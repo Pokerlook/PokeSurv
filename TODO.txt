@@ -1,0 +1,33 @@
+Combat/
+├── StatComponent
+├── SkillComponent
+├── ItemComponent
+├── StatusEffectComponent
+│
+├── Skill/
+│   ├── SkillBase
+│   ├── ProjectileSkill
+│   ├── OrbitalSkill
+│   ├── ZoneSkill
+│   ├── HitscanSkill (Melee)
+│   └── SummonSkill
+│
+└── Actor/
+    ├── PSPoolableActor    ← AActor 상속, IPoolable 구현 (공통 처리)
+    ├── ProjectileBase
+    ├── ZoneBase
+    └── OrbitalBase
+
+Data/                    
+├── SkillData
+└── ItemData
+
+오브젝트풀링 액터 인터페이스. 이니셜라이즈 / 리턴 풀.
+
+스킬 만들기 
+-> BP/Data/Skill에 SkillData 상속해서 DA 만들기
+-> BP/Actor에 투사체 만들기.(필요시)
+-> BP/Skill에 **Skill 상속해서 BP 만들기
+
+
+

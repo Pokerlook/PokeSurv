@@ -6,6 +6,8 @@
 #include "PokeSurv/Character/PSCharacterBase.h"
 #include "PSCharacterPlayer.generated.h"
 
+class APSPlayerController;
+
 /**
  * 
  */
@@ -14,6 +16,11 @@ class POKESURV_API APSCharacterPlayer : public APSCharacterBase
 {
 	GENERATED_BODY()
 protected:
+	virtual void BeginPlay() override;
 	virtual void UpdateMoveVector(float DeltaSeconds) override;
 
+private:
+	UPROPERTY()
+	TObjectPtr<APSPlayerController> PSPlayerController;
+	
 };

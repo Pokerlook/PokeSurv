@@ -32,7 +32,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Input | PS")
 	TObjectPtr<UInputAction> MoveAction;
-
+	
+	FVector LastMoveDirection = FVector(1.f, 0.f, 0.f); 
+	
 private:
 	TObjectPtr<ACharacter> PlayerCharacter;
 };

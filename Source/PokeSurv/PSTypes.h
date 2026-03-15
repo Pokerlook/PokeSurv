@@ -3,3 +3,5 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+// 여러 곳에서 공통적으로 쓸만한 enum / struct...

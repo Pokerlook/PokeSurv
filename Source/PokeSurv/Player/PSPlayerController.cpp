@@ -27,22 +27,15 @@ void APSPlayerController::SetupInputComponent()
 void APSPlayerController::Move(const FInputActionValue& Value)
 {
 	if (!PlayerCharacter) return;
-    
+
 	FVector2D Input = Value.Get<FVector2D>();
-	PlayerCharacter->AddMovementInput(FVector(Input.Y, Input.X, 0.f));
-
-	/*
-	*const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
-	const FRotator Rotation = GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
-
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	if (APawn* ControlledPawn = GetPawn<APawn>())
+	if (!Input.IsNearlyZero())
 	{
-	ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
-	ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+		LastMoveDirection = FVector(Input.Y, Input.X, 0.f).GetSafeNormal();
 	}
-	*/
+	PlayerCharacter->AddMovementInput(FVector(Input.Y, Input.X, 0.f));
+	
+	GEngine->AddOnScreenDebugMessage(123, 0.f, FColor::Yellow, 
+		FString::Printf(TEXT("LastMoveDirection: X=%.2f Y=%.2f"), 
+			LastMoveDirection.X, LastMoveDirection.Y));	// test
 }
