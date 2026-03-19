@@ -40,7 +40,4 @@ public:
 	// 오너 (투사체 스폰, 플레이어 위치 등에 필요)
 	UPROPERTY()
 	TObjectPtr<AActor> Owner;
-	
-
-	FVector NearestEnemyLocation = FVector::ZeroVector;
 };

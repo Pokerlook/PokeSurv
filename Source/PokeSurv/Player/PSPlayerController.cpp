@@ -29,9 +29,20 @@ void APSPlayerController::Move(const FInputActionValue& Value)
 	if (!PlayerCharacter) return;
 
 	FVector2D Input = Value.Get<FVector2D>();
-	if (!Input.IsNearlyZero())
+	if (!Input.IsNearlyZero())	// moving
 	{
 		LastMoveDirection = FVector(Input.Y, Input.X, 0.f).GetSafeNormal();
+	}
+	else    // stop
+	{
+		if (FMath::Abs(Input.X) >= FMath::Abs(Input.Y))
+		{
+			LastMoveDirection = FVector(0.f, Input.X > 0 ? 1.f : -1.f, 0.f);
+		}
+		else
+		{
+			LastMoveDirection = FVector(Input.Y > 0 ? 1.f : -1.f, 0.f, 0.f);
+		}
 	}
 	PlayerCharacter->AddMovementInput(FVector(Input.Y, Input.X, 0.f));
 	

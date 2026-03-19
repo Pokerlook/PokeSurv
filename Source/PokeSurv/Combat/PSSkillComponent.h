@@ -26,9 +26,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-private:
-	FVector FindNearestEnemyLocation();
 	
 public:
 	
@@ -43,7 +40,4 @@ public:
 	
 private:
 	
-	FVector NearestEnemyLocation = FVector::ZeroVector;
-	const float EnemyScanInterval = 0.1f;  // 0.1초마다 갱신
-	float EnemyScanTimer = 0.f;
 };

@@ -24,10 +24,70 @@ Data/
 
 오브젝트풀링 액터 인터페이스. 이니셜라이즈 / 리턴 풀.
 
-스킬 만들기 
+[스킬 만들기]
 -> BP/Data/Skill에 SkillData 상속해서 DA 만들기
 -> BP/Actor에 투사체 만들기.(필요시)
 -> BP/Skill에 **Skill 상속해서 BP 만들기
 
+@ 스탯 / 데미지 / 웨이브 시스템(오브젝트 풀링) / 아이템 / 레벨업 & 랜덤 스킬 선택 / 스킬 레벨업 폴리싱 / 보스 / 상자
 
 
+// 화면 가장자리 4곳의 월드 좌표를 구함
+FVector GetWorldPosFromScreen(APlayerController* PC, AActor* Player, FVector2D ScreenPos)
+{
+    FVector WorldPos, WorldDir;
+    PC->DeprojectScreenPositionToWorld(ScreenPos.X, ScreenPos.Y, WorldPos, WorldDir);
+
+    if (!FMath::IsNearlyZero(WorldDir.Z))
+    {
+        float T = (Player->GetActorLocation().Z - WorldPos.Z) / WorldDir.Z;
+        WorldPos = WorldPos + WorldDir * T;
+    }
+    return WorldPos;
+}
+
+FVector GetSpawnLocationOutsideScreen(APlayerController* PC, AActor* Player)
+{
+    int32 SizeX, SizeY;
+    PC->GetViewportSize(SizeX, SizeY);
+
+    int32 Side = FMath::RandRange(0, 3);
+    float WorldMargin = 150.f; // 이제 월드 단위 (cm)
+
+    FVector2D ScreenPos;
+    switch (Side)
+    {
+        case 0: ScreenPos = FVector2D(FMath::RandRange(0, SizeX), 0);     break; // 위 가장자리
+        case 1: ScreenPos = FVector2D(FMath::RandRange(0, SizeX), SizeY); break; // 아래 가장자리
+        case 2: ScreenPos = FVector2D(0,    FMath::RandRange(0, SizeY));  break; // 왼쪽 가장자리
+        case 3: ScreenPos = FVector2D(SizeX, FMath::RandRange(0, SizeY)); break; // 오른쪽 가장자리
+    }
+
+    // 가장자리 월드 좌표
+    FVector EdgeWorldPos = GetWorldPosFromScreen(PC, Player, ScreenPos);
+
+    // 플레이어 기준 바깥 방향으로 월드 단위로 밀어냄
+    FVector OutDir = (EdgeWorldPos - Player->GetActorLocation()).GetSafeNormal();
+    return EdgeWorldPos + OutDir * WorldMargin;
+}
+
+
+최대 체력
+회복
+방어력
+이동속도
+피해량
+투사체 속도
+지속시간
+공격범위
+쿨타임
+투사체 수
+부활
+자석
+행운
+성장
+탐욕
+저주
+새로고침
+건너뛰기
+지우기
