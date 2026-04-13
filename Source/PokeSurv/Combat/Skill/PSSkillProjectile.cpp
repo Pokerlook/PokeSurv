@@ -4,7 +4,6 @@
 #include "PokeSurv/Combat/Skill/PSSkillProjectile.h"
 
 #include "GameFramework/Character.h"
-#include "PokeSurv/Character/PSCharacterEnemy.h"
 #include "PokeSurv/Combat/Actor/PSProjectileBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
@@ -19,7 +18,7 @@ void UPSSkillProjectile::Activate()
 		APSProjectileBase* Projectile = RequestProjectile(SpawnLocation, Direction.Rotation());
 		if (IsValid(Projectile))
 		{
-			Projectile->Initialize(CurrentStats.Damage, CurrentStats.AreaMultiplier, CurrentStats.ProjectileSpeedMultiplier,
+			Projectile->Initialize(Owner, CalculateDamage(), CurrentStats.AreaMultiplier, CurrentStats.ProjectileSpeedMultiplier,
 				CurrentStats.PierceCount, CurrentStats.Knockback);
 		}
 	}

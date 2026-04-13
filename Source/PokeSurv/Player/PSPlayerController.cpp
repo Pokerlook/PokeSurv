@@ -45,8 +45,4 @@ void APSPlayerController::Move(const FInputActionValue& Value)
 		}
 	}
 	PlayerCharacter->AddMovementInput(FVector(Input.Y, Input.X, 0.f));
-	
-	GEngine->AddOnScreenDebugMessage(123, 0.f, FColor::Yellow, 
-		FString::Printf(TEXT("LastMoveDirection: X=%.2f Y=%.2f"), 
-			LastMoveDirection.X, LastMoveDirection.Y));	// test
 }

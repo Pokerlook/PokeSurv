@@ -2,7 +2,15 @@
 
 
 #include "PokeSurv/Character/PSCharacterBase.h"
-#include "PaperFlipbookComponent.h"
+
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "PokeSurv/Combat/PSStatComponent.h"
+
+APSCharacterBase::APSCharacterBase()
+{
+	StatComponent = CreateDefaultSubobject<UPSStatComponent>("StatComponent");
+}
 
 void APSCharacterBase::Tick(float DeltaSeconds)
 {
@@ -11,4 +19,59 @@ void APSCharacterBase::Tick(float DeltaSeconds)
 	MoveSpeed = GetVelocity().Size();
 
 	UpdateMoveVector(DeltaSeconds);
+}
+
+void APSCharacterBase::PS_TakeDamage_Implementation(const float  Damage)
+{
+	float FinalDamage = FMath::Max(1, (Damage - StatComponent->Defense) );
+	
+	StatComponent->CurrentHP = FMath::Max(0, StatComponent->CurrentHP - FinalDamage);
+
+	if (StatComponent->CurrentHP <= 0)
+	{
+		OnDeath();
+	}
+	else
+	{
+		OnDamage();
+	}
+}
+
+void APSCharacterBase::TakeKnockback_Implementation(float KnockBackMultiplier, FVector HitLocation)
+{
+	FVector KnockbackDir = (GetActorLocation() - HitLocation).GetSafeNormal();
+	LaunchCharacter(KnockbackDir * KnockBackMultiplier * StatComponent->KnockbakMultiplier * 100, true, false);
+}
+
+void APSCharacterBase::BeginPlay()
+{
+	StatComponent->OnStatsChanged.AddDynamic(this, &APSCharacterBase::OnStatsChanged);
+	
+	Super::BeginPlay();
+}
+
+void APSCharacterBase::OnDamage_Implementation()
+{
+	// 이펙트? + 하얗게 한번 깜빡이기
+}
+
+
+void APSCharacterBase::OnDeath_Implementation()
+{
+    UE_LOG(LogTemp, Warning, TEXT("[OnDeath] %s 사망 처리 시작"), *GetName());
+	// 1. 충돌 제거
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 2. 이동 중단
+	GetCharacterMovement()->DisableMovement();	// AddMovementInput 정지
+	
+	// 3. 틱 비활성화
+	SetActorTickEnabled(false);
+	// bp에서 타임라인 1초.  스프라이트 붉은색 유지. 점점 투명해짐. 살짝 진동, 좌우로 흔들림
+}
+
+void APSCharacterBase::OnStatsChanged()
+{
+    GetCharacterMovement()->MaxWalkSpeed = StatComponent->Speed;
+    OnStatsInitializedDelegate.Broadcast(); // 애님BP로 전달, sprite 변경
 }

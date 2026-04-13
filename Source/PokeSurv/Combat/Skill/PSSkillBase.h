@@ -23,6 +23,7 @@ public:
 
 protected:
 	virtual void Activate() PURE_VIRTUAL(UPSSkillBase::Activate,);
+	float CalculateDamage() const;
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

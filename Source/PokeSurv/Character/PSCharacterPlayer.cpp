@@ -3,7 +3,15 @@
 
 #include "PokeSurv/Character/PSCharacterPlayer.h"
 
+#include "PokeSurv/Combat/PSSkillComponent.h"
 #include "PokeSurv/Player/PSPlayerController.h"
+#include "PokeSurv/Player/PSPlayerStatComponent.h"
+
+APSCharacterPlayer::APSCharacterPlayer()
+{
+	PlayerStatComponent = CreateDefaultSubobject<UPSPlayerStatComponent>(TEXT("PlayerStatComponent"));
+	SkillComponent = CreateDefaultSubobject<UPSSkillComponent>(TEXT("SkillComponent"));
+}
 
 void APSCharacterPlayer::BeginPlay()
 {

@@ -19,16 +19,20 @@ public:
 	// Sets default values for this actor's properties
 	APSProjectileBase();
 	
-	void Initialize(float InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount, float InKnockBack);
+	void Initialize(AActor* InOwner, float InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount, float InKnockBackMultiplier);
 
 	virtual void OnSpawnFromPool_Implementation() override;
 	virtual void OnReturnToPool_Implementation() override;
 	
 protected:
 	virtual void BeginPlay() override;
+	
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 public:	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -52,8 +56,8 @@ private:
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	
-	float FinalDamage = 10.f;
+	float FinalDamage = 0;
 	int32 PierceCount = 0;
 	int32 BounceCount = 0;  // 0이면 바운스 없음
-	float KnockBack = 0.f;
+	float KnockBackMultiplier = 0.f;
 };

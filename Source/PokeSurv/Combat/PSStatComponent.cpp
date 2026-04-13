@@ -3,32 +3,29 @@
 
 #include "PokeSurv/Combat/PSStatComponent.h"
 
-// Sets default values for this component's properties
-UPSStatComponent::UPSStatComponent()
+void UPSStatComponent::Initialize(UPokemonData* NewData)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+    if (NewData) BaseData = NewData;
+	if (!BaseData)
+	{
+		return;
+	}
 
-	// ...
+	MaxHP      = BaseData->Health;
+	CurrentHP  = MaxHP;
+	Attack     = BaseData->Power;
+	Defense    = 0;               // 적 기본 방어력 없음 (뱀서 방식)
+	Speed      = BaseData->Speed;
+	KnockbakMultiplier = BaseData->KnockbackMultiplier.X;
+	
+    OnStatsChanged.Broadcast(); // 캐릭터가 
 }
 
-
-// Called when the game starts
 void UPSStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
+	if (BaseData)
+	{
+		Initialize(BaseData);
+	}
 }
-
-
-// Called every frame
-void UPSStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-

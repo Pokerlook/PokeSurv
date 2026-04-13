@@ -6,7 +6,9 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "PokeSurv/Character/PSCharacterBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
+#include "PokeSurv/Util/PSLibrary.h"
 
 // Sets default values
 APSProjectileBase::APSProjectileBase()
@@ -15,19 +17,23 @@ APSProjectileBase::APSProjectileBase()
 	PrimaryActorTick.bCanEverTick = true;
 
     CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &APSProjectileBase::OnOverlapBegin);
     RootComponent = CollisionSphere;
 
     FlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbook"));
     FlipbookComponent->SetupAttachment(RootComponent);
 	
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+
+	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &APSProjectileBase::OnOverlapBegin);
+	CollisionSphere->OnComponentHit.AddDynamic(this, &APSProjectileBase::OnHit);
+
 }
 
-void APSProjectileBase::Initialize(float InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount,
-	float InKnockBack)
+void APSProjectileBase::Initialize(AActor* InOwner, float InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount,
+	float InKnockBackMultiplier)
 {
-	KnockBack = InKnockBack;
+	Owner = InOwner;
+	KnockBackMultiplier = InKnockBackMultiplier;
 	FinalDamage = InDamage;
 	PierceCount = InPierceCount;
 	
@@ -68,15 +74,33 @@ void APSProjectileBase::BeginPlay()
 void APSProjectileBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*
-	IsValid 체크
-	HitActors.Contains(Actor) — 있으면 무시
-	없으면 HitActors.Add(Actor) 후 데미지
+	if (!OtherActor || OtherActor == Owner) return;
+	if (!OtherActor->IsA<APSCharacterBase>()) return;
+	
+	// 중복 히트 방지
+	if (HitActors.Contains(OtherActor)) return;
+	HitActors.Add(OtherActor);
 
-	피어스 카운트 처리...
+	// 데미지 처리
+    UPSLibrary::ApplyDamage(OtherActor, FinalDamage, KnockBackMultiplier, this);
+
+	// 관통 처리
+	if (PierceCount != TNumericLimits<int32>::Max())
+	{
+		PierceCount--;
+		if (PierceCount <= 0)  // 이미 0이면 이번 히트 후 반환
+		{
+			UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
+			Pool->ReturnToPool(this);
+		}
+	}
+}
+
+void APSProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
+{
 	UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
 	Pool->ReturnToPool(this);
-	*/
 }
 
 
