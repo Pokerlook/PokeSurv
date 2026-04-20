@@ -4,6 +4,7 @@
 #include "PokeSurv/Combat/Skill/PSSkillProjectile.h"
 
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Combat/Actor/PSProjectileBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
@@ -20,6 +21,14 @@ void UPSSkillProjectile::Activate()
 		{
 			Projectile->Initialize(Owner, CalculateDamage(), CurrentStats.AreaMultiplier, CurrentStats.ProjectileSpeedMultiplier,
 				CurrentStats.PierceCount, CurrentStats.Knockback);
+			UGameplayStatics::PlaySound2D(this, SkillData->ActivateSound);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("[%s] Projectile spawn failed. SkillData: %s, ProjectileClass: %s"),
+				*GetName(),
+				*GetNameSafe(SkillData),
+				SkillData ? *GetNameSafe(SkillData->ProjectileClass) : TEXT("SkillData null"));
 		}
 	}
 }

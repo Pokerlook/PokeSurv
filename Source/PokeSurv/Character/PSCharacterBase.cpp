@@ -5,6 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Combat/PSStatComponent.h"
 
 APSCharacterBase::APSCharacterBase()
@@ -21,11 +22,15 @@ void APSCharacterBase::Tick(float DeltaSeconds)
 	UpdateMoveVector(DeltaSeconds);
 }
 
-void APSCharacterBase::PS_TakeDamage_Implementation(const float  Damage)
+void APSCharacterBase::PS_TakeDamage_Implementation(const FDamageResult  Damage)
 {
-	float FinalDamage = FMath::Max(1, (Damage - StatComponent->Defense) );
+	float FinalDamage = FMath::Max(1, (Damage.FinalDamage - StatComponent->Defense) );
+	//UE_LOG(LogTemp, Warning, TEXT("[TakeDamage] %s | 입력 데미지: %.1f | 방어력: %d | 최종 데미지: %.1f"),
+	//	*GetName(), Damage, StatComponent->Defense, FinalDamage);
 	
 	StatComponent->CurrentHP = FMath::Max(0, StatComponent->CurrentHP - FinalDamage);
+
+	UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
 
 	if (StatComponent->CurrentHP <= 0)
 	{
@@ -40,7 +45,13 @@ void APSCharacterBase::PS_TakeDamage_Implementation(const float  Damage)
 void APSCharacterBase::TakeKnockback_Implementation(float KnockBackMultiplier, FVector HitLocation)
 {
 	FVector KnockbackDir = (GetActorLocation() - HitLocation).GetSafeNormal();
-	LaunchCharacter(KnockbackDir * KnockBackMultiplier * StatComponent->KnockbakMultiplier * 100, true, false);
+	
+	//UE_LOG(LogTemp, Warning, TEXT("[TakeKnockback] KnockBackMultiplier: %f | HitLocation: %s | KnockbackDir: %s | FinalForce: %f"),
+	//	KnockBackMultiplier, *HitLocation.ToString(), *KnockbackDir.ToString(),
+	//	KnockBackMultiplier * StatComponent->KnockbakMultiplier * 100);
+	
+	float RandomKnockback = FMath::FRandRange(StatComponent->KnockbackMultiplier.X, StatComponent->KnockbackMultiplier.Y);
+	LaunchCharacter(KnockbackDir * KnockBackMultiplier * RandomKnockback * 100, true, false);
 }
 
 void APSCharacterBase::BeginPlay()
@@ -58,7 +69,8 @@ void APSCharacterBase::OnDamage_Implementation()
 
 void APSCharacterBase::OnDeath_Implementation()
 {
-    UE_LOG(LogTemp, Warning, TEXT("[OnDeath] %s 사망 처리 시작"), *GetName());
+    //UE_LOG(LogTemp, Warning, TEXT("[OnDeath] %s 사망 처리 시작"), *GetName());
+	
 	// 1. 충돌 제거
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 

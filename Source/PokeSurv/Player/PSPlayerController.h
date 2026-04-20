@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
-
+#include "PokeSurv/PSTypes.h"
 #include "PSPlayerController.generated.h"
 
 class UInputMappingContext;
 class UInputAction;
+class UDamageTextComponent;
 
 /**
  * 
@@ -18,7 +19,10 @@ UCLASS()
 class POKESURV_API APSPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
+	
+public:
+	void ShowDamageNumber(FDamageResult DamageResult, AActor* TargetActor);
+	
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void SetupInputComponent() override;
@@ -37,4 +41,7 @@ public:
 	
 private:
 	TObjectPtr<ACharacter> PlayerCharacter;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "PS", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };

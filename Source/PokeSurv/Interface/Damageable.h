@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "PokeSurv/PSTypes.h"
 #include "Damageable.generated.h"
 
 // This class does not need to be modified.
@@ -21,7 +22,7 @@ class POKESURV_API IDamageable
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintNativeEvent)
-	void PS_TakeDamage(const float  Damage);
+	void PS_TakeDamage(const FDamageResult  Damage);
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void TakeKnockback(float KnockBackMultiplier, FVector HitLocation);

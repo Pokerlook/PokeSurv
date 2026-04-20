@@ -40,10 +40,11 @@ void UPSSkillComponent::AddSkill(TSubclassOf<UPSSkillBase> SkillClass)
 	if (!SkillClass) return;
     
 	UPSSkillBase* NewSkill = NewObject<UPSSkillBase>(this, SkillClass);
-	NewSkill->InitSkill(GetOwner());
-	Skills.Add(NewSkill);
 	
 	UPSPoolSubsystem* PoolSubsystem = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
 	PoolSubsystem->InitPool(NewSkill->SkillData->ProjectileClass, NewSkill->SkillData->ProjectileLimit);
+	
+	NewSkill->InitSkill(GetOwner());
+	Skills.Add(NewSkill);
 }
 

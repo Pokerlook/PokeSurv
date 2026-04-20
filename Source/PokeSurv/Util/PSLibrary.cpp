@@ -5,7 +5,7 @@
 
 #include "PokeSurv/Interface/Damageable.h"
 
-void UPSLibrary::ApplyDamage(AActor* Target, float Damage, float KnockBackMultiplier, AActor* DamageCauser)
+void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBackMultiplier, AActor* DamageCauser)
 {
 	if (!Target || !DamageCauser) return;
 

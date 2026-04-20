@@ -35,8 +35,8 @@ public:
 	int32 Attack;               // 실제 공격력
 	int32 Defense;              // 실제 방어력 (PSPlayerStatComponent의 Defense 흡수)
 	float Speed;                // 실제 이동속도
-	float KnockbakMultiplier;
-
+	FVector2D KnockbackMultiplier = FVector2D(0, 0); // (Base, Max)
+	
 	UPROPERTY(BlueprintAssignable, Category = "Stats")
 	FOnStatsChanged OnStatsChanged;
 };

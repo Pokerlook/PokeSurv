@@ -29,7 +29,7 @@ APSProjectileBase::APSProjectileBase()
 
 }
 
-void APSProjectileBase::Initialize(AActor* InOwner, float InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount,
+void APSProjectileBase::Initialize(AActor* InOwner, FDamageResult InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount,
 	float InKnockBackMultiplier)
 {
 	Owner = InOwner;
@@ -39,20 +39,21 @@ void APSProjectileBase::Initialize(AActor* InOwner, float InDamage, float InArea
 	
 	ProjectileMovement->InitialSpeed = DefaultSpeed * InSpeedMultiplier;
 	ProjectileMovement->MaxSpeed = DefaultSpeed * InSpeedMultiplier;
+	ProjectileMovement->Velocity = GetActorRotation().Vector() * DefaultSpeed * InSpeedMultiplier;//GetActorForwardVector() * DefaultSpeed * InSpeedMultiplier;
 	CollisionSphere->SetSphereRadius(DefaultRadius * InAreaMultiplier);
-	ProjectileMovement->Velocity = GetActorForwardVector() * ProjectileMovement->InitialSpeed;
-}
 
-void APSProjectileBase::OnSpawnFromPool_Implementation()
-{
 	Super::OnSpawnFromPool_Implementation();
 	
 	GetWorldTimerManager().SetTimer(LifeSpanTimer, [this]()
 	{
 		UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
 		Pool->ReturnToPool(this);
-	}, ProjectileLifeSpan, false);
-	
+	}, ProjectileLifeSpan, false);		
+}
+
+void APSProjectileBase::OnSpawnFromPool_Implementation()
+{
+	// call at Initialize
 }
 
 void APSProjectileBase::OnReturnToPool_Implementation()

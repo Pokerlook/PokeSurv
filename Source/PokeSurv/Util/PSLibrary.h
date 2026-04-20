@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "PokeSurv/PSTypes.h"
 #include "PSLibrary.generated.h"
 
 /**
@@ -15,6 +16,6 @@ class POKESURV_API UPSLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintCallable)
-	static void ApplyDamage(AActor* Target, float Damage, float KnockBackMultiplier, AActor* DamageCauser);
+	static void ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBackMultiplier, AActor* DamageCauser);
 
 };

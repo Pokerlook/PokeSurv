@@ -24,10 +24,16 @@ void UPSSkillBase::InitSkill(AActor* InOwner)
 	CurrentStats = SkillData->LevelData[0];
 }
 
-float UPSSkillBase::CalculateDamage() const
+FDamageResult UPSSkillBase::CalculateDamage() const
 {
+    FDamageResult Result;
+	
 	const UPSPlayerStatComponent* PlayerStatComp = Owner->FindComponentByClass<UPSPlayerStatComponent>();
-	if (!PlayerStatComp) return 0.f;
+	if (!PlayerStatComp) return Result;
 
-	return (PlayerStatComp->DamageBonus+1) * CurrentStats.Damage;
+	Result.bIsCritical = FMath::RandRange(0.f, 1.f) < CurrentStats.CritChance;
+	float CritMult = Result.bIsCritical ? CurrentStats.CritMultiplier : 1.f;
+    
+	Result.FinalDamage = (PlayerStatComp->DamageBonus + 1) * CurrentStats.Damage * CritMult;
+	return Result;
 }

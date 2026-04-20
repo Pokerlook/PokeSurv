@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "PokeSurv/PSTypes.h"
 #include "PokeSurv/Data/SkillData.h"
 #include "PSSkillBase.generated.h"
 
@@ -23,18 +23,20 @@ public:
 
 protected:
 	virtual void Activate() PURE_VIRTUAL(UPSSkillBase::Activate,);
-	float CalculateDamage() const;
+	FDamageResult CalculateDamage() const;
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<USkillData> SkillData;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly)
 	FSkillLevelData CurrentStats ; // 현재 누적 스탯
 	
 	// 현재 레벨
+	UPROPERTY(BlueprintReadOnly)
 	int32 CurrentLevel = 0;  // LevelData[0]이 1레벨
-	
+
+protected:	
 	// 쿨타임 타이머
 	float CooldownTimer = 0.f;
 	

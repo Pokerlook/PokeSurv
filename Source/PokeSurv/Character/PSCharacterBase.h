@@ -21,7 +21,7 @@ public:
 	
 	virtual void Tick(float DeltaSeconds) override;
 	
-	virtual void PS_TakeDamage_Implementation(const float  Damage) override;
+	virtual void PS_TakeDamage_Implementation(const FDamageResult  Damage) override;
 	virtual void TakeKnockback_Implementation(float KnockBackMultiplier, FVector HitLocation) override;
 	
 protected:
@@ -52,4 +52,7 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPSStatComponent> StatComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundBase> HitSound;  // 피격 사운드
 };

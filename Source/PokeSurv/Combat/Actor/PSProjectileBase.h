@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PSPoolableActor.h"
+#include "PokeSurv/PSTypes.h"
 #include "PSProjectileBase.generated.h"
 
 class USphereComponent;
@@ -19,7 +20,7 @@ public:
 	// Sets default values for this actor's properties
 	APSProjectileBase();
 	
-	void Initialize(AActor* InOwner, float InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount, float InKnockBackMultiplier);
+	void Initialize(AActor* InOwner, FDamageResult  InDamage, float InAreaMultiplier, float InSpeedMultiplier, int32 InPierceCount, float InKnockBackMultiplier);
 
 	virtual void OnSpawnFromPool_Implementation() override;
 	virtual void OnReturnToPool_Implementation() override;
@@ -56,7 +57,7 @@ private:
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	
-	float FinalDamage = 0;
+	FDamageResult FinalDamage;
 	int32 PierceCount = 0;
 	int32 BounceCount = 0;  // 0이면 바운스 없음
 	float KnockBackMultiplier = 0.f;

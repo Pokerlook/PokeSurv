@@ -16,7 +16,7 @@ void UPSStatComponent::Initialize(UPokemonData* NewData)
 	Attack     = BaseData->Power;
 	Defense    = 0;               // 적 기본 방어력 없음 (뱀서 방식)
 	Speed      = BaseData->Speed;
-	KnockbakMultiplier = BaseData->KnockbackMultiplier.X;
+	KnockbackMultiplier = BaseData->KnockbackMultiplier;
 	
     OnStatsChanged.Broadcast(); // 캐릭터가 
 }

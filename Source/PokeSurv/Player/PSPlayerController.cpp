@@ -6,6 +6,21 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/Character.h"
 #include "InputAction.h"
+#include "PokeSurv/UI/DamageTextComponent.h"
+
+void APSPlayerController::ShowDamageNumber(FDamageResult DamageResult, AActor* TargetActor)
+{
+	if (IsValid(TargetActor) && !TargetActor->IsHidden() && DamageTextComponentClass)	// hidden이면 풀에 잠들어 있는 것
+	{
+		// 이걸 나중에 풀에서 가져오는 걸로 바꾸면 됨
+		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetActor, DamageTextComponentClass);
+		
+		DamageText->RegisterComponent();
+		DamageText->AttachToComponent(TargetActor->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetDamageText(DamageResult);	// BP 에서 풀에 반환하도록 함수 마지막에 설정하면 됨
+	}
+}
 
 void APSPlayerController::OnPossess(APawn* InPawn)
 {
