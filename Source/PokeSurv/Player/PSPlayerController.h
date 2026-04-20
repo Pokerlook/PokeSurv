@@ -10,7 +10,7 @@
 
 class UInputMappingContext;
 class UInputAction;
-class UDamageTextComponent;
+class UDamageTextWidget;
 
 /**
  * 
@@ -24,11 +24,15 @@ public:
 	void ShowDamageNumber(FDamageResult DamageResult, AActor* TargetActor);
 	
 protected:
+	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void SetupInputComponent() override;
 	
 private:
 	void Move(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void OnDamageTextFinished(UDamageTextWidget* Widget);
 	
 public:
 	UPROPERTY(EditAnywhere, Category = "Input | PS")
@@ -41,7 +45,12 @@ public:
 	
 private:
 	TObjectPtr<ACharacter> PlayerCharacter;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "PS", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
+
+	UPROPERTY()
+	TArray<TObjectPtr<UDamageTextWidget>> DamageTextPool;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextWidget> DamageTextClass;
+
+	int32 DamageTextPoolSize = 200;
 };

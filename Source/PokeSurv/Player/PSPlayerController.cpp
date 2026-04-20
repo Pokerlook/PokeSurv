@@ -6,19 +6,42 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/Character.h"
 #include "InputAction.h"
-#include "PokeSurv/UI/DamageTextComponent.h"
+#include "PokeSurv/UI/DamageTextWidget.h"
 
 void APSPlayerController::ShowDamageNumber(FDamageResult DamageResult, AActor* TargetActor)
 {
-	if (IsValid(TargetActor) && !TargetActor->IsHidden() && DamageTextComponentClass)	// hidden이면 풀에 잠들어 있는 것
+	if (DamageTextPool.IsEmpty())
 	{
-		// 이걸 나중에 풀에서 가져오는 걸로 바꾸면 됨
-		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetActor, DamageTextComponentClass);
-		
-		DamageText->RegisterComponent();
-		DamageText->AttachToComponent(TargetActor->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
-		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		DamageText->SetDamageText(DamageResult);	// BP 에서 풀에 반환하도록 함수 마지막에 설정하면 됨
+		UE_LOG(LogTemp, Warning, TEXT("[%s] DamageTextPool is empty."),
+			*GetName());
+		return;
+	}
+	
+	UDamageTextWidget* Widget = DamageTextPool.Pop();
+	if (!Widget)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[%s] DamageTextWidget popped from pool is null."),
+			*GetName());
+		return;
+	}
+
+	//FVector2D ScreenPos;
+	//ProjectWorldLocationToScreen(TargetActor->GetActorLocation(), ScreenPos);
+	//Widget->SetPositionInViewport(ScreenPos);
+	Widget->WorldLocation = TargetActor->GetActorLocation();
+	Widget->AddToViewport();
+	Widget->SetDamageText(DamageResult);
+}
+
+void APSPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	// BeginPlay에서 풀 초기화
+	for (int32 i = 0; i < DamageTextPoolSize; i++)
+	{
+		UDamageTextWidget* Widget = CreateWidget<UDamageTextWidget>(this, DamageTextClass.Get());
+		DamageTextPool.Add(Widget);
+		Widget->OnDamageTextFinished.AddDynamic(this, &APSPlayerController::OnDamageTextFinished);
 	}
 }
 
@@ -60,4 +83,10 @@ void APSPlayerController::Move(const FInputActionValue& Value)
 		}
 	}
 	PlayerCharacter->AddMovementInput(FVector(Input.Y, Input.X, 0.f));
+}
+
+void APSPlayerController::OnDamageTextFinished(UDamageTextWidget* Widget)
+{
+	Widget->RemoveFromParent();
+	DamageTextPool.Add(Widget);
 }
