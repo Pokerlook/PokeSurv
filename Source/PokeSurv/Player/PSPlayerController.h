@@ -44,6 +44,7 @@ public:
 	FVector LastMoveDirection = FVector(1.f, 0.f, 0.f); 
 	
 private:
+	UPROPERTY()
 	TObjectPtr<ACharacter> PlayerCharacter;
 
 	UPROPERTY()

@@ -9,6 +9,7 @@
 class UPSSkillComponent;
 class APSPlayerController;
 class UPSPlayerStatComponent;
+class UPSHealthWidgetComponent;
 
 /**
  * 
@@ -20,8 +21,11 @@ class POKESURV_API APSCharacterPlayer : public APSCharacterBase
 public:
 	APSCharacterPlayer();
 	
+	virtual void PS_TakeDamage_Implementation(const FDamageResult  Damage) override;
+	
 protected:
 	virtual void BeginPlay() override;
+	
 	virtual void UpdateMoveVector(float DeltaSeconds) override;
 
 private:
@@ -29,9 +33,13 @@ private:
 	TObjectPtr<APSPlayerController> PSPlayerController;
 
 protected:
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPSPlayerStatComponent> PlayerStatComponent;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPSSkillComponent> SkillComponent;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPSHealthWidgetComponent> HPBarComponent;
 };

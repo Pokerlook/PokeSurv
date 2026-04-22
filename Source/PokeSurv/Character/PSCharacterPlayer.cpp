@@ -4,19 +4,37 @@
 #include "PokeSurv/Character/PSCharacterPlayer.h"
 
 #include "PokeSurv/Combat/PSSkillComponent.h"
+#include "PokeSurv/Combat/PSStatComponent.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
+#include "PokeSurv/UI/PSHealthWidgetComponent.h"
 
 APSCharacterPlayer::APSCharacterPlayer()
 {
 	PlayerStatComponent = CreateDefaultSubobject<UPSPlayerStatComponent>(TEXT("PlayerStatComponent"));
 	SkillComponent = CreateDefaultSubobject<UPSSkillComponent>(TEXT("SkillComponent"));
+	HPBarComponent = CreateDefaultSubobject<UPSHealthWidgetComponent>("HPBarComponent");
+	HPBarComponent->SetupAttachment(GetRootComponent()); 
+}
+
+void APSCharacterPlayer::PS_TakeDamage_Implementation(const FDamageResult Damage)
+{
+	Super::PS_TakeDamage_Implementation(Damage);
+	HPBarComponent->UpdateHP(StatComponent->CurrentHP, StatComponent->MaxHP);
 }
 
 void APSCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-    PSPlayerController = Cast<APSPlayerController>(GetController());
+	PSPlayerController = Cast<APSPlayerController>(GetController());
+	
+	// InitWidget 명시적으로 보장
+	HPBarComponent->InitWidget();
+    
+	if (UUserWidget* Widget = HPBarComponent->GetUserWidgetObject())
+	{
+		HPBarComponent->UpdateHP(StatComponent->CurrentHP, StatComponent->MaxHP);
+	}
 }
 
 void APSCharacterPlayer::UpdateMoveVector(float DeltaSeconds)

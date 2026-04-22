@@ -29,7 +29,7 @@ void APSPlayerController::ShowDamageNumber(FDamageResult DamageResult, AActor* T
 	//ProjectWorldLocationToScreen(TargetActor->GetActorLocation(), ScreenPos);
 	//Widget->SetPositionInViewport(ScreenPos);
 	Widget->WorldLocation = TargetActor->GetActorLocation();
-	Widget->AddToViewport();
+	Widget->SetVisibility(ESlateVisibility::HitTestInvisible);
 	Widget->SetDamageText(DamageResult);
 }
 
@@ -42,6 +42,8 @@ void APSPlayerController::BeginPlay()
 		UDamageTextWidget* Widget = CreateWidget<UDamageTextWidget>(this, DamageTextClass.Get());
 		DamageTextPool.Add(Widget);
 		Widget->OnDamageTextFinished.AddDynamic(this, &APSPlayerController::OnDamageTextFinished);
+		Widget->AddToViewport();
+		Widget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
@@ -87,6 +89,6 @@ void APSPlayerController::Move(const FInputActionValue& Value)
 
 void APSPlayerController::OnDamageTextFinished(UDamageTextWidget* Widget)
 {
-	Widget->RemoveFromParent();
+	Widget->SetVisibility(ESlateVisibility::Collapsed);
 	DamageTextPool.Add(Widget);
 }
