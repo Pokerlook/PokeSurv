@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperZDCharacter.h" 
-#include "PokeSurv/Interface/Damageable.h"
+#include "PokeSurv/Interface/PSDamageable.h"
 #include "PSCharacterBase.generated.h"
 
 class UPSStatComponent;
@@ -12,7 +12,7 @@ class UPSStatComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStatsInitialized);
 
 UCLASS()
-class POKESURV_API APSCharacterBase : public APaperZDCharacter, public IDamageable
+class POKESURV_API APSCharacterBase : public APaperZDCharacter, public IPSDamageable
 {
 	GENERATED_BODY()
 	

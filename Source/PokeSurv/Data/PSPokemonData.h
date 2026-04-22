@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "AnimSequences/PaperZDAnimSequence.h"
-#include "PokemonData.generated.h"
+#include "PSPokemonData.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class POKESURV_API UPokemonData : public UPrimaryDataAsset
+class POKESURV_API UPSPokemonData : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 	

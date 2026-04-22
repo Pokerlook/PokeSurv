@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "PokeSurv/PSTypes.h"
-#include "Damageable.generated.h"
+#include "PSDamageable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UDamageable : public UInterface
+class UPSDamageable : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,7 +17,7 @@ class UDamageable : public UInterface
 /**
  * 
  */
-class POKESURV_API IDamageable
+class POKESURV_API IPSDamageable
 {
 	GENERATED_BODY()
 public:

@@ -3,7 +3,7 @@
 
 #include "PokeSurv/Util/PSLibrary.h"
 
-#include "PokeSurv/Interface/Damageable.h"
+#include "PokeSurv/Interface/PSDamageable.h"
 
 void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBackMultiplier, AActor* DamageCauser)
 {
@@ -19,12 +19,12 @@ void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBa
 	}
 	else return;
 
-	if (Target->Implements<UDamageable>())
+	if (Target->Implements<UPSDamageable>())
 	{
-		IDamageable::Execute_PS_TakeDamage(Target, Damage);
+		IPSDamageable::Execute_PS_TakeDamage(Target, Damage);
 		if (KnockBackMultiplier > 0.f)
 		{
-			IDamageable::Execute_TakeKnockback(Target, KnockBackMultiplier, DamageCauser->GetActorLocation());
+			IPSDamageable::Execute_TakeKnockback(Target, KnockBackMultiplier, DamageCauser->GetActorLocation());
 		}
 	}
 }

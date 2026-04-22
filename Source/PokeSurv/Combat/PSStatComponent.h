@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PokeSurv/Data/PokemonData.h"
+#include "PokeSurv/Data/PSPokemonData.h"
 #include "PSStatComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStatsChanged);
@@ -16,7 +16,7 @@ class POKESURV_API UPSStatComponent : public UActorComponent
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void Initialize(UPokemonData* NewData);
+	void Initialize(UPSPokemonData* NewData);
 
 protected:
 	virtual void BeginPlay() override;
@@ -30,7 +30,7 @@ public:
 	int32 CurrentHP = 0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	TObjectPtr<UPokemonData> BaseData;
+	TObjectPtr<UPSPokemonData> BaseData;
 	
 	int32 Attack;               // 실제 공격력
 	int32 Defense;              // 실제 방어력 (PSPlayerStatComponent의 Defense 흡수)

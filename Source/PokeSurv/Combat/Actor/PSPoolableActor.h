@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PokeSurv/Interface/Poolable.h"
+#include "PokeSurv/Interface/PSPoolable.h"
 #include "PSPoolableActor.generated.h"
 
 UCLASS()
-class POKESURV_API APSPoolableActor : public AActor, public IPoolable
+class POKESURV_API APSPoolableActor : public AActor, public IPSPoolable
 {
 	GENERATED_BODY()
 

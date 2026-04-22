@@ -10,7 +10,7 @@
 
 class UInputMappingContext;
 class UInputAction;
-class UDamageTextWidget;
+class UPSDamageTextWidget;
 
 /**
  * 
@@ -32,7 +32,7 @@ private:
 	void Move(const FInputActionValue& Value);
 
 	UFUNCTION()
-	void OnDamageTextFinished(UDamageTextWidget* Widget);
+	void OnDamageTextFinished(UPSDamageTextWidget* Widget);
 	
 public:
 	UPROPERTY(EditAnywhere, Category = "Input | PS")
@@ -48,10 +48,10 @@ private:
 	TObjectPtr<ACharacter> PlayerCharacter;
 
 	UPROPERTY()
-	TArray<TObjectPtr<UDamageTextWidget>> DamageTextPool;
+	TArray<TObjectPtr<UPSDamageTextWidget>> DamageTextPool;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UDamageTextWidget> DamageTextClass;
+	TSubclassOf<UPSDamageTextWidget> DamageTextClass;
 
 	int32 DamageTextPoolSize = 200;
 };

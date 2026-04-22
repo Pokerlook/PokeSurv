@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "SkillData.generated.h"
+#include "PSSkillData.generated.h"
 
 class APSPoolableActor;
 class USoundBase;
@@ -55,7 +55,7 @@ struct FSkillLevelData
 };
 
 UCLASS()
-class POKESURV_API USkillData : public UPrimaryDataAsset
+class POKESURV_API UPSSkillData : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 	

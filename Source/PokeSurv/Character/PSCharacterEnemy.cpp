@@ -52,6 +52,12 @@ void APSCharacterEnemy::UpdateMoveVector(float DeltaSeconds)
 	else                                         MoveVector2D = FVector2D(0, -1);
 }
 
+void APSCharacterEnemy::OnDeath_Implementation()
+{
+	Super::OnDeath_Implementation();
+    GetWorldTimerManager().ClearTimer(ContactDamageTimer);
+}
+
 void APSCharacterEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (!OtherActor->ActorHasTag("Player")) return;

@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PokeSurv/UI/DamageTextWidget.h"
+#include "PokeSurv/UI/PSDamageTextWidget.h"
 
 #include "Animation/UMGSequencePlayer.h"
 
-void UDamageTextWidget::BindAnimationFinished(UUMGSequencePlayer* Player)
+void UPSDamageTextWidget::BindAnimationFinished(UUMGSequencePlayer* Player)
 {
 	if (!Player) return;
 
@@ -26,7 +26,7 @@ void UDamageTextWidget::BindAnimationFinished(UUMGSequencePlayer* Player)
 	});*/
 }
 
-void UDamageTextWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+void UPSDamageTextWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	 

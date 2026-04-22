@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PokeSurv/Data/SkillData.h"
+#include "PokeSurv/Data/PSSkillData.h"
 
 #if WITH_EDITOR
-void USkillData::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
+void UPSSkillData::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	

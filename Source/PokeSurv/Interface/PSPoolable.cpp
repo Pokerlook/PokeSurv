@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PokeSurv/Interface/Poolable.h"
+#include "PokeSurv/Interface/PSPoolable.h"
 
 // Add default functionality here for any IPoolable functions that are not pure virtual.

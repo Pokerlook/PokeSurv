@@ -6,7 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/Character.h"
 #include "InputAction.h"
-#include "PokeSurv/UI/DamageTextWidget.h"
+#include "PokeSurv/UI/PSDamageTextWidget.h"
 
 void APSPlayerController::ShowDamageNumber(FDamageResult DamageResult, AActor* TargetActor)
 {
@@ -17,7 +17,7 @@ void APSPlayerController::ShowDamageNumber(FDamageResult DamageResult, AActor* T
 		return;
 	}
 	
-	UDamageTextWidget* Widget = DamageTextPool.Pop();
+	UPSDamageTextWidget* Widget = DamageTextPool.Pop();
 	if (!Widget)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[%s] DamageTextWidget popped from pool is null."),
@@ -39,7 +39,7 @@ void APSPlayerController::BeginPlay()
 	// BeginPlay에서 풀 초기화
 	for (int32 i = 0; i < DamageTextPoolSize; i++)
 	{
-		UDamageTextWidget* Widget = CreateWidget<UDamageTextWidget>(this, DamageTextClass.Get());
+		UPSDamageTextWidget* Widget = CreateWidget<UPSDamageTextWidget>(this, DamageTextClass.Get());
 		DamageTextPool.Add(Widget);
 		Widget->OnDamageTextFinished.AddDynamic(this, &APSPlayerController::OnDamageTextFinished);
 		Widget->AddToViewport();
@@ -87,7 +87,7 @@ void APSPlayerController::Move(const FInputActionValue& Value)
 	PlayerCharacter->AddMovementInput(FVector(Input.Y, Input.X, 0.f));
 }
 
-void APSPlayerController::OnDamageTextFinished(UDamageTextWidget* Widget)
+void APSPlayerController::OnDamageTextFinished(UPSDamageTextWidget* Widget)
 {
 	Widget->SetVisibility(ESlateVisibility::Collapsed);
 	DamageTextPool.Add(Widget);

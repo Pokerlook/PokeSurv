@@ -3,7 +3,7 @@
 
 #include "PokeSurv/Combat/PSStatComponent.h"
 
-void UPSStatComponent::Initialize(UPokemonData* NewData)
+void UPSStatComponent::Initialize(UPSPokemonData* NewData)
 {
     if (NewData) BaseData = NewData;
 	if (!BaseData)

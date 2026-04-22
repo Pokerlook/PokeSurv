@@ -4,7 +4,7 @@
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 
 #include "PokeSurv/Combat/Actor/PSPoolableActor.h"
-#include "PokeSurv/Interface/Poolable.h"
+#include "PokeSurv/Interface/PSPoolable.h"
 
 void UPSPoolSubsystem::InitPool(TSubclassOf<APSPoolableActor> ActorClass, int32 PoolSize)
 {
@@ -18,7 +18,7 @@ void UPSPoolSubsystem::InitPool(TSubclassOf<APSPoolableActor> ActorClass, int32 
 		APSPoolableActor* NewActor = GetWorld()->SpawnActor<APSPoolableActor>(ActorClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 		if (NewActor)
 		{
-			IPoolable::Execute_OnReturnToPool(NewActor);
+			IPSPoolable::Execute_OnReturnToPool(NewActor);
 			PoolArray.Add(NewActor);
 		}
 	}
@@ -38,7 +38,7 @@ AActor* UPSPoolSubsystem::SpawnFromPool(TSubclassOf<APSPoolableActor> ActorClass
 	if (Actor)
 	{
 		Actor->SetActorLocationAndRotation(Location, Rotation);
-		IPoolable::Execute_OnSpawnFromPool(Actor);
+		IPSPoolable::Execute_OnSpawnFromPool(Actor);
 	}
 	return Actor;
 }
@@ -48,10 +48,10 @@ void UPSPoolSubsystem::ReturnToPool(AActor* Actor)
 	if (!Actor) return;
     
 	UClass* ActorClass = Actor->GetClass();
-	checkf(ActorClass->ImplementsInterface(UPoolable::StaticClass()), 
+	checkf(ActorClass->ImplementsInterface(UPSPoolable::StaticClass()), 
 		TEXT("ReturnToPool: %s is not Poolable"), *Actor->GetName());
 
-	IPoolable::Execute_OnReturnToPool(Actor);
+	IPSPoolable::Execute_OnReturnToPool(Actor);
 	FPoolArray& PoolArray = ObjectPools.FindOrAdd(ActorClass);
 	PoolArray.Add(Actor);
 }

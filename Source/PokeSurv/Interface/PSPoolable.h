@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "Poolable.generated.h"
+#include "PSPoolable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UPoolable : public UInterface
+class UPSPoolable : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,7 +16,7 @@ class UPoolable : public UInterface
 /**
  * 
  */
-class POKESURV_API IPoolable
+class POKESURV_API IPSPoolable
 {
 	GENERATED_BODY()
 

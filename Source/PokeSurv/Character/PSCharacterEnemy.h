@@ -18,8 +18,10 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	
 	virtual void UpdateMoveVector(float DeltaSeconds) override;
-
+	virtual void OnDeath_Implementation() override;
+	
 private:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PokeSurv/PSTypes.h"
-#include "PokeSurv/Data/SkillData.h"
+#include "PokeSurv/Data/PSSkillData.h"
 #include "PSSkillBase.generated.h"
 
 
@@ -27,7 +27,7 @@ protected:
 	
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<USkillData> SkillData;
+	TObjectPtr<UPSSkillData> SkillData;
 	
 	UPROPERTY(BlueprintReadOnly)
 	FSkillLevelData CurrentStats ; // 현재 누적 스탯

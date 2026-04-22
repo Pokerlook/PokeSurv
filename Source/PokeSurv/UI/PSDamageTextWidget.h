@@ -5,15 +5,15 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "PokeSurv/PSTypes.h"
-#include "DamageTextWidget.generated.h"
+#include "PSDamageTextWidget.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageTextFinished, UDamageTextWidget*, Widget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageTextFinished, UPSDamageTextWidget*, Widget);
 
 /**
  * 
  */
 UCLASS()
-class POKESURV_API UDamageTextWidget : public UUserWidget
+class POKESURV_API UPSDamageTextWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
