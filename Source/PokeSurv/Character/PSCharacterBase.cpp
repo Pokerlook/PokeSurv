@@ -6,7 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PokeSurv/Combat/PSStatComponent.h"
+#include "PokeSurv/Character/PSStatComponent.h"
 
 APSCharacterBase::APSCharacterBase()
 {

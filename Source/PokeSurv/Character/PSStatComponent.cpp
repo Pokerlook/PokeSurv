@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PokeSurv/Combat/PSStatComponent.h"
+#include "PokeSurv/Character/PSStatComponent.h"
 
 void UPSStatComponent::Initialize(UPSPokemonData* NewData)
 {

@@ -4,7 +4,7 @@
 #include "PokeSurv/Character/PSCharacterPlayer.h"
 
 #include "PokeSurv/Combat/PSSkillComponent.h"
-#include "PokeSurv/Combat/PSStatComponent.h"
+#include "PokeSurv/Character/PSStatComponent.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
 #include "PokeSurv/UI/PSHealthWidgetComponent.h"

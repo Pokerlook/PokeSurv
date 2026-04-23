@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PokeSurv/Combat/Actor/PSPoolableActor.h"
+#include "PokeSurv/Actor/PSPoolableActor.h"
 
 void APSPoolableActor::OnSpawnFromPool_Implementation()
 {

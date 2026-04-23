@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PokeSurv/Combat/Actor/PSProjectileBase.h"
+#include "PokeSurv/Combat/Projectile/PSProjectileBase.h"
 
 #include "PaperFlipbookComponent.h"
 #include "Components/SphereComponent.h"

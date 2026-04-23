@@ -8,30 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="726bb5c7-00e3-4b53-86c3-798209be6459" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Player/BP_PlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Player/BP_PlayerController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/UI/FloatingText/WBP_DamageText.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/UI/FloatingText/WBP_DamageText.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Actor/PSPoolableActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Actor/PSPoolableActor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSStatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSStatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSStatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSStatComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/PokemonData.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSPokemonData.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/PokemonData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSPokemonData.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/SkillData.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSSkillData.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/SkillData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSSkillData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Actor/PSPoolableActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Actor/PSPoolableActor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Actor/PSPoolableActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Actor/PSPoolableActor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Actor/PSProjectileBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Actor/PSProjectileBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Interface/Damageable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Interface/PSDamageable.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Interface/Damageable.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Interface/PSDamageable.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Interface/Poolable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Interface/PSPoolable.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Interface/Poolable.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Interface/PSPoolable.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/UI/DamageTextWidget.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/UI/DamageTextWidget.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Util/PSLibrary.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Util/PSLibrary.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,19 +35,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Uproject.PokeSurv.executor": "Run",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Uproject.PokeSurv.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="PokeSurv" type="Uproject" factoryName="rider.uproject">
       <configuration_1>
@@ -149,7 +131,9 @@
       <option name="presentableId" value="Default" />
       <updated>1776842474083</updated>
       <workItem from="1776842475642" duration="342000" />
-      <workItem from="1776842842749" duration="929000" />
+      <workItem from="1776842842749" duration="1247000" />
+      <workItem from="1776911913301" duration="2065000" />
+      <workItem from="1776928989182" duration="2323000" />
     </task>
     <servers />
   </component>

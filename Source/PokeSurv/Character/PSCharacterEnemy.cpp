@@ -5,7 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PokeSurv/Combat/PSStatComponent.h"
+#include "PokeSurv/Character/PSStatComponent.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Util/PSLibrary.h"
 

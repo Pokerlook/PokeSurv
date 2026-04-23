@@ -5,7 +5,7 @@
 
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
-#include "PokeSurv/Combat/Actor/PSProjectileBase.h"
+#include "PokeSurv/Combat/Projectile/PSProjectileBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 

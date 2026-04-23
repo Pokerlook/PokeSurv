@@ -3,7 +3,7 @@
 
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 
-#include "PokeSurv/Combat/Actor/PSPoolableActor.h"
+#include "PokeSurv/Actor/PSPoolableActor.h"
 #include "PokeSurv/Interface/PSPoolable.h"
 
 void UPSPoolSubsystem::InitPool(TSubclassOf<APSPoolableActor> ActorClass, int32 PoolSize)

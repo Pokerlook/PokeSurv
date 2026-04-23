@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PSPoolableActor.h"
+#include "PokeSurv/Actor/PSPoolableActor.h"
 #include "PokeSurv/PSTypes.h"
 #include "PSProjectileBase.generated.h"
 
