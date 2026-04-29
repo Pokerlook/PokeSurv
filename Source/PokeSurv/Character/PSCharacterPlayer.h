@@ -29,9 +29,14 @@ protected:
 	virtual void UpdateMoveVector(float DeltaSeconds) override;
 
 private:
-	UPROPERTY()
-	TObjectPtr<APSPlayerController> PSPlayerController;
-
+	UFUNCTION()
+	void OnPickupOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+		bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnPlayerStatUpdated();
+	
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
@@ -42,4 +47,13 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPSHealthWidgetComponent> HPBarComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pickup")
+	TObjectPtr<class USphereComponent> PickupMagnet;
+
+private:
+	UPROPERTY()
+	TObjectPtr<APSPlayerController> PSPlayerController;
+
+	float BaseMagnetRadius;
 };

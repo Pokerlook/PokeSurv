@@ -4,6 +4,7 @@
 #include "PokeSurv/Combat/PSSkillComponent.h"
 
 #include "PokeSurv/Game/PSPoolSubsystem.h"
+#include "Projectile/PSProjectileBase.h"
 #include "Skill/PSSkillBase.h"
 
 UPSSkillComponent::UPSSkillComponent()
@@ -42,7 +43,7 @@ void UPSSkillComponent::AddSkill(TSubclassOf<UPSSkillBase> SkillClass)
 	UPSSkillBase* NewSkill = NewObject<UPSSkillBase>(this, SkillClass);
 	
 	UPSPoolSubsystem* PoolSubsystem = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
-	PoolSubsystem->InitPool(NewSkill->SkillData->ProjectileClass, NewSkill->SkillData->ProjectileLimit);
+	PoolSubsystem->InitPool(TSubclassOf<APSPoolableActor>(NewSkill->SkillData->ProjectileClass), NewSkill->SkillData->ProjectileLimit);
 	
 	NewSkill->InitSkill(GetOwner());
 	Skills.Add(NewSkill);

@@ -3,8 +3,11 @@
 
 #include "PokeSurv/Character/PSCharacterPlayer.h"
 
+#include "Components/SphereComponent.h"
 #include "PokeSurv/Combat/PSSkillComponent.h"
 #include "PokeSurv/Character/PSStatComponent.h"
+#include "PokeSurv/Combat/Pickup/PSPickupBase.h"
+#include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
 #include "PokeSurv/UI/PSHealthWidgetComponent.h"
@@ -14,7 +17,10 @@ APSCharacterPlayer::APSCharacterPlayer()
 	PlayerStatComponent = CreateDefaultSubobject<UPSPlayerStatComponent>(TEXT("PlayerStatComponent"));
 	SkillComponent = CreateDefaultSubobject<UPSSkillComponent>(TEXT("SkillComponent"));
 	HPBarComponent = CreateDefaultSubobject<UPSHealthWidgetComponent>("HPBarComponent");
-	HPBarComponent->SetupAttachment(GetRootComponent()); 
+	HPBarComponent->SetupAttachment(GetRootComponent());
+	
+	PickupMagnet = CreateDefaultSubobject<USphereComponent>(TEXT("PickupMagnet"));
+	PickupMagnet->SetupAttachment(RootComponent);
 }
 
 void APSCharacterPlayer::PS_TakeDamage_Implementation(const FDamageResult Damage)
@@ -35,6 +41,11 @@ void APSCharacterPlayer::BeginPlay()
 	{
 		HPBarComponent->UpdateHP(StatComponent->CurrentHP, StatComponent->MaxHP);
 	}
+
+	BaseMagnetRadius = PickupMagnet->GetScaledSphereRadius();
+	PickupMagnet->OnComponentBeginOverlap.AddDynamic(this, &APSCharacterPlayer::OnPickupOverlapBegin);
+
+	PlayerStatComponent->OnPlayerStatChanged.AddDynamic(this, &APSCharacterPlayer::OnPlayerStatUpdated);
 }
 
 void APSCharacterPlayer::UpdateMoveVector(float DeltaSeconds)
@@ -57,4 +68,18 @@ void APSCharacterPlayer::UpdateMoveVector(float DeltaSeconds)
 		MoveVector2D.Y = Dir.X > 0 ? 1 : -1;
 		MoveVector2D.X = 0;
 	}
+}
+
+void APSCharacterPlayer::OnPickupOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	APSPickupBase* Pickup = Cast<APSPickupBase>(OtherActor);
+	if (!Pickup) return;
+
+	Pickup->OnPickupCollected(this);
+}
+
+void APSCharacterPlayer::OnPlayerStatUpdated()
+{
+    StatComponent->RecalculateFromPlayerStat(PlayerStatComponent);
 }

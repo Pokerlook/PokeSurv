@@ -7,6 +7,8 @@
 #include "PokeSurv/Data/PSPokemonData.h"
 #include "PSStatComponent.generated.h"
 
+class UPSPlayerStatComponent;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStatsChanged);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -17,6 +19,9 @@ class POKESURV_API UPSStatComponent : public UActorComponent
 public:
 	UFUNCTION(BlueprintCallable)
 	void Initialize(UPSPokemonData* NewData);
+	
+	UFUNCTION(BlueprintCallable)
+	void RecalculateFromPlayerStat(UPSPlayerStatComponent* PlayerStatComponent);	// 플레이어 캐릭터 & 에네미(저주) 구분... 오너의 태그?
 
 protected:
 	virtual void BeginPlay() override;
