@@ -56,9 +56,9 @@ void APSCharacterBase::TakeKnockback_Implementation(float KnockBackMultiplier, F
 
 void APSCharacterBase::BeginPlay()
 {
-	StatComponent->OnStatsChanged.AddDynamic(this, &APSCharacterBase::OnStatsChanged);
-	
 	Super::BeginPlay();
+	StatComponent->OnStatsChanged.AddDynamic(this, &APSCharacterBase::OnStatsChanged);
+	OnStatsChanged();
 }
 
 void APSCharacterBase::OnDamage_Implementation()

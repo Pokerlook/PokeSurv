@@ -81,5 +81,8 @@ void APSCharacterPlayer::OnPickupOverlapBegin(UPrimitiveComponent* OverlappedCom
 
 void APSCharacterPlayer::OnPlayerStatUpdated()
 {
-    StatComponent->RecalculateFromPlayerStat(PlayerStatComponent);
+	StatComponent->RecalculateFromPlayerStat(PlayerStatComponent);
+	
+	float NewRadius = BaseMagnetRadius * (1.f + PlayerStatComponent->MagnetBonus);
+	PickupMagnet->SetSphereRadius(NewRadius);
 }

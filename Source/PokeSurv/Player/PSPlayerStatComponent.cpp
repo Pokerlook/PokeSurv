@@ -3,6 +3,14 @@
 
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
 
+void UPSPlayerStatComponent::BroadcastInitialValues()
+{
+	OnExpChanged.Broadcast(Exp, GetRequiredExp());
+	OnGoldChanged.Broadcast(Gold);
+	OnLevelUp.Broadcast(PlayerLevel);
+	OnPlayerStatChanged.Broadcast();
+}
+
 void UPSPlayerStatComponent::AddStat(EPlayerStatType StatType, float Value)
 {
 	switch (StatType)
@@ -68,11 +76,63 @@ float UPSPlayerStatComponent::GetStat(EPlayerStatType StatType) const
 void UPSPlayerStatComponent::AddExp(float Value)
 {
 	Exp += Value;
-	if(Exp >= GetRequiredExp())
+	float MaxExp = GetRequiredExp();
+	
+	if(Exp >= MaxExp)
 	{
-		//LevelUp //Value -= GetRequiredExp();
+		//LevelUp 함수 부르기(만들기)
+		Value -= MaxExp;
 		UE_LOG(LogTemp, Warning, TEXT("LevelUp"));
 	}
+	OnExpChanged.Broadcast(Exp, MaxExp);
+}
+
+void UPSPlayerStatComponent::AddGold(float Value)
+{
+	Gold +=Value;
+	OnGoldChanged.Broadcast(Gold);
+}
+
+void UPSPlayerStatComponent::DebugPlayerStat()
+{
+	UE_LOG(LogTemp, Log, TEXT("=== [%s] PlayerStat ==="), *GetOwner()->GetName());
+
+	// Player
+	UE_LOG(LogTemp, Log, TEXT("[Player]"));
+	UE_LOG(LogTemp, Log, TEXT("  PlayerLevel: %d"), PlayerLevel);
+	UE_LOG(LogTemp, Log, TEXT("  Exp: %.2f"), Exp);
+	UE_LOG(LogTemp, Log, TEXT("  Gold: %d"), Gold);
+
+	// Character
+	UE_LOG(LogTemp, Log, TEXT("[Character]"));
+	UE_LOG(LogTemp, Log, TEXT("  MaxHPBonus: %d"), MaxHPBonus);
+	UE_LOG(LogTemp, Log, TEXT("  Recovery: %.2f"), Recovery);
+	UE_LOG(LogTemp, Log, TEXT("  Defense: %d"), Defense);
+	UE_LOG(LogTemp, Log, TEXT("  SpeedBonus: %.2f"), SpeedBonus);
+
+	// Skill
+	UE_LOG(LogTemp, Log, TEXT("[Skill]"));
+	UE_LOG(LogTemp, Log, TEXT("  DamageBonus: %.2f"), DamageBonus);
+	UE_LOG(LogTemp, Log, TEXT("  ProjectileSpeedBonus: %.2f"), ProjectileSpeedBonus);
+	UE_LOG(LogTemp, Log, TEXT("  DurationBonus: %.2f"), DurationBonus);
+	UE_LOG(LogTemp, Log, TEXT("  AreaBonus: %.2f"), AreaBonus);
+	UE_LOG(LogTemp, Log, TEXT("  CooldownDecrease: %.2f"), CooldownDecrease);
+	UE_LOG(LogTemp, Log, TEXT("  ProjectileCount: %d"), ProjectileCount);
+
+	// Meta
+	UE_LOG(LogTemp, Log, TEXT("[Meta]"));
+	UE_LOG(LogTemp, Log, TEXT("  Revive: %d"), Revive);
+	UE_LOG(LogTemp, Log, TEXT("  MagnetBonus: %.2f"), MagnetBonus);
+	UE_LOG(LogTemp, Log, TEXT("  Luck: %.2f"), Luck);
+	UE_LOG(LogTemp, Log, TEXT("  Growth: %.2f"), Growth);
+	UE_LOG(LogTemp, Log, TEXT("  Greed: %.2f"), Greed);
+	UE_LOG(LogTemp, Log, TEXT("  Curse: %.2f"), Curse);
+
+	// Shop
+	UE_LOG(LogTemp, Log, TEXT("[Shop]"));
+	UE_LOG(LogTemp, Log, TEXT("  Reroll: %d"), Reroll);
+	UE_LOG(LogTemp, Log, TEXT("  Skip: %d"), Skip);
+	UE_LOG(LogTemp, Log, TEXT("  Banish: %d"), Banish);
 }
 
 int32 UPSPlayerStatComponent::GetRequiredExp() const

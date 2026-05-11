@@ -16,7 +16,6 @@ class POKESURV_API APSPickupBase : public APSPoolableActor
 	
 public:
 	APSPickupBase();
-	virtual void OnSpawnFromPool_Implementation() override;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Pickup")
 	void OnPickupCollected(AActor* Target);	// 스탯을 변경하거나 이벤트를 발생시킬 것
@@ -26,7 +25,7 @@ public:
 	void ReturnToPool();
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Pickup")
-	void SetValue(float InValue);
+	void SetValue(float InValue);	// Gem의 경우 BP에서 sprite 변경
 	
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Pickup")

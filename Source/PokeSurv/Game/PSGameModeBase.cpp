@@ -25,6 +25,12 @@ void APSGameModeBase::SpawnExpGem(FVector Location, float XPValue)
 	}
 }
 
+void APSGameModeBase::AddKillCount()
+{
+	KillCount++;
+	OnKillCountChanged.Broadcast(KillCount);
+}
+
 void APSGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();

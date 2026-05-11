@@ -65,6 +65,7 @@ void APSCharacterEnemy::OnDeath_Implementation()
 	if (!GM) return;
 
 	GM->SpawnExpGem(GetActorLocation(), StatComponent->BaseData->XP);
+	GM->AddKillCount();
 }
 
 void APSCharacterEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

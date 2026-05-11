@@ -51,7 +51,24 @@ struct FSkillLevelData
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float CritChance = 0.f;
 	
 	// 치명타 배율
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) float CritMultiplier = 0.f;	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float CritMultiplier = 0.f;
+	
+	FSkillLevelData& operator+=(const FSkillLevelData& Other)
+	{
+		Cooldown += Other.Cooldown;
+		FireInterval += Other.FireInterval;
+		HitboxDelay += Other.HitboxDelay;
+		Damage += Other.Damage;
+		AreaMultiplier += Other.AreaMultiplier;
+		ProjectileSpeedMultiplier += Other.ProjectileSpeedMultiplier;
+		ProjectileCount += Other.ProjectileCount;
+		PierceCount += Other.PierceCount;
+		Duration += Other.Duration;
+		Knockback += Other.Knockback;
+		CritChance += Other.CritChance;
+		CritMultiplier += Other.CritMultiplier;
+		return *this;
+	}
 };
 
 UCLASS()
@@ -60,31 +77,31 @@ class POKESURV_API UPSSkillData : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FString SkillName;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText Description;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UTexture2D* Icon;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<APSProjectileBase> ProjectileClass;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 ProjectileLimit = 50;	// 투사체제한
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 Rarity = 1;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<USoundBase> ActivateSound;  // 스킬 발동 사운드
 
 	/*UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FGameplayTag SkillTag; // [문장_계열] 같은 거	*/
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) // 레벨별 데이터
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) // 레벨별 데이터
 	TArray<FSkillLevelData> LevelData; // 최대 8개
 
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;

@@ -7,6 +7,7 @@
 #include "PSSkillComponent.generated.h"
 
 class UPSSkillBase;
+class UPSItemBase;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class POKESURV_API UPSSkillComponent : public UActorComponent
@@ -18,10 +19,13 @@ public:
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// 스킬 추가 or 레벨업
 	UFUNCTION(BlueprintCallable)
 	void AddSkill(TSubclassOf<UPSSkillBase> SkillClass);// 스킬 추가되면 자동 발동 시작
 	
-	// LevelUpSkill
+	// 아이템 추가 or 레벨업
+	UFUNCTION(BlueprintCallable)
+	void AddItem(TSubclassOf<UPSItemBase> ItemClass);
 	
 protected:
 	// Called when the game starts
@@ -38,6 +42,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
 	float EnemyScanRadius = 1500.f;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Items")
+	TArray<TObjectPtr<UPSItemBase>> Items;
 private:
 	
 };

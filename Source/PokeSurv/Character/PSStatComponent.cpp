@@ -3,6 +3,8 @@
 
 #include "PokeSurv/Character/PSStatComponent.h"
 
+#include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
 
 void UPSStatComponent::Initialize(UPSPokemonData* NewData)
@@ -14,14 +16,29 @@ void UPSStatComponent::Initialize(UPSPokemonData* NewData)
 		return;
 	}
 
-	MaxHP      = BaseData->Health;
+	UPSPlayerStatComponent* PlayerStatComponent = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->FindComponentByClass<UPSPlayerStatComponent>();
+	
+	if(GetOwner()->ActorHasTag("Enemy"))
+	{
+		MaxHP      = BaseData->Health * (1 + PlayerStatComponent->Curse) ;		
+		Defense    = 0;
+	}
+	else if (GetOwner()->ActorHasTag("Player"))
+	{
+		MaxHP      = BaseData->Health * (1 + PlayerStatComponent->MaxHPBonus);	
+		Defense    = PlayerStatComponent->Defense;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has no Tag"), *GetOwner()->GetName());
+	}
+	
 	CurrentHP  = MaxHP;
 	Attack     = BaseData->Power;
-	Defense    = 0;               // 적 기본 방어력 없음 (뱀서 방식)
 	Speed      = BaseData->Speed;
 	KnockbackMultiplier = BaseData->KnockbackMultiplier;
 	
-    OnStatsChanged.Broadcast(); // 캐릭터가 읽기
+    OnStatsChanged.Broadcast(); // 캐릭터가 읽기, speed (AnimBP)
 }
 
 void UPSStatComponent::RecalculateFromPlayerStat(UPSPlayerStatComponent* PlayerStatComponent)
@@ -31,22 +48,19 @@ void UPSStatComponent::RecalculateFromPlayerStat(UPSPlayerStatComponent* PlayerS
 		UE_LOG(LogTemp, Error, TEXT("UPSStatComponent::Initialize: No PokemonData Data!"));
 		return;
 	}
-
-	MaxHP      = BaseData->Health * (1 + PlayerStatComponent->MaxHPBonus) ;
-	CurrentHP  = MaxHP;
-	Attack     = BaseData->Power;
-	Defense    = PlayerStatComponent->Defense;
-	Speed      = BaseData->Speed * (1 + PlayerStatComponent->SpeedBonus) ;
-
+	if (!PlayerStatComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("UPSStatComponent::Initialize: No PlayerStatComponent!"));
+		return;
+	}
 	
-	MaxHP      = BaseData->Health * (1 + PlayerStatComponent->Curse) ;
-	CurrentHP  = MaxHP;
-	Attack     = BaseData->Power;
-	Defense    = 0;               // 적 기본 방어력 없음 (뱀서 방식)
-	Speed      = BaseData->Speed;
-
-	
-	KnockbackMultiplier = BaseData->KnockbackMultiplier;
+	float PrevMaxHP = MaxHP;
+	float HPRatio = (PrevMaxHP > 0.f) ? (float)CurrentHP / (float)PrevMaxHP : 1.f;
+	MaxHP     = BaseData->Health * (1 + PlayerStatComponent->MaxHPBonus);
+    CurrentHP = MaxHP * HPRatio;
+	Attack    = BaseData->Power;
+	Defense   = PlayerStatComponent->Defense;
+	Speed     = BaseData->Speed * (1 + PlayerStatComponent->SpeedBonus);
 	
 	OnStatsChanged.Broadcast();
 }

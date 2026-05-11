@@ -15,7 +15,18 @@ class POKESURV_API UPSLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "PS|Utility")
 	static void ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBackMultiplier, AActor* DamageCauser);
-
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
+	static FText FormatTime_MS(int32 Seconds);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
+    static int32 GetElapsedSeconds(const UObject* WorldContextObject);
+	
+	UFUNCTION(BlueprintCallable, Category = "PS|Utility")
+	static void DebugPlayerSkillsAndItems(const UObject* WorldContextObject);
+	
+	UFUNCTION(BlueprintCallable, Category = "PS|Utility")
+	static void DebugPlayerStat(const UObject* WorldContextObject);
 };

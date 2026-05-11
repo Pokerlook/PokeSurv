@@ -7,6 +7,7 @@
 #include "PokeSurv/Data/PSSkillData.h"
 #include "PSSkillBase.generated.h"
 
+class UPSPlayerStatComponent;
 
 UCLASS(BlueprintType, Blueprintable)
 class POKESURV_API UPSSkillBase : public UObject
@@ -14,27 +15,39 @@ class POKESURV_API UPSSkillBase : public UObject
 	GENERATED_BODY()
 
 public:
-	void TickCooldown(float DeltaTime);  // SkillComponent가 매 틱 호출
+	// SkillComponent가 매 틱 호출
+	void TickCooldown(float DeltaTime);  
 
 	// SkillComp->AddSkill 에서 호출할 듯 
 	void InitSkill(AActor* InOwner);
 
 	// SkillLevelUp, if check, CurrentLevel++ 
+	void LevelUp();
+
+	UFUNCTION(BlueprintCallable)
+	void DebugSkill();
+	
 
 protected:
+	
 	virtual void Activate() PURE_VIRTUAL(UPSSkillBase::Activate,);
+	
 	FDamageResult CalculateDamage() const;
+	float CalculateAreaMultiplayer() const;
+	float CalculateProjectileSpeedMultiplayer() const;
+	float CalculateDuration() const;
+	float CalculateCooldown() const;
+	int32 CalculateProjectileCount() const;
 	
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
+	int32 SkillLevel = 0;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PS")
 	TObjectPtr<UPSSkillData> SkillData;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
 	FSkillLevelData CurrentStats ; // 현재 누적 스탯
-	
-	// 현재 레벨
-	UPROPERTY(BlueprintReadOnly)
-	int32 CurrentLevel = 0;  // LevelData[0]이 1레벨
 
 protected:	
 	// 쿨타임 타이머
@@ -43,4 +56,7 @@ protected:
 	// 오너 (투사체 스폰, 플레이어 위치 등에 필요)
 	UPROPERTY()
 	TObjectPtr<AActor> Owner;
+
+	UPROPERTY()
+	UPSPlayerStatComponent* PlayerStatComp;
 };

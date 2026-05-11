@@ -3,7 +3,15 @@
 
 #include "PokeSurv/Util/PSLibrary.h"
 
+#include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "PokeSurv/Combat/PSSkillComponent.h"
+#include "PokeSurv/Combat/Item/PSItemBase.h"
+#include "PokeSurv/Combat/Skill/PSSkillBase.h"
 #include "PokeSurv/Interface/PSDamageable.h"
+#include "PokeSurv/Player/PSPlayerStatComponent.h"
 
 void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBackMultiplier, AActor* DamageCauser)
 {
@@ -27,4 +35,48 @@ void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBa
 			IPSDamageable::Execute_TakeKnockback(Target, KnockBackMultiplier, DamageCauser->GetActorLocation());
 		}
 	}
+}
+
+FText UPSLibrary::FormatTime_MS(int32 Seconds)
+{
+	int32 Minutes = Seconds / 60;
+	int32 RemSeconds = Seconds % 60;
+
+	FText TimeText = FText::FromString(
+		FString::Printf(TEXT("%02d : %02d"), Minutes, RemSeconds)
+	);
+	return TimeText;
+}
+
+int32 UPSLibrary::GetElapsedSeconds(const UObject* WorldContextObject)
+{
+	int32 time =  UKismetMathLibrary::FTrunc(UKismetSystemLibrary::GetGameTimeInSeconds(WorldContextObject));
+	return time;
+}
+
+void UPSLibrary::DebugPlayerSkillsAndItems(const UObject* WorldContextObject)
+{
+	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(WorldContextObject, 0);
+	UPSSkillComponent* SkillComponent = Character->FindComponentByClass<UPSSkillComponent>();
+	
+	for (UPSSkillBase* Skill : SkillComponent->Skills)
+	{
+		if (!Skill) continue;
+		UE_LOG(LogTemp, Warning, TEXT("[Skill] %s LV%d"), *Skill->GetName(), Skill->SkillLevel);
+		Skill->DebugSkill();
+	}
+	for (UPSItemBase* Item : SkillComponent->Items)
+	{
+		if (!Item) continue;
+		UE_LOG(LogTemp, Warning, TEXT("[Item] %s LV%d"), *Item->GetName(), Item->ItemLevel);              
+	}
+
+}
+
+void UPSLibrary::DebugPlayerStat(const UObject* WorldContextObject)
+{
+	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(WorldContextObject, 0);
+	UPSPlayerStatComponent* PlayerStatComponent = Character->FindComponentByClass<UPSPlayerStatComponent>();
+
+	PlayerStatComponent->DebugPlayerStat();
 }

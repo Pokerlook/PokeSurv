@@ -7,6 +7,9 @@
 #include "PSPlayerStatComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerStatChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnExpChanged, float, CurrentExp, float, MaxExp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGoldChanged, int, Gold);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUp, int, Level);
 
 UENUM(BlueprintType)
 enum class EPlayerStatType : uint8
@@ -20,7 +23,7 @@ enum class EPlayerStatType : uint8
 	ProjectileSpeedBonus UMETA(DisplayName = "ProjectileSpeedBonus", ToolTip = "발사체 속도"),
 	DurationBonus       UMETA(DisplayName = "DurationBonus",        ToolTip = "스킬 지속시간"),
 	AreaBonus           UMETA(DisplayName = "AreaBonus",            ToolTip = "공격 범위"),
-	CooldownDecrease    UMETA(DisplayName = "CooldownDecrease",     ToolTip = "쿨타임 감소"),
+	CooldownDecrease    UMETA(DisplayName = "CooldownDecrease",     ToolTip = "쿨타임 감소(음수)"),
 	ProjectileCount     UMETA(DisplayName = "ProjectileCount",      ToolTip = "발사체 추가수"),
 
 	Revive              UMETA(DisplayName = "Revive",               ToolTip = "부활 횟수"),
@@ -44,6 +47,10 @@ class POKESURV_API UPSPlayerStatComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	
+	UFUNCTION(BlueprintCallable)
+	void BroadcastInitialValues();
+	
 	// 스탯 추가 (아이템 획득, 레벨업 등)
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void AddStat(EPlayerStatType StatType, float Value);
@@ -55,8 +62,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void AddExp(float Value);
 	
-	//UFUNCTION(BlueprintCallable, Category = "Stats")
-	//void AddGold(float Value);
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void AddGold(float Value);
+
+	void DebugPlayerStat();
 	
 private:
 	int32 GetRequiredExp() const;
@@ -64,6 +73,15 @@ private:
 public:
 	UPROPERTY(BlueprintAssignable, Category = "Stats")
 	FOnPlayerStatChanged OnPlayerStatChanged;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Stats")
+	FOnExpChanged OnExpChanged;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Stats")
+	FOnGoldChanged OnGoldChanged;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Stats")
+	FOnLevelUp OnLevelUp;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Player")
 	int32 PlayerLevel = 1;
