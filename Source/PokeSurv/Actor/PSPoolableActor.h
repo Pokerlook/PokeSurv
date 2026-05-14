@@ -15,4 +15,7 @@ class POKESURV_API APSPoolableActor : public AActor, public IPSPoolable
 public:
 	virtual void OnSpawnFromPool_Implementation() override;
 	virtual void OnReturnToPool_Implementation() override;
+
+	virtual bool ShouldCull_Implementation() override;
+	virtual void CheckCulling_Implementation(const FBox2D& ScreenBounds) override;
 };

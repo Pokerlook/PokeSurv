@@ -32,12 +32,23 @@ protected:
 	
 	virtual void Activate() PURE_VIRTUAL(UPSSkillBase::Activate,);
 	
+	// 한 발(혹은 한 사이클) 실행 - 자식 클래스가 구현
+	virtual void FireOnce() {}
+
+	// 시퀀스 시작 - 자식 클래스의 Activate()에서 호출
+	void StartFireSequence();
+    void HandleFireTick();
+	
 	FDamageResult CalculateDamage() const;
-	float CalculateAreaMultiplayer() const;
-	float CalculateProjectileSpeedMultiplayer() const;
+	float CalculateAreaMultiplier() const;
 	float CalculateDuration() const;
 	float CalculateCooldown() const;
+	float CalculateProjectileSpeedMultiplier() const;
 	int32 CalculateProjectileCount() const;
+	int32 CalculateProjectilePierceCount() const;
+
+	float GetKnockBack() const;
+	float GetFireInterval() const;
 	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
@@ -45,9 +56,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PS")
 	TObjectPtr<UPSSkillData> SkillData;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
-	FSkillLevelData CurrentStats ; // 현재 누적 스탯
 
 protected:	
 	// 쿨타임 타이머
@@ -59,4 +67,14 @@ protected:
 
 	UPROPERTY()
 	UPSPlayerStatComponent* PlayerStatComp;
+	
+	// 발사 시퀀스 관리
+	UPROPERTY()
+	int32 RemainingFireCount = 0;
+
+	FTimerHandle FireIntervalTimerHandle;
+
+private:
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
+	FSkillLevelData CurrentStats ; // 현재 누적 스탯
 };

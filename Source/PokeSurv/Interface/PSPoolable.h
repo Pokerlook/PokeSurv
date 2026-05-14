@@ -30,4 +30,11 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Poolable")
 	void OnReturnToPool();
 
+	// 이 액터가 컬링을 해야할지 말아야할지 결정
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Poolable")
+	bool ShouldCull();
+
+	// 현재 풀로 반환해야하는지 확인하고 반환.
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Poolable")
+	void CheckCulling(const FBox2D& ReferenceLocation);
 };

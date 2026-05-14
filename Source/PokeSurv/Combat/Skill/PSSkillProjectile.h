@@ -26,16 +26,22 @@ class POKESURV_API UPSSkillProjectile : public UPSSkillBase
 
 protected:
 	virtual void Activate() override;
+	virtual void FireOnce() override;
 
 private:
-	FVector GetFireDirection();
-	FVector GetNearestEnemyDirection();
+	FVector GetFireDirection(const FVector& StartLocation);
+	FVector GetNearestEnemyDirection(const FVector& StartLocation);
 	FVector GetMoveDirection();
-	APSProjectileBase* RequestProjectile(FVector Location, FRotator Rotation); // 지금은 SpawnActor, 나중에 풀에서 꺼내오는 걸로 교체
+	
+	APSProjectileBase* RequestProjectile(FVector Location, FRotator Rotation);
 
+	FVector GetSpawnOffset();
+	void RefillSpawnOffsets();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill")
 	EProjectileAimMode AimMode = EProjectileAimMode::NearestEnemy;
-	
+
+private:
+	TArray<FVector> RemainingSpawnOffsets;
 };
