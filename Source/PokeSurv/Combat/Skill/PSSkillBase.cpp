@@ -3,6 +3,7 @@
 
 #include "PokeSurv/Combat/Skill/PSSkillBase.h"
 
+#include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
 
 void UPSSkillBase::TickCooldown(float DeltaTime)
@@ -62,6 +63,11 @@ void UPSSkillBase::DebugSkill()
 	UE_LOG(LogTemp, Log, TEXT("Knockback: %f"), CurrentStats.Knockback);
 	UE_LOG(LogTemp, Log, TEXT("CritChance: %f"), CurrentStats.CritChance);
 	UE_LOG(LogTemp, Log, TEXT("CritMultiplier: %f"), CurrentStats.CritMultiplier);
+}
+
+void UPSSkillBase::Activate()
+{
+	StartFireSequence();
 }
 
 void UPSSkillBase::StartFireSequence()
@@ -174,7 +180,7 @@ float UPSSkillBase::CalculateDuration() const
 		return 0;
 	}
 	
-	const float Result = CurrentStats.Duration + PlayerStatComp->DurationBonus;
+	const float Result = CurrentStats.Duration *(1.0f + PlayerStatComp->DurationBonus);
 	return Result;
 }
 
@@ -221,3 +227,9 @@ float UPSSkillBase::GetFireInterval() const
 {
 	return CurrentStats.FireInterval;
 }
+
+float UPSSkillBase::GetHitBoxDelay() const
+{
+	return CurrentStats.HitboxDelay;
+}
+

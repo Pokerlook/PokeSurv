@@ -25,7 +25,7 @@ void UPSSkillProjectile::FireOnce()
 	const FVector SpawnLocation = Owner->GetActorLocation() + GetSpawnOffset();
     const FVector Direction = GetFireDirection(SpawnLocation);
 
-	DrawDebugSphere(GetWorld(), SpawnLocation, 2.f, 8, FColor::Cyan, false, 2.f);  // 임시
+	//DrawDebugSphere(GetWorld(), SpawnLocation, 2.f, 8, FColor::Cyan, false, 2.f);
 
 	APSProjectileBase* Projectile = RequestProjectile(SpawnLocation, Direction.Rotation());
 
@@ -54,7 +54,7 @@ void UPSSkillProjectile::FireOnce()
 	
 }
 
-FVector UPSSkillProjectile::GetFireDirection(const FVector& StartLocation)
+FVector UPSSkillProjectile::GetFireDirection(const FVector& StartLocation) const
 {
 	switch (AimMode)
 	{
@@ -76,7 +76,17 @@ FVector UPSSkillProjectile::GetFireDirection(const FVector& StartLocation)
 	}
 }
 
-FVector UPSSkillProjectile::GetNearestEnemyDirection(const FVector& StartLocation)
+FVector UPSSkillProjectile::GetMoveDirection() const
+{
+	const APSPlayerController* PC = Cast<APSPlayerController>(
+		Cast<ACharacter>(Owner)->GetController()
+		);
+    
+	check(PC);
+	return PC->LastMoveDirection;
+}
+
+FVector UPSSkillProjectile::GetNearestEnemyDirection(const FVector& StartLocation) const
 {
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(Owner);
@@ -106,9 +116,7 @@ FVector UPSSkillProjectile::GetNearestEnemyDirection(const FVector& StartLocatio
 			if (!Actor) continue;
 
 			// 감지된 액터마다 점 표시
-			DrawDebugPoint(GetWorld(), Actor->GetActorLocation(),
-				10.f, FColor::Red, false, 0.1f);
-			//
+			//DrawDebugPoint(GetWorld(), Actor->GetActorLocation(), 10.f, FColor::Red, false, 0.1f);
 			
 			float Dist = FVector::DistSquared(StartLocation, Actor->GetActorLocation());
 			if (Dist < MinDist) { MinDist = Dist; Nearest = Actor; }
@@ -126,15 +134,6 @@ FVector UPSSkillProjectile::GetNearestEnemyDirection(const FVector& StartLocatio
 
 	return GetMoveDirection(); // fallback
 
-}
-
-FVector UPSSkillProjectile::GetMoveDirection()
-{
-	APSPlayerController* PC = Cast<APSPlayerController>(
-		Cast<ACharacter>(Owner)->GetController());
-    
-	check(PC);
-	return PC->LastMoveDirection;
 }
 
 APSProjectileBase* UPSSkillProjectile::RequestProjectile(FVector Location, FRotator Rotation)

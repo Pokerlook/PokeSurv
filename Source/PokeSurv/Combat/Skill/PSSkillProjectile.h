@@ -29,9 +29,10 @@ protected:
 	virtual void FireOnce() override;
 
 private:
-	FVector GetFireDirection(const FVector& StartLocation);
-	FVector GetNearestEnemyDirection(const FVector& StartLocation);
-	FVector GetMoveDirection();
+	
+	FVector GetFireDirection(const FVector& StartLocation) const;
+	FVector GetMoveDirection() const;
+	FVector GetNearestEnemyDirection(const FVector& StartLocation) const;
 	
 	APSProjectileBase* RequestProjectile(FVector Location, FRotator Rotation);
 

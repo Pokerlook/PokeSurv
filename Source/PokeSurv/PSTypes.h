@@ -18,3 +18,26 @@ struct FDamageResult
     UPROPERTY(BlueprintReadWrite)
 	bool bIsCritical = false;
 };
+
+UENUM(BlueprintType)
+enum class ESummonSpawnPattern  : uint8
+{
+    OwnerCenter,			// 캐릭터 중앙 (마늘)
+	OwnerLeftRightStack,		// 캐릭터 좌우, 위치는 점점 위로. 채찍
+	RandomAllEnemy,				// 랜덤. 번개반지
+};
+
+UENUM(BlueprintType)
+enum class ESummonBehavior : uint8
+{
+	Stationary,         // 
+	AttachOwner,        // 
+	ChasePlayer,        // 
+};
+
+UENUM(BlueprintType)
+enum class ESummonDamageMode : uint8
+{
+	OneShot,		// 스폰 시 1번만 (번개반지)
+	Periodic,		// 콜리전에 들어오면 1번, 그리고는 주기적으로 (마늘, 장판)
+};

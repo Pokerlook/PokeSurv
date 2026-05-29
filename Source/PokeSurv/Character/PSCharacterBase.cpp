@@ -24,6 +24,8 @@ void APSCharacterBase::Tick(float DeltaSeconds)
 
 void APSCharacterBase::PS_TakeDamage_Implementation(const FDamageResult  Damage)
 {
+    if (StatComponent->CurrentHP <= 0) return;	// 이미 죽음
+	
 	float FinalDamage = FMath::Max(1, (Damage.FinalDamage - StatComponent->Defense) );
 	//UE_LOG(LogTemp, Warning, TEXT("[TakeDamage] %s | 입력 데미지: %.1f | 방어력: %d | 최종 데미지: %.1f"),
 	//	*GetName(), Damage, StatComponent->Defense, FinalDamage);

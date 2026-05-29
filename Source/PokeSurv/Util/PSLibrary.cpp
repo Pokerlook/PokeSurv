@@ -7,6 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "PokeSurv/Character/PSCharacterBase.h"
+#include "PokeSurv/Character/PSStatComponent.h"
 #include "PokeSurv/Combat/PSSkillComponent.h"
 #include "PokeSurv/Combat/Item/PSItemBase.h"
 #include "PokeSurv/Combat/Skill/PSSkillBase.h"
@@ -79,4 +81,29 @@ void UPSLibrary::DebugPlayerStat(const UObject* WorldContextObject)
 	UPSPlayerStatComponent* PlayerStatComponent = Character->FindComponentByClass<UPSPlayerStatComponent>();
 
 	PlayerStatComponent->DebugPlayerStat();
+}
+
+bool UPSLibrary::IsAlive(AActor* Actor)
+{
+	if (!IsValid(Actor))
+	{
+		UE_LOG(LogTemp, Verbose, TEXT("[IsAlive] Actor is invalid (null or pending kill)"));
+		return false;
+	}
+    
+	APSCharacterBase* Character = Cast<APSCharacterBase>(Actor);
+	if (!Character)
+	{
+		UE_LOG(LogTemp, Verbose, TEXT("[IsAlive] %s is not APSCharacterBase"), *Actor->GetName());
+		return false;
+	}
+    
+	UPSStatComponent* Stat = Character->FindComponentByClass<UPSStatComponent>();
+	if (!Stat)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[IsAlive] %s has no PSStatComponent"), *Actor->GetName());
+		return false;
+	}
+    
+	return Stat->CurrentHP > 0.f;
 }

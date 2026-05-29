@@ -9,14 +9,13 @@ Combat/
 │   ├── ProjectileSkill
 │   ├── OrbitalSkill
 │   ├── ZoneSkill
-│   ├── HitscanSkill (Melee)
 │   └── SummonSkill
 │
 └── Actor/
     ├── PSPoolableActor    ← AActor 상속, IPoolable 구현 (공통 처리)
     ├── ProjectileBase
-    ├── ZoneBase
-    └── OrbitalBase
+    ├── SummonBase
+    		└── OrbitalBase 
 
 Data/                    
 ├── SkillData

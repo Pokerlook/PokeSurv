@@ -6,7 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "PSSkillData.generated.h"
 
-class APSProjectileBase;
+class APSPoolableActor;
 class USoundBase;
 
 USTRUCT(BlueprintType)
@@ -87,7 +87,7 @@ public:
 	UTexture2D* Icon;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<APSProjectileBase> ProjectileClass;
+	TSubclassOf<APSPoolableActor> ProjectileClass;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 ProjectileLimit = 50;	// 투사체제한

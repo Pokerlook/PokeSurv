@@ -35,7 +35,7 @@ protected:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
-public:	
+protected:	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> CollisionSphere;	// root
 
@@ -54,6 +54,7 @@ private:
 	
 	float DefaultSpeed = 0.f;
 	float DefaultRadius = 0.f;
+	FVector DefaultFlipBookScale;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	

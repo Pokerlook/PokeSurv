@@ -29,4 +29,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "PS|Utility")
 	static void DebugPlayerStat(const UObject* WorldContextObject);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
+	static bool IsAlive(AActor* Actor);
 };

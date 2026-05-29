@@ -21,6 +21,7 @@ APSProjectileBase::APSProjectileBase()
 
     FlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbook"));
     FlipbookComponent->SetupAttachment(RootComponent);
+	FlipbookComponent->SetCollisionProfileName(TEXT("NoCollision"));
 	
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 
@@ -41,19 +42,13 @@ void APSProjectileBase::Initialize(AActor* InOwner, FDamageResult InDamage, floa
 	ProjectileMovement->MaxSpeed = DefaultSpeed * InSpeedMultiplier;
 	ProjectileMovement->Velocity = GetActorRotation().Vector() * DefaultSpeed * InSpeedMultiplier;//GetActorForwardVector() * DefaultSpeed * InSpeedMultiplier;
 	CollisionSphere->SetSphereRadius(DefaultRadius * InAreaMultiplier);
+	FlipbookComponent->SetRelativeScale3D(DefaultFlipBookScale*(InAreaMultiplier));
 
-	Super::OnSpawnFromPool_Implementation();
-	
-	GetWorldTimerManager().SetTimer(LifeSpanTimer, [this]()
-	{
-		UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
-		Pool->ReturnToPool(this);
-	}, ProjectileLifeSpan, false);		
 }
 
 void APSProjectileBase::OnSpawnFromPool_Implementation()
 {
-	// call at Initialize
+	Super::OnSpawnFromPool_Implementation();
 }
 
 void APSProjectileBase::OnReturnToPool_Implementation()
@@ -70,6 +65,7 @@ void APSProjectileBase::BeginPlay()
 	Super::BeginPlay();
 	DefaultSpeed = ProjectileMovement->InitialSpeed;
 	DefaultRadius = CollisionSphere->GetUnscaledSphereRadius();
+	DefaultFlipBookScale =  GetActorRelativeScale3D();
 }
 
 void APSProjectileBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -77,6 +73,7 @@ void APSProjectileBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 {
 	if (!OtherActor || OtherActor == Owner) return;
 	if (!OtherActor->IsA<APSCharacterBase>()) return;
+	if(!UPSLibrary::IsAlive(OtherActor)) return;
 	
 	// 중복 히트 방지
 	if (HitActors.Contains(OtherActor)) return;
