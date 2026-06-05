@@ -89,14 +89,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<APSPoolableActor> ProjectileClass;
 	
+	// 투사체제한
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int32 ProjectileLimit = 50;	// 투사체제한
+	int32 ProjectileLimit = 50;	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 Rarity = 1;
 	
+	// 스킬 발동 사운드
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<USoundBase> ActivateSound;  // 스킬 발동 사운드
+	TObjectPtr<USoundBase> ActivateSound;  
+	
+	// 발사체/소환물이 생성될 때마다 재생 (개별 발사 음, 화살 슉슉)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<USoundBase> FireSound;
 
 	/*UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FGameplayTag SkillTag; // [문장_계열] 같은 거	*/

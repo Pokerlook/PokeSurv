@@ -19,15 +19,8 @@ void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBa
 {
 	if (!Target || !DamageCauser) return;
 
-	if (DamageCauser->ActorHasTag("Player"))
-	{
-		if (!Target->ActorHasTag("Enemy")) return;
-	}
-	else if (DamageCauser->ActorHasTag("Enemy"))
-	{
-		if (!Target->ActorHasTag("Player")) return;
-	}
-	else return;
+	// 적대 관계 아니면 무시
+	if (!IsHostileTo(DamageCauser, Target)) return;
 
 	if (Target->Implements<UPSDamageable>())
 	{
@@ -37,6 +30,23 @@ void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBa
 			IPSDamageable::Execute_TakeKnockback(Target, KnockBackMultiplier, DamageCauser->GetActorLocation());
 		}
 	}
+}
+
+bool UPSLibrary::IsHostileTo(AActor* A, AActor* B)
+{
+	if (!A || !B) return false;
+    
+	const bool bAIsPlayer = A->ActorHasTag("Player");
+	const bool bAIsEnemy  = A->ActorHasTag("Enemy");
+	const bool bBIsPlayer = B->ActorHasTag("Player");
+	const bool bBIsEnemy  = B->ActorHasTag("Enemy");
+    
+	// Player vs Enemy
+	if (bAIsPlayer && bBIsEnemy) return true;
+	if (bAIsEnemy && bBIsPlayer) return true;
+    
+	// 그 외(같은 팀, 태그 없음): 적대 아님
+	return false;
 }
 
 FText UPSLibrary::FormatTime_MS(int32 Seconds)

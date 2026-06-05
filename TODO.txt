@@ -25,13 +25,14 @@ Data/
 
 [스킬 만들기]
 -> BP/Data/Skill에 SkillData 상속해서 DA 만들기
--> BP/Actor에 투사체 만들기.(필요시)
+-> BP/Actor에 투사체 만들기.(필요시) / 액터에 태그 넣기. Player / Enemy
 -> BP/Skill에 **Skill 상속해서 BP 만들기
 
-UPSStatComponent::Initialize 
+
 
 @ UI / 플레이어&스킬 레벨업 UPSPlayerStatComponent::AddExp + 랜덤 스킬&아이템 선택 
-/ 웨이브 시스템(오브젝트 풀링) / 아이템 & 플레이어스탯  / 폴리싱 / 보스 기믹 / 상자
+/ 웨이브 시스템(오브젝트 풀링) -> Projectile, Summon에서. 중복히트 방지 처리. (몹이 풀로 돌아갈 때 저것들의 중복방지배열에서 제거해야댐)
+/ 아이템 & 플레이어스탯  / 폴리싱 / 보스 기믹 / 상자
 레벨별 패시브 스킬 (HP*레벨, 10레벨당 피해량 보너스 등)
 	웨이브 등 월드서브시스템으로 구현시, 값은 게임모드에 변수로 BP 클래스 같은거 넣어주고(DA라던가) 비긴플레이에 이니셜라이즈!
 
@@ -51,42 +52,3 @@ UPSStatComponent::Initialize
 PSCharacterEnemy::Initialize & UPSStatComponent::Initialize (풀링용)
 
 캐릭터 적/플레이어 1개로 돌려쓰기 (보스 제외). 스탯컴포넌트의 DA_PokemonData 갈아껴서.
-
-// 화면 가장자리 4곳의 월드 좌표를 구함
-FVector GetWorldPosFromScreen(APlayerController* PC, AActor* Player, FVector2D ScreenPos)
-{
-    FVector WorldPos, WorldDir;
-    PC->DeprojectScreenPositionToWorld(ScreenPos.X, ScreenPos.Y, WorldPos, WorldDir);
-
-    if (!FMath::IsNearlyZero(WorldDir.Z))
-    {
-        float T = (Player->GetActorLocation().Z - WorldPos.Z) / WorldDir.Z;
-        WorldPos = WorldPos + WorldDir * T;
-    }
-    return WorldPos;
-}
-
-FVector GetSpawnLocationOutsideScreen(APlayerController* PC, AActor* Player)
-{
-    int32 SizeX, SizeY;
-    PC->GetViewportSize(SizeX, SizeY);
-
-    int32 Side = FMath::RandRange(0, 3);
-    float WorldMargin = 150.f; // 이제 월드 단위 (cm)
-
-    FVector2D ScreenPos;
-    switch (Side)
-    {
-        case 0: ScreenPos = FVector2D(FMath::RandRange(0, SizeX), 0);     break; // 위 가장자리
-        case 1: ScreenPos = FVector2D(FMath::RandRange(0, SizeX), SizeY); break; // 아래 가장자리
-        case 2: ScreenPos = FVector2D(0,    FMath::RandRange(0, SizeY));  break; // 왼쪽 가장자리
-        case 3: ScreenPos = FVector2D(SizeX, FMath::RandRange(0, SizeY)); break; // 오른쪽 가장자리
-    }
-
-    // 가장자리 월드 좌표
-    FVector EdgeWorldPos = GetWorldPosFromScreen(PC, Player, ScreenPos);
-
-    // 플레이어 기준 바깥 방향으로 월드 단위로 밀어냄
-    FVector OutDir = (EdgeWorldPos - Player->GetActorLocation()).GetSafeNormal();
-    return EdgeWorldPos + OutDir * WorldMargin;
-}

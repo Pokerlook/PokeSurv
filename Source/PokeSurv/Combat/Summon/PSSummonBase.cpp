@@ -6,6 +6,7 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/BoxComponent.h"
 #include "PokeSurv/Character/PSCharacterBase.h"
+#include "PokeSurv/Combat/Projectile/PSProjectileBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Util/PSLibrary.h"
 
@@ -65,7 +66,12 @@ void APSSummonBase::Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior
                                FDamageResult InDamage, float InAreaMultiplier, float InHitboxDelay, float InDuration, float InKnockBackMultiplier)
 {
 	Owner = InOwner;
-	UWorld* World = GetWorld();
+	Tags.Empty();
+	if (InOwner)
+	{
+		if (InOwner->ActorHasTag("Player")) Tags.Add("Player");
+		else if (InOwner->ActorHasTag("Enemy")) Tags.Add("Enemy");
+	}
 	
 	FinalDamage = InDamage;
 	CollisionBox->SetBoxExtent(OriginalBoxExtent * InAreaMultiplier);
@@ -86,6 +92,7 @@ void APSSummonBase::Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior
 		AttachToActor(Owner, Rules);
 	}
 	
+	UWorld* World = GetWorld();
 	World->GetTimerManager().ClearTimer(DurationTimerHandle);
 	World->GetTimerManager().ClearTimer(HitboxDelayTimerHandle);
 	
@@ -140,11 +147,8 @@ void APSSummonBase::Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior
 		SetActorTickEnabled(true);
 		break;
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("[Summon] FlipbookComponent Scale: %s"),
-	*FlipbookComponent->GetRelativeScale3D().ToString());
-	UE_LOG(LogTemp, Warning, TEXT("[Summon] FlipbookComponent World Scale: %s"),
-		*FlipbookComponent->GetComponentScale().ToString());
+	
+    bInitialized = true; 
 }
 
 void APSSummonBase::OnSpawnFromPool_Implementation()
@@ -169,12 +173,13 @@ void APSSummonBase::OnReturnToPool_Implementation()
 	{
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	}
+    bInitialized = false; 
 }
 
 void APSSummonBase::BeginPlay()
 {
 	Super::BeginPlay();
-	OriginalBoxExtent = CollisionBox->GetScaledBoxExtent();
+	OriginalBoxExtent = CollisionBox->GetUnscaledBoxExtent();
 }
 
 void APSSummonBase::PerformAreaDamage()
@@ -187,12 +192,30 @@ void APSSummonBase::PerformAreaDamage()
 	
 	FCollisionObjectQueryParams ObjectParams;
 	ObjectParams.AddObjectTypesToQuery(ECC_Pawn);
-	const FCollisionShape CollisionShape = FCollisionShape::MakeBox(CollisionBox->GetScaledBoxExtent());
+	
+	const FVector BoxExtent = CollisionBox->GetScaledBoxExtent();
+	const FCollisionShape CollisionShape = FCollisionShape::MakeBox(BoxExtent);
+	
+	// 박스의 실제 월드 위치/회전 가져오기
+	const FVector BoxLocation = CollisionBox->GetComponentLocation();
+	const FQuat BoxRotation = CollisionBox->GetComponentQuat();
 	
 	TArray<FOverlapResult> SweepActors;
 	GetWorld()->OverlapMultiByObjectType(
-		SweepActors, GetActorLocation(), GetActorQuat(),
+		SweepActors, BoxLocation, BoxRotation,
 		ObjectParams, CollisionShape, QueryParams);
+
+	DrawDebugBox(
+		GetWorld(),
+		BoxLocation,            
+		BoxExtent,
+		BoxRotation,            
+		FColor::Red,
+		false,
+		0.2f,
+		0,
+		2.f
+	);
 	
 	for (auto& Overlap : SweepActors)
 	{
@@ -201,14 +224,25 @@ void APSSummonBase::PerformAreaDamage()
 		if (AreaActors.Contains(Actor)) continue;
         
 		AreaActors.Add(Actor);
-		UPSLibrary::ApplyDamage(Actor, FinalDamage, KnockBackMultiplier, Owner);
+		UPSLibrary::ApplyDamage(Actor, FinalDamage, KnockBackMultiplier, this);
 	}
 }
 
 void APSSummonBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+    if (!bInitialized) return;
 	if (!OtherActor || OtherActor == Owner) return;
+	if(UPSLibrary::IsHostileTo(this, OtherActor)) ReturnToPool();
+
+	if (APSProjectileBase* OtherProjectile = Cast<APSProjectileBase>(OtherActor); 
+		OtherProjectile && OtherProjectile->ActorHasTag("Enemy") && ActorHasTag("Player") )
+	{
+		UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
+		Pool->ReturnToPool(OtherProjectile);
+		return;
+	}
+	
 	if (!OtherActor->IsA<APSCharacterBase>()) return;
 	if(!UPSLibrary::IsAlive(OtherActor)) return;
 	

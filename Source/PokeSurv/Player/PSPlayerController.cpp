@@ -69,21 +69,20 @@ void APSPlayerController::Move(const FInputActionValue& Value)
 	if (!PlayerCharacter) return;
 
 	FVector2D Input = Value.Get<FVector2D>();
-	if (!Input.IsNearlyZero())	// moving
+	
+	if (!Input.IsNearlyZero())  // moving
 	{
+        // 8방향 정규화 (이동 중인 동안만 갱신)
 		LastMoveDirection = FVector(Input.Y, Input.X, 0.f).GetSafeNormal();
-	}
-	else    // stop
-	{
-		if (FMath::Abs(Input.X) >= FMath::Abs(Input.Y))
+        
+		// 좌우 입력 있을 때만 bLastMovedRight 갱신
+		if (!FMath::IsNearlyZero(Input.X))
 		{
-			LastMoveDirection = FVector(0.f, Input.X > 0 ? 1.f : -1.f, 0.f);
+			bLastMovedRight = (Input.X > 0);
 		}
-		else
-		{
-			LastMoveDirection = FVector(Input.Y > 0 ? 1.f : -1.f, 0.f, 0.f);
-		}
+		// Input.X == 0이면 (위/아래만 입력) 이전 값 유지
 	}
+
 	PlayerCharacter->AddMovementInput(FVector(Input.Y, Input.X, 0.f));
 }
 

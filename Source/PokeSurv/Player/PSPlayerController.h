@@ -43,6 +43,8 @@ public:
 	
 	FVector LastMoveDirection = FVector(1.f, 0.f, 0.f); 
 	
+	bool bLastMovedRight = false;  // 마지막 수평 이동이 오른쪽?
+	
 private:
 	UPROPERTY()
 	TObjectPtr<ACharacter> PlayerCharacter;

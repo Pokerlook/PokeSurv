@@ -19,6 +19,9 @@ public:
 	static void ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBackMultiplier, AActor* DamageCauser);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
+	static bool IsHostileTo(AActor* A, AActor* B);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
 	static FText FormatTime_MS(int32 Seconds);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")

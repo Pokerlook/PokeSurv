@@ -49,7 +49,8 @@ protected:
 	float ProjectileLifeSpan  = 5.f;
 	
 private:
-	FTimerHandle LifeSpanTimer;
+    bool bInitialized = false;
+	
 	TArray<TWeakObjectPtr<AActor>> HitActors;	//풀에 반환할 때 비운
 	
 	float DefaultSpeed = 0.f;

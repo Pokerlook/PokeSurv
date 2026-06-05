@@ -3,13 +3,27 @@
 
 #include "PokeSurv/Combat/Skill/PSSkillSummon.h"
 
+#include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Combat/Summon/PSSummonBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
+#include "PokeSurv/Player/PSPlayerController.h"
 
 void UPSSkillSummon::Activate()
 {
 	CurrentSpawnStackOffset = -SpawnStackSpacing;
+	
+	if (SummonSpawnPattern == ESummonSpawnPattern::OwnerLeftRightStack)
+	{
+		if (ACharacter* Character = Cast<ACharacter>(Owner))
+		{
+			if (APSPlayerController* PC = Cast<APSPlayerController>(Character->GetController()))
+			{
+				bNextSpawnRight = PC->bLastMovedRight;
+			}
+		}
+	}
+	
 	StartFireSequence();
 }
 
@@ -29,9 +43,9 @@ void UPSSkillSummon::FireOnce()
 		Summon->Initialize(Owner, SummonBehavior, SummonDamageMode,
 			CalculateDamage(), CalculateAreaMultiplier(), GetHitBoxDelay(), CalculateDuration(), GetKnockBack());
 		
-		if (SkillData && SkillData->ActivateSound)
+		if (SkillData && SkillData->FireSound)
 		{
-			UGameplayStatics::PlaySound2D(this, SkillData->ActivateSound);
+			UGameplayStatics::PlaySound2D(this, SkillData->FireSound);
 		}
 	}
 	else

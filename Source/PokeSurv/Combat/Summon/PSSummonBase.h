@@ -60,6 +60,7 @@ protected:
 	float OneShotDuration = 0.1f;
 	
 private:
+    bool bInitialized = false;
 	
 	TArray<TWeakObjectPtr<AActor>> OverlapActors;	//처음 콜리전에 들어올 시 데미지. 풀에 반환할 때 비운다.
 	TArray<TWeakObjectPtr<AActor>> AreaActors;	

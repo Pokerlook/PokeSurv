@@ -3,6 +3,7 @@
 
 #include "PokeSurv/Combat/Skill/PSSkillBase.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
 
@@ -30,7 +31,7 @@ void UPSSkillBase::TickCooldown(float DeltaTime)
 void UPSSkillBase::InitSkill(AActor* InOwner)
 {
 	Owner = InOwner;
-	CooldownTimer = 0.f; // 바로 발동되게
+	CooldownTimer = CalculateCooldown();
 	
 	PlayerStatComp = Owner->FindComponentByClass<UPSPlayerStatComponent>();
 	LevelUp();
@@ -82,7 +83,12 @@ void UPSSkillBase::StartFireSequence()
 	{
 		return;
 	}
-
+	
+	if (SkillData && SkillData->FireSound)
+	{
+		UGameplayStatics::PlaySound2D(this, SkillData->ActivateSound);
+	}
+	
 	// 첫 발은 즉시 발사
 	HandleFireTick();
 }

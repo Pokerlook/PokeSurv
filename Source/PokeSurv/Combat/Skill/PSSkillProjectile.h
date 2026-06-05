@@ -30,7 +30,7 @@ protected:
 
 private:
 	
-	FVector GetFireDirection(const FVector& StartLocation) const;
+	FVector GetFireDirection(const FVector& StartLocation);
 	FVector GetMoveDirection() const;
 	FVector GetNearestEnemyDirection(const FVector& StartLocation) const;
 	
@@ -39,10 +39,18 @@ private:
 	FVector GetSpawnOffset();
 	void RefillSpawnOffsets();
 
+	void RefillFireDirections_RandomMode();
+	FVector GetNextFireDirection_RandomMode();
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill")
 	EProjectileAimMode AimMode = EProjectileAimMode::NearestEnemy;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill",
+			  meta = (EditCondition = "AimMode == EProjectileAimMode::Random"))
+	float RandomConeHalfAngleDegrees = 30.f;
 private:
 	TArray<FVector> RemainingSpawnOffsets;
+	
+    TArray<FVector> RemainingFireDirections_RandomMode;  // Random
 };
