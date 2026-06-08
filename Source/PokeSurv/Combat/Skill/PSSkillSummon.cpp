@@ -29,6 +29,8 @@ void UPSSkillSummon::Activate()
 
 void UPSSkillSummon::FireOnce()
 {
+    UE_LOG(LogTemp, Warning, TEXT("[%s FireOnce] called"), *GetName());
+	
 	if (!IsValid(Owner))
 	{
 		return;
@@ -41,17 +43,44 @@ void UPSSkillSummon::FireOnce()
 	if (IsValid(Summon))
 	{
 		Summon->Initialize(Owner, SummonBehavior, SummonDamageMode,
-			CalculateDamage(), CalculateAreaMultiplier(), GetHitBoxDelay(), CalculateDuration(), GetKnockBack());
+			CalculateDamage(), CalculateAreaMultiplier(), CalculateHitBoxDelay(), CalculateDuration(), GetKnockBack());
 		
 		if (SkillData && SkillData->FireSound)
 		{
 			UGameplayStatics::PlaySound2D(this, SkillData->FireSound);
 		}
+
+		ActiveSummons.AddUnique(Summon);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%s] Summon spawn failed. SkillData: %s"),
-			*GetName(), *GetNameSafe(SkillData));
+		UE_LOG(LogTemp, Error, TEXT("[%s] Summon spawn failed. SkillData: %s, ProjectileClass: %s"),
+	*GetName(),
+	*GetNameSafe(SkillData),
+	SkillData ? *GetNameSafe(SkillData->ProjectileClass) : TEXT("SkillData null"));
+
+	}
+}
+
+void UPSSkillSummon::OnLevelUp()
+{
+	for (int32 i = ActiveSummons.Num() - 1; i >= 0; i--)
+	{
+		if (APSSummonBase* Summon = ActiveSummons[i].Get();
+			!Summon->IsHidden())
+		{
+			Summon->UpdateStats(
+				CalculateDamage(),
+				CalculateAreaMultiplier(),
+				CalculateHitBoxDelay(),
+				CalculateDuration(),
+				GetKnockBack()
+			);
+		}
+		else
+		{
+			ActiveSummons.RemoveAt(i);  // 죽은 거 정리
+		}
 	}
 }
 

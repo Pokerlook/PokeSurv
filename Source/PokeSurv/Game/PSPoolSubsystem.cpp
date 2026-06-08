@@ -30,6 +30,20 @@ void UPSPoolSubsystem::Deinitialize()
 
 void UPSPoolSubsystem::InitPool(TSubclassOf<APSPoolableActor> ActorClass, int32 PoolSize)
 {
+	if (!ActorClass)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[InitPool] ActorClass is null"));
+		return;
+	}
+    
+	UE_LOG(LogTemp, Warning, TEXT("[InitPool] Class: %s, PoolSize: %d"),
+		*ActorClass->GetName(), PoolSize);
+    
+	if (PoolSize <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[InitPool] PoolSize <= 0, pool will be empty"));
+	}
+	
 	FPoolArray& PoolArray = ObjectPools.FindOrAdd(ActorClass);
     
 	for (int32 i = 0; i < PoolSize; i++)

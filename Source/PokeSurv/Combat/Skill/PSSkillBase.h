@@ -35,6 +35,8 @@ protected:
 	// 한 발(혹은 한 사이클) 실행 - 자식 클래스가 구현
 	virtual void FireOnce() {}
 
+	virtual void OnLevelUp() {}
+	
 	// 시퀀스 시작 - 자식 클래스의 Activate()에서 호출
 	void StartFireSequence();
     void HandleFireTick();
@@ -46,10 +48,10 @@ protected:
 	float CalculateProjectileSpeedMultiplier() const;
 	int32 CalculateProjectileCount() const;
 	int32 CalculateProjectilePierceCount() const;
+	float CalculateHitBoxDelay() const;
 
 	float GetKnockBack() const;
 	float GetFireInterval() const;
-	float GetHitBoxDelay() const;
 	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
@@ -65,6 +67,8 @@ protected:
 	TObjectPtr<AActor> Owner;
 
 private:
+    bool bActivatedOnce = false;  // Cooldown < 0일 때 1회 발동 후 종료 체크
+	
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
 	FSkillLevelData CurrentStats ; // 현재 누적 스탯
 	

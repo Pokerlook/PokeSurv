@@ -14,8 +14,9 @@ struct FSkillLevelData
 {
 	GENERATED_BODY()
 	
-	// 쿨타임
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) float Cooldown = 0.f;	
+	// 쿨타임. -1로 설정 시 1회만 발동
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ToolTip = "-1: 한 번만 발동 (영구 유지 스킬용)"))
+	float Cooldown = 0.f;	
 
 	// 연사간격
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float FireInterval = 0.f;	
@@ -40,7 +41,7 @@ struct FSkillLevelData
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 PierceCount = 0;	
 
 	
-	// 지속시간
+	// 지속시간. 0 미만은 무한
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float Duration = 0.f;	
 
 	// 넉백

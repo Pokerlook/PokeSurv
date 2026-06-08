@@ -20,10 +20,13 @@ void UPSSkillBase::TickCooldown(float DeltaTime)
 		return;
 	}
 	
+	if (CurrentStats.Cooldown < 0.f && bActivatedOnce) return;
+	
 	CooldownTimer -= DeltaTime;
 	if (CooldownTimer <= 0.f)
 	{
 		Activate();
+        bActivatedOnce = true;
 		CooldownTimer = CalculateCooldown();;
 	}
 }
@@ -31,10 +34,10 @@ void UPSSkillBase::TickCooldown(float DeltaTime)
 void UPSSkillBase::InitSkill(AActor* InOwner)
 {
 	Owner = InOwner;
-	CooldownTimer = CalculateCooldown();
-	
 	PlayerStatComp = Owner->FindComponentByClass<UPSPlayerStatComponent>();
 	LevelUp();
+	
+	CooldownTimer = CalculateCooldown();
 }
 
 void UPSSkillBase::LevelUp()
@@ -47,6 +50,8 @@ void UPSSkillBase::LevelUp()
 
 	CurrentStats += SkillData->LevelData[SkillLevel];
 	SkillLevel++;
+	
+    OnLevelUp();
 }
 
 void UPSSkillBase::DebugSkill()
@@ -198,7 +203,7 @@ float UPSSkillBase::CalculateCooldown() const
 		return 0;
 	}
 	
-	const float Result = CurrentStats.Cooldown * (1.0f + PlayerStatComp->CooldownDecrease);
+	const float Result = CurrentStats.Cooldown * (1.0f - PlayerStatComp->CooldownDecrease);
 	return Result;
 }
 
@@ -224,6 +229,18 @@ int32 UPSSkillBase::CalculateProjectilePierceCount() const
 	return Result;
 }
 
+float UPSSkillBase::CalculateHitBoxDelay() const
+{
+	if (!PlayerStatComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PlayerStatComp is null"));
+		return 0;
+	}
+	
+	const float Result = CurrentStats.HitboxDelay * (1.0f - PlayerStatComp->CooldownDecrease);
+	return Result;
+}
+
 float UPSSkillBase::GetKnockBack() const
 {
 	return CurrentStats.Knockback;
@@ -233,9 +250,3 @@ float UPSSkillBase::GetFireInterval() const
 {
 	return CurrentStats.FireInterval;
 }
-
-float UPSSkillBase::GetHitBoxDelay() const
-{
-	return CurrentStats.HitboxDelay;
-}
-

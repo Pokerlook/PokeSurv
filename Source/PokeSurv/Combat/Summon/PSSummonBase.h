@@ -27,6 +27,8 @@ public:
 	void Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior, ESummonDamageMode InSummonDamageMode, 
 		FDamageResult InDamage, float InAreaMultiplier, float InHitboxDelay, float InDuration, float InKnockBackMultiplier);
 
+	void UpdateStats(FDamageResult InDamage, float InAreaMultiplier, float InHitboxDelay, float InDuration, float InKnockBackMultiplier);
+		
 	virtual void OnSpawnFromPool_Implementation() override;
 	virtual void OnReturnToPool_Implementation() override;
 	
@@ -66,6 +68,7 @@ private:
 	TArray<TWeakObjectPtr<AActor>> AreaActors;	
 	
 	FVector OriginalBoxExtent;
+	FVector CurrentBoxExtent;
 
 	ESummonBehavior SummonBehavior;
 	ESummonDamageMode SummonDamageMode;

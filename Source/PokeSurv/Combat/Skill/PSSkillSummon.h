@@ -21,6 +21,7 @@ protected:
 	virtual void Activate() override;
 	virtual void FireOnce() override;
 
+	virtual void OnLevelUp() override;
 private:
 	
 	APSSummonBase* RequestSummon(FVector Location, FRotator Rotation);
@@ -46,4 +47,6 @@ protected:
 private:
 	bool bNextSpawnRight = false;  // 다음 발사 좌/우
 	float CurrentSpawnStackOffset = 0;
+	
+	TArray<TWeakObjectPtr<APSSummonBase>> ActiveSummons; 
 };

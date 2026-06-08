@@ -75,6 +75,7 @@ void APSSummonBase::Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior
 	
 	FinalDamage = InDamage;
 	CollisionBox->SetBoxExtent(OriginalBoxExtent * InAreaMultiplier);
+	CurrentBoxExtent = CollisionBox->GetUnscaledBoxExtent();
 	KnockBackMultiplier = InKnockBackMultiplier;
 	SummonBehavior = InSummonBehavior;
     SummonDamageMode = InSummonDamageMode;
@@ -95,46 +96,41 @@ void APSSummonBase::Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior
 	UWorld* World = GetWorld();
 	World->GetTimerManager().ClearTimer(DurationTimerHandle);
 	World->GetTimerManager().ClearTimer(HitboxDelayTimerHandle);
-	
-	if (SummonDamageMode == ESummonDamageMode::OneShot)
+
+	switch (SummonDamageMode)
 	{
+	case ESummonDamageMode::OneShot:
 		CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		PerformAreaDamage();
-		
+    
 		World->GetTimerManager().SetTimer(
-		DurationTimerHandle,
-		this,
-		&APSSummonBase::ReturnToPool,
-		OneShotDuration,
-		false   
-		);
-		
+			DurationTimerHandle, this, &APSSummonBase::ReturnToPool, OneShotDuration, false);
+    
 		FlipbookComponent->SetLooping(false);
 		FlipbookComponent->PlayFromStart();
-	}
-	else
-	{
+		break;
+    
+	case ESummonDamageMode::Periodic:
 		CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		PerformAreaDamage();
-		
-		World->GetTimerManager().SetTimer(
-		DurationTimerHandle,
-		this,
-		&APSSummonBase::ReturnToPool,
-		InDuration,    // InDuration초 후 풀에 반환
-		false    
-		);
+    
+		if (InDuration > 0.f)
+		{
+			World->GetTimerManager().SetTimer(
+				DurationTimerHandle, this, &APSSummonBase::ReturnToPool, InDuration, false);
+		}
 
-		// Period 데미지
-		World->GetTimerManager().SetTimer(
-			HitboxDelayTimerHandle, this, 
-			&APSSummonBase::PerformAreaDamage, 
-			InHitboxDelay, true);	// HitboxDelay마다 데미지
-		
+		if(InHitboxDelay > 0.f)
+		{
+			World->GetTimerManager().SetTimer(
+				HitboxDelayTimerHandle, this, &APSSummonBase::PerformAreaDamage, InHitboxDelay, true);			
+		}
+    
 		FlipbookComponent->SetLooping(true);
 		FlipbookComponent->PlayFromStart();
+		break;
 	}
-
+	
 	switch (SummonBehavior)
 	{
 	case ESummonBehavior::Stationary:
@@ -149,6 +145,34 @@ void APSSummonBase::Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior
 	}
 	
     bInitialized = true; 
+}
+
+void APSSummonBase::UpdateStats(FDamageResult InDamage, float InAreaMultiplier, float InHitboxDelay, float InDuration,
+	float InKnockBackMultiplier)
+{
+	FinalDamage = InDamage;
+	CollisionBox->SetBoxExtent(OriginalBoxExtent * InAreaMultiplier);
+	CurrentBoxExtent = CollisionBox->GetUnscaledBoxExtent();
+	KnockBackMultiplier = InKnockBackMultiplier;
+
+	
+	if (SummonDamageMode != ESummonDamageMode::Periodic) return;
+	
+	UWorld* World = GetWorld();
+	World->GetTimerManager().ClearTimer(DurationTimerHandle);
+	World->GetTimerManager().ClearTimer(HitboxDelayTimerHandle);
+	
+	if (InDuration > 0.f)
+	{
+		World->GetTimerManager().SetTimer(
+			DurationTimerHandle, this, &APSSummonBase::ReturnToPool, InDuration, false);
+	}
+	
+	if(InHitboxDelay > 0.f)
+	{
+		World->GetTimerManager().SetTimer(
+			HitboxDelayTimerHandle, this, &APSSummonBase::PerformAreaDamage, InHitboxDelay, true);			
+	}
 }
 
 void APSSummonBase::OnSpawnFromPool_Implementation()
@@ -193,8 +217,7 @@ void APSSummonBase::PerformAreaDamage()
 	FCollisionObjectQueryParams ObjectParams;
 	ObjectParams.AddObjectTypesToQuery(ECC_Pawn);
 	
-	const FVector BoxExtent = CollisionBox->GetScaledBoxExtent();
-	const FCollisionShape CollisionShape = FCollisionShape::MakeBox(BoxExtent);
+	const FCollisionShape CollisionShape = FCollisionShape::MakeBox(CurrentBoxExtent);
 	
 	// 박스의 실제 월드 위치/회전 가져오기
 	const FVector BoxLocation = CollisionBox->GetComponentLocation();
@@ -208,7 +231,7 @@ void APSSummonBase::PerformAreaDamage()
 	DrawDebugBox(
 		GetWorld(),
 		BoxLocation,            
-		BoxExtent,
+		CurrentBoxExtent,
 		BoxRotation,            
 		FColor::Red,
 		false,
@@ -233,7 +256,7 @@ void APSSummonBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 {
     if (!bInitialized) return;
 	if (!OtherActor || OtherActor == Owner) return;
-	if(UPSLibrary::IsHostileTo(this, OtherActor)) ReturnToPool();
+	if(!UPSLibrary::IsHostileTo(this, OtherActor)) return;
 
 	if (APSProjectileBase* OtherProjectile = Cast<APSProjectileBase>(OtherActor); 
 		OtherProjectile && OtherProjectile->ActorHasTag("Enemy") && ActorHasTag("Player") )
@@ -250,7 +273,7 @@ void APSSummonBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 	if (OverlapActors.Contains(OtherActor)) return;
 	OverlapActors.Add(OtherActor);
 	
-	UPSLibrary::ApplyDamage(OtherActor, FinalDamage, KnockBackMultiplier, Owner);
+	UPSLibrary::ApplyDamage(OtherActor, FinalDamage, KnockBackMultiplier, this);
 }
 
 void APSSummonBase::ReturnToPool()
