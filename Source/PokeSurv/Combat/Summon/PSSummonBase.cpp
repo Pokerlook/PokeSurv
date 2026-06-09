@@ -228,7 +228,7 @@ void APSSummonBase::PerformAreaDamage()
 		SweepActors, BoxLocation, BoxRotation,
 		ObjectParams, CollisionShape, QueryParams);
 
-	DrawDebugBox(
+	/*DrawDebugBox(
 		GetWorld(),
 		BoxLocation,            
 		CurrentBoxExtent,
@@ -238,7 +238,7 @@ void APSSummonBase::PerformAreaDamage()
 		0.2f,
 		0,
 		2.f
-	);
+	);*/
 	
 	for (auto& Overlap : SweepActors)
 	{

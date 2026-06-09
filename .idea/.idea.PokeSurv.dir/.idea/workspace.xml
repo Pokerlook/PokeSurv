@@ -9,19 +9,21 @@
   <component name="ChangeListManager">
     <list default="true" id="726bb5c7-00e3-4b53-86c3-798209be6459" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Actor/Projectile/BP_Summon_FlameWheel.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Actor/Projectile/BP_Summon_FlameWheel.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/FB_VFX_EarthPower.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/FB_VFX_EarthPower.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_0.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_0.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_3.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_4.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_5.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_5.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_6.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/PRAS-_Earth_Power_Sprite_6.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Character/BP_PlayerBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/BP_PlayerBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_GarlicFlameWheel.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_GarlicFlameWheel.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_GarlicFlameWheel.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Skill/BP_Skill_Garlic.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Skill/BP_Skill_Garlic.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Map/02_GameStage.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Map/02_GameStage.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillSummon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillSummon.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillSummon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillSummon.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Move.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Move.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/PSSkillData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSSkillData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -243,6 +245,7 @@
       <workItem from="1780791881537" duration="4004000" />
       <workItem from="1780875077961" duration="3886000" />
       <workItem from="1780904397218" duration="368000" />
+      <workItem from="1780961799731" duration="3132000" />
     </task>
     <servers />
   </component>

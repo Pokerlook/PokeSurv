@@ -103,8 +103,6 @@ void UPSPoolSubsystem::ReturnToPool(AActor* Actor)
 
 void UPSPoolSubsystem::CullingCheck()
 {
-	if (APlayerController* PC = GetWorld()->GetFirstPlayerController(); !PC) return;
-	
 	UpdateScreenBounds();
     
 	for (int32 i = ActivePoolables.Num() - 1; i >= 0; i--)
