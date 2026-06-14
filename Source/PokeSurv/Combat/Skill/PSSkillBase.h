@@ -27,6 +27,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DebugSkill();
 	
+	bool IsMaxLevel() const
+	{
+		return SkillData && SkillLevel >= SkillData->LevelData.Num();
+	}
 
 protected:
 	
@@ -54,6 +58,7 @@ protected:
 	float GetFireInterval() const;
 	
 public:
+	// 이 레벨은 인덱스 서치에 사용되므로, +1을 해야 플레이어가 보는 레벨과 동일하다
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PS")
 	int32 SkillLevel = 0;
 	

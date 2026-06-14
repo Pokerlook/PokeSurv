@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "PSTypes.generated.h"
 
+class UPSSkillBase;
+class UPSItemBase;
+
 // 여러 곳에서 공통적으로 쓸만한 enum / struct...
 
 USTRUCT(BlueprintType)
@@ -40,4 +43,19 @@ enum class ESummonDamageMode : uint8
 {
 	OneShot,		// 스폰 시 1번만 (번개반지)
 	Periodic,		// 콜리전에 들어오면 1번, 그리고는 주기적으로 (마늘, 장판)
+};
+
+USTRUCT(BlueprintType)
+struct FPSLevelUpOption
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsSkill = true;
+
+	UPROPERTY(BlueprintReadOnly)
+	TSubclassOf<UPSSkillBase> SkillClass;
+
+	UPROPERTY(BlueprintReadOnly)
+	TSubclassOf<UPSItemBase> ItemClass;
 };

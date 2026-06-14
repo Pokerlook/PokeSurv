@@ -40,6 +40,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int MaxLevel =5;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 Rarity = 1;
 
 	// 정수. ProjectileCount, Defense, Revive, Reroll, Skip, Banish
 	// 소숫점. Recovery

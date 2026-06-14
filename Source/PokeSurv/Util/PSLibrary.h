@@ -7,6 +7,10 @@
 #include "PokeSurv/PSTypes.h"
 #include "PSLibrary.generated.h"
 
+class UPSSkillBase;
+class UPSItemBase;
+class UPSSkillComponent;
+
 /**
  * 
  */
@@ -24,15 +28,33 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
 	static FText FormatTime_MS(int32 Seconds);
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility", meta = (WorldContext = "WorldContextObject"))
     static int32 GetElapsedSeconds(const UObject* WorldContextObject);
 	
-	UFUNCTION(BlueprintCallable, Category = "PS|Utility")
+	UFUNCTION(BlueprintCallable, Category = "PS|Utility", meta = (WorldContext = "WorldContextObject"))
 	static void DebugPlayerSkillsAndItems(const UObject* WorldContextObject);
 	
-	UFUNCTION(BlueprintCallable, Category = "PS|Utility")
+	UFUNCTION(BlueprintCallable, Category = "PS|Utility", meta = (WorldContext = "WorldContextObject"))
 	static void DebugPlayerStat(const UObject* WorldContextObject);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PS|Utility")
 	static bool IsAlive(AActor* Actor);
+
+	UFUNCTION(BlueprintPure, Category = "PS|Utility")
+	static int32 GetSkillRarity(const TSubclassOf<UPSSkillBase>& SkillClass);
+
+	UFUNCTION(BlueprintPure, Category = "PS|Utility")
+	static int32 GetItemRarity(const TSubclassOf<UPSItemBase>& ItemClass);
+	
+	UFUNCTION(BlueprintPure, Category = "PS|Utility")
+	static FString GetOptionName(const FPSLevelUpOption& Option);
+
+	UFUNCTION(BlueprintPure, Category = "PS|Utility")
+	static UTexture2D* GetOptionIcon(const FPSLevelUpOption& Option);
+
+	UFUNCTION(BlueprintPure, Category = "PS|Utility")
+	static FText GetOptionBaseDescription(const FPSLevelUpOption& Option);
+	
+	UFUNCTION(BlueprintPure, Category = "PS|Utility", meta = (WorldContext = "WorldContextObject"))
+	static UPSSkillComponent* GetPlayerSkillComponent(const UObject* WorldContextObject);
 };

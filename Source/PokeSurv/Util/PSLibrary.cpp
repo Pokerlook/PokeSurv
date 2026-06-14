@@ -117,3 +117,40 @@ bool UPSLibrary::IsAlive(AActor* Actor)
     
 	return Stat->CurrentHP > 0.f;
 }
+
+int32 UPSLibrary::GetSkillRarity(const TSubclassOf<UPSSkillBase>& SkillClass)
+{
+    return SkillClass.GetDefaultObject()->SkillData->Rarity;
+}
+
+int32 UPSLibrary::GetItemRarity(const TSubclassOf<UPSItemBase>& ItemClass)
+{
+    return ItemClass.GetDefaultObject()->ItemData->Rarity;
+}
+
+FString UPSLibrary::GetOptionName(const FPSLevelUpOption& Option)
+{
+	return Option.bIsSkill
+		? Option.SkillClass.GetDefaultObject()->SkillData->SkillName
+		: Option.ItemClass.GetDefaultObject()->ItemData->ItemName;
+}
+
+UTexture2D* UPSLibrary::GetOptionIcon(const FPSLevelUpOption& Option)
+{
+	return Option.bIsSkill
+		? Option.SkillClass.GetDefaultObject()->SkillData->Icon
+		: Option.ItemClass.GetDefaultObject()->ItemData->Icon;
+}
+
+FText UPSLibrary::GetOptionBaseDescription(const FPSLevelUpOption& Option)
+{
+	return Option.bIsSkill
+		? Option.SkillClass.GetDefaultObject()->SkillData->Description
+		: Option.ItemClass.GetDefaultObject()->ItemData->Description;
+}
+
+UPSSkillComponent* UPSLibrary::GetPlayerSkillComponent(const UObject* WorldContextObject)
+{
+	const ACharacter* Player = UGameplayStatics::GetPlayerCharacter(WorldContextObject, 0);
+	return Player ? Player->FindComponentByClass<UPSSkillComponent>() : nullptr;
+}

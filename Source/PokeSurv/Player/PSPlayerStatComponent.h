@@ -70,6 +70,8 @@ public:
 private:
 	int32 GetRequiredExp() const;
 
+	void LevelUp();
+
 public:
 	UPROPERTY(BlueprintAssignable, Category = "Stats")
 	FOnPlayerStatChanged OnPlayerStatChanged;

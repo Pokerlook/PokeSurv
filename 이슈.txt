@@ -1,0 +1,10 @@
+
+레벨업 선택지 3~4개.
+# 문제 : 스킬 / 아이템  (뱀서로 따지만 무기/패시브 아이템) 2개의 풀을 하나로 만들고 거기서 레어도를 사용해 랜덤하게 3~4개 골라야 함.
+ + 내가 지니고 있는 아이템/스킬 먼저 뽑을 수 있는 2번의 기회 처리해야됨.
+
+
+언리얼 BlueprintNativeEvent 한계, BP가 Parent 호출을 강제할 방법이 없다. 
+UPSLevelUpMenuWidget의 SetupCards쪽 내부에서 BlueprintImplementableEvent 함수를 부르고 BP에서 그 BlueprintImplementableEvent를 작성하자.
+
+

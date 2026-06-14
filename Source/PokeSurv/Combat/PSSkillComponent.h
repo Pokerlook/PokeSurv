@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "PokeSurv/PSTypes.h"
 #include "PSSkillComponent.generated.h"
 
 class UPSSkillBase;
@@ -27,23 +28,38 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddItem(TSubclassOf<UPSItemBase> ItemClass);
 	
+	UPSSkillBase* FindSkill(const TSubclassOf<UPSSkillBase>& SkillClass) const;
+	UPSItemBase* FindItem(const TSubclassOf<UPSItemBase>& ItemClass) const;
+	
+	UFUNCTION(BlueprintPure, Category = "PS")
+	bool IsOptionNew(const FPSLevelUpOption& Option) const;
+
+	// 보유 중이면 현재 레벨, 미보유면 0 (또는 INDEX_NONE)
+	UFUNCTION(BlueprintPure, Category = "PS")
+	int32 GetOptionCurrentLevel(const FPSLevelUpOption& Option) const;
+	
+	UFUNCTION(BlueprintPure, Category = "PS")
+	FText GetOptionNextLevelDescription(const FPSLevelUpOption& Option) const;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	
 public:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skills")
-	TSubclassOf<UPSSkillBase> DefaultSkill;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PS|Skills")
 	TArray<TObjectPtr<UPSSkillBase>> Skills;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PS|Items")
+	TArray<TObjectPtr<UPSItemBase>> Items;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PS")
+	int32 MaxSlotPerType = 6;
+	
+protected:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PS")
 	float EnemyScanRadius = 1500.f;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Items")
-	TArray<TObjectPtr<UPSItemBase>> Items;
-private:
-	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PS")
+	TSubclassOf<UPSSkillBase> DefaultSkill;
 };

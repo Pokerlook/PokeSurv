@@ -7,7 +7,6 @@ void UPSPlayerStatComponent::BroadcastInitialValues()
 {
 	OnExpChanged.Broadcast(Exp, GetRequiredExp());
 	OnGoldChanged.Broadcast(Gold);
-	OnLevelUp.Broadcast(PlayerLevel);
 	OnPlayerStatChanged.Broadcast();
 }
 
@@ -76,15 +75,14 @@ float UPSPlayerStatComponent::GetStat(EPlayerStatType StatType) const
 void UPSPlayerStatComponent::AddExp(float Value)
 {
 	Exp += Value;
-	float MaxExp = GetRequiredExp();
 	
-	if(Exp >= MaxExp)
+	while (Exp >= GetRequiredExp())
 	{
-		//LevelUp 함수 부르기(만들기)
-		Value -= MaxExp;
-		UE_LOG(LogTemp, Warning, TEXT("LevelUp"));
+		Exp -= GetRequiredExp();
+		LevelUp();
 	}
-	OnExpChanged.Broadcast(Exp, MaxExp);
+	
+    OnExpChanged.Broadcast(Exp, GetRequiredExp());
 }
 
 void UPSPlayerStatComponent::AddGold(float Value)
@@ -154,4 +152,10 @@ int32 UPSPlayerStatComponent::GetRequiredExp() const
 
 	// 41+
 	return 3455 + (PlayerLevel - 40) * 16;
+}
+
+void UPSPlayerStatComponent::LevelUp()
+{
+    PlayerLevel++;
+    OnLevelUp.Broadcast(PlayerLevel);
 }

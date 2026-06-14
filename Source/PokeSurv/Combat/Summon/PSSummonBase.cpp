@@ -249,6 +249,7 @@ void APSSummonBase::PerformAreaDamage()
 		AreaActors.Add(Actor);
 		UPSLibrary::ApplyDamage(Actor, FinalDamage, KnockBackMultiplier, this);
 	}
+	AtPerformAreaDamage(AreaActors);
 }
 
 void APSSummonBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -274,6 +275,7 @@ void APSSummonBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 	OverlapActors.Add(OtherActor);
 	
 	UPSLibrary::ApplyDamage(OtherActor, FinalDamage, KnockBackMultiplier, this);
+	AtOverlapBegin(OtherActor);
 }
 
 void APSSummonBase::ReturnToPool()
