@@ -3,7 +3,6 @@
 
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 
-#include "PokeSurv/Actor/PSPoolableActor.h"
 #include "PokeSurv/Interface/PSPoolable.h"
 
 void UPSPoolSubsystem::OnWorldBeginPlay(UWorld& InWorld)
@@ -28,57 +27,80 @@ void UPSPoolSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
-void UPSPoolSubsystem::InitPool(TSubclassOf<APSPoolableActor> ActorClass, int32 PoolSize)
+void UPSPoolSubsystem::InitPool(TSubclassOf<AActor> ActorClass, int32 PoolSize)
 {
 	if (!ActorClass)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[InitPool] ActorClass is null"));
 		return;
 	}
+	
+	if (!ActorClass->ImplementsInterface(UPSPoolable::StaticClass()))
+	{
+		UE_LOG(LogTemp, Error, TEXT("[InitPool] %s does not implement IPSPoolable"),
+			*ActorClass->GetName());
+		return;
+	}
     
-	UE_LOG(LogTemp, Warning, TEXT("[InitPool] Class: %s, PoolSize: %d"),
-		*ActorClass->GetName(), PoolSize);
+	UE_LOG(LogTemp, Log, TEXT("[InitPool] Class: %s, PoolSize: %d"), *ActorClass->GetName(), PoolSize);
     
 	if (PoolSize <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[InitPool] PoolSize <= 0, pool will be empty"));
+		return;
 	}
 	
 	FPoolArray& PoolArray = ObjectPools.FindOrAdd(ActorClass);
+	
+	if (PoolArray.Num() > 0)  // FPoolArray에 Num() 추가 필요
+	{
+		UE_LOG(LogTemp, Error, TEXT("[InitPool] %s already has %d actors, adding %d more"),
+			*ActorClass->GetName(), PoolArray.Num(), PoolSize);
+	}
     
 	for (int32 i = 0; i < PoolSize; i++)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
         
-		APSPoolableActor* NewActor = GetWorld()->SpawnActor<APSPoolableActor>(ActorClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		AActor* NewActor = GetWorld()->SpawnActor<AActor>(ActorClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 		if (NewActor)
 		{
 			IPSPoolable::Execute_OnReturnToPool(NewActor);
 			PoolArray.Add(NewActor);
+#if WITH_EDITOR
+			 NewActor->SetFolderPath(FName(*FString::Printf(TEXT("Pool/%s"), *ActorClass->GetName())));
+#endif
 		}
 	}
 }
 
-AActor* UPSPoolSubsystem::SpawnFromPool(TSubclassOf<APSPoolableActor> ActorClass, FVector Location, FRotator Rotation)
+AActor* UPSPoolSubsystem::SpawnFromPool(TSubclassOf<AActor> ActorClass, FVector Location, FRotator Rotation)
 {
-	FPoolArray& PoolArray = ObjectPools.FindOrAdd(ActorClass);
+	FPoolArray* PoolArray = ObjectPools.Find(ActorClass);
     
-	if (PoolArray.IsEmpty())
+	if (!PoolArray)
 	{
-		// 풀 비었으면 nullptr 반환, 스킬에서 알아서 대기
+		UE_LOG(LogTemp, Error, TEXT("[SpawnFromPool] No pool for %s. InitPool 먼저 호출했는지 확인"),
+			*ActorClass->GetName());
 		return nullptr;
 	}
-
-	AActor* Actor = PoolArray.Pop();
+	
+	if (PoolArray->IsEmpty())	// 다 꺼내져서 풀이 비엇다
+	{
+		return nullptr;
+	}
+	
+	AActor* Actor = PoolArray->Pop();
 	if (Actor)
 	{
 		Actor->SetActorLocationAndRotation(Location, Rotation);
 		IPSPoolable::Execute_OnSpawnFromPool(Actor);
+		PoolArray->ActiveCount++; 
 		
 		if (IPSPoolable::Execute_ShouldCull(Actor))
 		{
-			ActivePoolables.Add(Actor);  // 컬링 대상만 추적
+			CullTargets.Add(Actor);  // 컬링 대상만 추적
 		}
 
 	}
@@ -94,24 +116,38 @@ void UPSPoolSubsystem::ReturnToPool(AActor* Actor)
 		TEXT("ReturnToPool: %s is not Poolable"), *Actor->GetName());
 
 	IPSPoolable::Execute_OnReturnToPool(Actor);
-	FPoolArray& PoolArray = ObjectPools.FindOrAdd(ActorClass);
-	PoolArray.Add(Actor);
+	FPoolArray* PoolArray = ObjectPools.Find(ActorClass);
+	
+	if (!PoolArray)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[ReturnToPool] No pool for %s"), *ActorClass->GetName());
+		return;
+	}
+
+	PoolArray->Add(Actor);
+	PoolArray->ActiveCount = FMath::Max(0, PoolArray->ActiveCount - 1);	//ActiveCount--
 	
 	// ActivePoolables에서 제거 (컬링 추적 안 받았으면 RemoveSingleSwap이 그냥 0 반환)
-	ActivePoolables.RemoveSingleSwap(Actor);
+	CullTargets.RemoveSingleSwap(Actor);
+}
+
+int32 UPSPoolSubsystem::GetActiveCount(TSubclassOf<AActor> ActorClass) const
+{
+	const FPoolArray* PoolArray = ObjectPools.Find(ActorClass);
+	return PoolArray ? PoolArray->ActiveCount : 0;
 }
 
 void UPSPoolSubsystem::CullingCheck()
 {
 	UpdateScreenBounds();
     
-	for (int32 i = ActivePoolables.Num() - 1; i >= 0; i--)
+	for (int32 i = CullTargets.Num() - 1; i >= 0; i--)
 	{
-		AActor* Actor = ActivePoolables[i].Get();
+		AActor* Actor = CullTargets[i].Get();
         
 		if (!IsValid(Actor))
 		{
-			ActivePoolables.RemoveAtSwap(i);
+			CullTargets.RemoveAtSwap(i);
 			continue;
 		}
         

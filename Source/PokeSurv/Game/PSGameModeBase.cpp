@@ -4,6 +4,7 @@
 #include "PokeSurv/Game/PSGameModeBase.h"
 
 #include "PSPoolSubsystem.h"
+#include "PSWaveSubsystem.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Combat/PSSkillComponent.h"
@@ -59,6 +60,11 @@ void APSGameModeBase::BeginPlay()
 	if (Pool)
 	{
 		Pool->InitPool(TSubclassOf<APSPoolableActor>(ExpGemClass), 400);
+	}
+	
+	if (UPSWaveSubsystem* WaveSubsystem = GetWorld()->GetSubsystem<UPSWaveSubsystem>())
+	{
+		WaveSubsystem->StartWave(WaveTable, EnemyClass, SwarmClass);
 	}
 }
 

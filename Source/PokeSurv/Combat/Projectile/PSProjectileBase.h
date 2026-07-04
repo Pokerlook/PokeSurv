@@ -24,7 +24,7 @@ public:
 
 	virtual void OnSpawnFromPool_Implementation() override;
 	virtual void OnReturnToPool_Implementation() override;
-	
+	virtual bool ShouldCull_Implementation() override;
 protected:
 	virtual void BeginPlay() override;
 	

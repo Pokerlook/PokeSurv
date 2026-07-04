@@ -6,8 +6,6 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "PSPoolSubsystem.generated.h"
 
-class APSPoolableActor;
-
 USTRUCT()
 struct FPoolArray
 {
@@ -15,10 +13,12 @@ struct FPoolArray
 
 	UPROPERTY()
 	TArray<TObjectPtr<AActor>> ObjectPool;
+    int32 ActiveCount = 0;   // 활성화 된, 풀에서 나가있는 수
 
 	bool IsEmpty() { return ObjectPool.IsEmpty(); }
 	AActor* Pop() { return ObjectPool.Pop(); }
 	void Add(AActor* Actor) { ObjectPool.Add(Actor); }
+    int32 Num() const { return ObjectPool.Num(); }  
 };
 
 /**
@@ -33,10 +33,14 @@ public:
 	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
     virtual void Deinitialize() override;
 	
-	void InitPool(TSubclassOf<APSPoolableActor> ActorClass, int32 PoolSize); // 풀 초기화 - UPSSkillComponent::AddSkill 때 호출 & 
-	AActor* SpawnFromPool(TSubclassOf<APSPoolableActor> ActorClass, FVector Location, FRotator Rotation); // 풀에서 꺼내오기 - RequestProjectile 때 호출
+	void InitPool(TSubclassOf<AActor> ActorClass, int32 PoolSize); // 풀 초기화 - UPSSkillComponent::AddSkill 때 호출 & 
+	AActor* SpawnFromPool(TSubclassOf<AActor> ActorClass, FVector Location, FRotator Rotation); // 풀에서 꺼내오기 - RequestProjectile 때 호출
+
+	UFUNCTION(BlueprintCallable)
 	void ReturnToPool(AActor* Actor); // 풀에 반환 -  poolable에서 사용
 
+	int32 GetActiveCount(TSubclassOf<AActor> ActorClass) const;
+	
 private:
 	void CullingCheck();
     void UpdateScreenBounds();
@@ -45,7 +49,7 @@ protected:
 	TMap<UClass*, FPoolArray> ObjectPools;
 	
 	UPROPERTY()
-	TArray<TWeakObjectPtr<AActor>> ActivePoolables;
+	TArray<TWeakObjectPtr<AActor>> CullTargets;
 	
 	FTimerHandle CullingTimerHandle;
 	static constexpr float CullingInterval = 0.1f;

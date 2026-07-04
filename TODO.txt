@@ -1,25 +1,3 @@
-Combat/
-├── StatComponent
-├── SkillComponent
-├── ItemComponent
-├── StatusEffectComponent
-│
-├── Skill/
-│   ├── SkillBase
-│   ├── ProjectileSkill
-│   ├── OrbitalSkill
-│   ├── ZoneSkill
-│   └── SummonSkill
-│
-└── Actor/
-    ├── PSPoolableActor    ← AActor 상속, IPoolable 구현 (공통 처리)
-    ├── ProjectileBase
-    ├── SummonBase
-    		└── OrbitalBase 
-
-Data/                    
-├── SkillData
-└── ItemData
 
 오브젝트풀링 액터 인터페이스. 이니셜라이즈 / 리턴 풀.
 
@@ -29,18 +7,21 @@ Data/
 -> BP/Skill에 **Skill 상속해서 BP 만들기
 
 
+풀에서 들어갔다 나온 얘들이 마늘(화염바퀴) 접촉시 최초 데미지 안 받는 현상? (서몬 스킬 부분 손댈 것. 
 
-@ UI / 플레이어&스킬 레벨업 UPSPlayerStatComponent::AddExp + 랜덤 스킬&아이템 선택 
-/ 웨이브 시스템(오브젝트 풀링) -> Projectile, Summon에서. 중복히트 방지 처리. (몹이 풀로 돌아갈 때 저것들의 중복방지배열에서 제거해야댐)
-/ 아이템 & 플레이어스탯  / 폴리싱 / 보스 기믹 / 상자
-레벨별 패시브 스킬 (HP*레벨, 10레벨당 피해량 보너스 등)
-	웨이브 등 월드서브시스템으로 구현시, 값은 게임모드에 변수로 BP 클래스 같은거 넣어주고(DA라던가) 비긴플레이에 이니셜라이즈!
+/ 웨이브 시스템(오브젝트 풀링) -> UPSWaveSubsystem::SpawnSwarm 쪽에 Swarm->Initialize / APSCharacterEnemySwarm, APSCharacterEnemyBoss 완성
+
+*** UPSWaveSubsystem의 EnemySpawnRadius,SwarmStraightRadius  -> 스폰 범위 조절 ***
+
+상자 만들기. 게임모드 레벨업 관련 로직 참고?
+보스 기믹 
+레벨별 패시브 스킬(HP*레벨, 10레벨당 피해량 보너스 등) -> 적 전용 스킬 구현
 
 # 어떻게 플레이어 스탯 변화를 감지할 것인가?
-스킬 : UPSSkillBase::CalculateDamage처럼 계산하는 곳 만들자. (해야댐)
-스탯 : UPSStatComponent의 OnStatsChanged 쓰고... 플레이어 캐릭터에서 스탯&플레이어스탯 컴포넌트 연결...  (완)
+스킬 : UPSSkillBase::CalculateDamage처럼 계산
+스탯 : UPSStatComponent의 OnStatsChanged 델리게이트 쓰고... 플레이어 캐릭터에서 스탯&플레이어스탯 컴포넌트 연결...  (완)
 
-## 스프라이트 우선순위(Priority)
+## 스프라이트 우선순위(Priority) (아직 안 함)
 바닥 0
 픽업 1
 이펙트 2

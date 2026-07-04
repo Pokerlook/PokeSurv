@@ -4,9 +4,9 @@
 #include "PokeSurv/Character/PSCharacterEnemy.h"
 
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Character/PSStatComponent.h"
-#include "PokeSurv/Combat/Pickup/PSPickupBase.h"
 #include "PokeSurv/Game/PSGameModeBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
@@ -37,6 +37,25 @@ void APSCharacterEnemy::PS_TakeDamage_Implementation(const FDamageResult Damage)
 	}
 }
 
+void APSCharacterEnemy::OnSpawnFromPool_Implementation()
+{
+	SetActorHiddenInGame(false);
+	SetActorTickEnabled(true);
+	SetActorEnableCollision(true);
+}
+
+void APSCharacterEnemy::OnReturnToPool_Implementation()
+{
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
+	SetActorEnableCollision(false);
+}
+
+bool APSCharacterEnemy::ShouldCull_Implementation()
+{
+	return false;
+}
+
 void APSCharacterEnemy::BeginPlay()
 {
 	Super::BeginPlay();
@@ -60,12 +79,24 @@ void APSCharacterEnemy::OnDeath_Implementation()
 	Super::OnDeath_Implementation();
     GetWorldTimerManager().ClearTimer(ContactDamageTimer);
 	
-	// 경험치 보석 만들기
 	APSGameModeBase* GM = Cast<APSGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (!GM) return;
-
-	GM->SpawnExpGem(GetActorLocation(), StatComponent->BaseData->XP);
 	GM->AddKillCount();
+	
+    HandleDrops();
+}
+
+void APSCharacterEnemy::HandleDrops()
+{
+	// 경험치 보석 만들기
+	if (APSGameModeBase* GM = Cast<APSGameModeBase>(GetWorld()->GetAuthGameMode()))
+		GM->SpawnExpGem(GetActorLocation(), StatComponent->BaseData->XP);
+}
+
+void APSCharacterEnemy::RequestReturnToPool()
+{
+	UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
+	Pool->ReturnToPool(this);
 }
 
 void APSCharacterEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

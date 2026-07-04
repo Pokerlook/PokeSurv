@@ -71,6 +71,11 @@ void APSProjectileBase::OnReturnToPool_Implementation()
     bInitialized = false;
 }
 
+bool APSProjectileBase::ShouldCull_Implementation()
+{
+	return true;
+}
+
 void APSProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();

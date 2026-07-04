@@ -8,3 +8,8 @@
 UPSLevelUpMenuWidget의 SetupCards쪽 내부에서 BlueprintImplementableEvent 함수를 부르고 BP에서 그 BlueprintImplementableEvent를 작성하자.
 
 
+UPSWaveSubsystem, 특정 타이머에 묶은 이벤트를 n번만 반복하게 하는 것...
+뱀서에서 n~n+1분 사이에. 맵 이벤트가 보통 1개지만, 2개일 때도 있고. m번 반복하기 때문에. 좀 머리 아팠다.
+타이머 콜백에 인덱스를 넘겨서 해당 구조체의 Repeats를 증가시키고, 목표 횟수에 도달하면 타이머를 클리어하는 방식. (타이머 델리게이트 사용해 셋타이머)
+
+Enemy에 AIController를 None으로 했더니 안 움직임... -> 틱에서 Pawn->AddMovementInput으로 캐릭터방향으로 이동하도록 하기 때문.

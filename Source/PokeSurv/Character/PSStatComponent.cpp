@@ -20,8 +20,15 @@ void UPSStatComponent::Initialize(UPSPokemonData* NewData)
 	
 	if(GetOwner()->ActorHasTag("Enemy"))
 	{
-		MaxHP      = BaseData->Health * (1 + PlayerStatComponent->Curse) ;		
-		Defense    = 0;
+		if(BaseData->bScaleHPByPlayerLevel)
+		{
+			MaxHP = BaseData->Health * (1 + PlayerStatComponent->Curse) * PlayerStatComponent->PlayerLevel;			
+		}
+		else
+		{
+			MaxHP = BaseData->Health * (1 + PlayerStatComponent->Curse);					
+		}
+		Defense = 0;
 	}
 	else if (GetOwner()->ActorHasTag("Player"))
 	{

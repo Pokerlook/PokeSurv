@@ -21,7 +21,7 @@ void APSPoolableActor::OnReturnToPool_Implementation()
 
 bool APSPoolableActor::ShouldCull_Implementation()
 {
-	return true;
+	return false;
 }
 
 void APSPoolableActor::CheckCulling_Implementation(const FBox2D& ScreenBounds)

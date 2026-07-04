@@ -9,38 +9,32 @@
   <component name="ChangeListManager">
     <list default="true" id="726bb5c7-00e3-4b53-86c3-798209be6459" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/FB_VFX_Scratch.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/Graphic/VFX/etc/FB_VFX_Scratch.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/Character_Insect/0168_Ariados/ARIADOS.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Actor/PickupBase/BP_Pickup_ExpGem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Actor/PickupBase/BP_Pickup_ExpGem.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Character/AnimBP.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/AnimBP.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Character/BP_PlayerBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/BP_PlayerBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Item/DA_Item_Bracer.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Pokemon/Spinarak/DA_0167_Spinarak.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Pokemon/Spinarak/DA_0167_Spinarak.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_SKill_Whip_Scratch.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_SKill_Whip_Scratch.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_Dagger_Ember.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_Dagger_Ember.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_Fireball_MysticalFire.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_Fireball_MysticalFire.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_Garlic_FlameWheel.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_Garlic_FlameWheel.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_LightningRing_EarthPower.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_LightningRing_EarthPower.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_MagicMissile_Swift.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Data/Skill/DA_Skill_MagicMissile_Swift.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/AnimSource_Enemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/Enemy/AnimSource_Enemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_AIController.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Pokemon/Spinarak/DA_0167_Spinarak.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Game/BP_PSGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Game/BP_PSGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Item/BP_Item_Bracer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Item/BP_Item_Bracer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/UI/BP_PSHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/UI/BP_PSHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/UI/HUD/WBP_HUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/UI/HUD/WBP_HUD.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Map/02_GameStage.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Map/02_GameStage.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Move.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Move.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Item/PSItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Item/PSItemBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSSkillComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSSkillComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSSkillComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/PSSkillComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Skill/PSSkillBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Summon/PSSummonBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/PSItemData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSItemData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Actor/PSPoolableActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Actor/PSPoolableActor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSStatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSStatComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/PSPokemonData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSPokemonData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/PSTypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/PSTypes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerStatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerStatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerStatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Player/PSPlayerStatComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/UI/PSHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/UI/PSHUD.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/UI/PSHUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/UI/PSHUD.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Util/PSLibrary.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Util/PSLibrary.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Util/PSLibrary.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Util/PSLibrary.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/이슈.txt" beforeDir="false" afterPath="$PROJECT_DIR$/이슈.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +48,65 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://4" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Containers/Array.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Containers/Map.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Math/Box2D.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Math/MathFwd.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Math/Vector.h" root0="FORCE_HIGHLIGHTING" />
@@ -76,20 +129,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Uproject.PokeSurv.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Uproject.PokeSurv.executor": "Run",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="PokeSurv" type="Uproject" factoryName="rider.uproject">
       <configuration_1>
@@ -275,6 +328,44 @@
       <workItem from="1781249301678" duration="5240000" />
       <workItem from="1781394521523" duration="3506000" />
       <workItem from="1781423986405" duration="5612000" />
+      <workItem from="1781483083150" duration="284000" />
+      <workItem from="1781493869032" duration="2059000" />
+      <workItem from="1781505815863" duration="10778000" />
+      <workItem from="1781584436505" duration="2517000" />
+      <workItem from="1781600619517" duration="3521000" />
+      <workItem from="1781759058371" duration="2186000" />
+      <workItem from="1781835890729" duration="594000" />
+      <workItem from="1781852984073" duration="3063000" />
+      <workItem from="1782081364668" duration="4528000" />
+      <workItem from="1782095665814" duration="595000" />
+      <workItem from="1782116742775" duration="595000" />
+      <workItem from="1782163091338" duration="597000" />
+      <workItem from="1782181531054" duration="483000" />
+      <workItem from="1782194393152" duration="915000" />
+      <workItem from="1782203949615" duration="893000" />
+      <workItem from="1782215568194" duration="900000" />
+      <workItem from="1782262443064" duration="3588000" />
+      <workItem from="1782290230023" duration="1305000" />
+      <workItem from="1782365460835" duration="603000" />
+      <workItem from="1782387376708" duration="1297000" />
+      <workItem from="1782446739452" duration="1204000" />
+      <workItem from="1782462124032" duration="2377000" />
+      <workItem from="1782514934016" duration="598000" />
+      <workItem from="1782521048518" duration="6479000" />
+      <workItem from="1782590873452" duration="3660000" />
+      <workItem from="1782596889379" duration="598000" />
+      <workItem from="1782696475648" duration="8086000" />
+      <workItem from="1782738334853" duration="1910000" />
+      <workItem from="1782771604361" duration="633000" />
+      <workItem from="1782777345689" duration="11183000" />
+      <workItem from="1782817220954" duration="1549000" />
+      <workItem from="1782882642524" duration="3313000" />
+      <workItem from="1782952393965" duration="2768000" />
+      <workItem from="1782976934662" duration="928000" />
+      <workItem from="1782998140939" duration="2894000" />
+      <workItem from="1783044503530" duration="10118000" />
+      <workItem from="1783084904309" duration="2144000" />
+      <workItem from="1783119796546" duration="10999000" />
     </task>
     <servers />
   </component>
@@ -284,5 +375,16 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Source/PokeSurv/Game/PSWaveSubsystem.cpp</url>
+          <line>281</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

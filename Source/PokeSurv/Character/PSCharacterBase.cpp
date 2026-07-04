@@ -73,15 +73,13 @@ void APSCharacterBase::OnDeath_Implementation()
 {
     //UE_LOG(LogTemp, Warning, TEXT("[OnDeath] %s 사망 처리 시작"), *GetName());
 	
-	// 1. 충돌 제거
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->MaxWalkSpeed = 0;
+	SetActorEnableCollision(false);
+}
 
-	// 2. 이동 중단
-	GetCharacterMovement()->DisableMovement();	// AddMovementInput 정지
+void APSCharacterBase::OnRevive_Implementation()
+{
 	
-	// 3. 틱 비활성화
-	SetActorTickEnabled(false);
-	// bp에서 타임라인 1초.  스프라이트 붉은색 유지. 점점 투명해짐. 살짝 진동, 좌우로 흔들림
 }
 
 void APSCharacterBase::OnStatsChanged()

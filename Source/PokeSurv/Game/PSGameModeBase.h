@@ -13,6 +13,8 @@ class UPSItemBase;
 class UPSPlayerStatComponent;
 class UPSSkillComponent;
 class APSHUD;
+class APSCharacterEnemy;
+class APSCharacterEnemySwarm;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKillCountChanged, int32, KillCount);
 
@@ -69,6 +71,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "PS")
 	TSet<TSubclassOf<UPSItemBase>> AllItemClasses;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "PS")
+	TSubclassOf<APSCharacterEnemy> EnemyClass;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "PS")
+	TSubclassOf<APSCharacterEnemySwarm> SwarmClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "PS")
+	UDataTable* WaveTable;
 	
 private:
 	TObjectPtr<UPSPlayerStatComponent> PlayerStatComponent;

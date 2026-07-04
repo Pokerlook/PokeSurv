@@ -34,6 +34,9 @@ protected:
 	
 	UFUNCTION(BlueprintNativeEvent, Category = "PS")
 	void OnDeath();
+	
+	UFUNCTION(BlueprintNativeEvent, Category = "PS")
+	void OnRevive();
 
 private:
 	UFUNCTION()
