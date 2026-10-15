@@ -15,6 +15,8 @@ class POKESURV_API APSCharacterEnemy : public APSCharacterBase, public IPSPoolab
 {
 	GENERATED_BODY()
 public:
+    virtual void Tick(float DeltaSeconds) override;
+	
 	virtual void PS_TakeDamage_Implementation(const FDamageResult  Damage) override;
 	
 	virtual void OnSpawnFromPool_Implementation() override;
@@ -25,6 +27,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
+	virtual FVector GetMovementDirection() const;
 	virtual void UpdateMoveVector(float DeltaSeconds) override;
 	virtual void OnDeath_Implementation() override;
 	
@@ -39,10 +42,11 @@ private:
 
 	void ContactDamageTrace();
 
-private:
+protected:
 	UPROPERTY()
 	TObjectPtr<ACharacter> TargetCharacter;
 	
+private:
 	FTimerHandle ContactDamageTimer;
 	float ContactDamageInterval = 0.5f;
 };

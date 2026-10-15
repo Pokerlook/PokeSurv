@@ -4,6 +4,7 @@
 #include "PokeSurv/Game/PSWaveSubsystem.h"
 
 #include "PSPoolSubsystem.h"
+#include "Components/CapsuleComponent.h"
 #include "PokeSurv/Character/PSCharacterEnemy.h"
 #include "PokeSurv/Character/PSCharacterEnemyBoss.h"
 #include "PokeSurv/Character/PSCharacterEnemySwarm.h"
@@ -133,7 +134,7 @@ void UPSWaveSubsystem::SpawnRoutine()
 
 	// 최소 수 까지 스폰
 	int32 Alive = Pool->GetActiveCount(EnemyClass);
-	UE_LOG(LogTemp, Warning, TEXT("Alive : %d"), Alive);
+	UE_LOG(LogTemp, Warning, TEXT("[Wave] Alive:%d / Min:%d"), Alive, Rows[CurrentRowIndex].EnemyMinimum);
 	
 	while( Alive < Rows[CurrentRowIndex].EnemyMinimum)
 	{
@@ -214,21 +215,36 @@ bool UPSWaveSubsystem::SpawnSwarm(FPSMapEvent FMapEvent)
 	{
 		// 이 무리의 중심점 하나 잡고, 그 주변에 Amount마리를 흩뿌림
 		const FVector Center = GetEnemySpawnLocation(SwarmStraightRadius);
-		const float ClusterRadius = 200.f;  // 뭉치는 범위
-
+		
+		// SwarmClass CDO에서 캡슐 반지름 읽어 간격 산출 (고정이지만 BP 값과 자동 동기화)
+		float Spacing  = 68.f; // 폴백
+		if (const APSCharacterEnemySwarm* CDO = SwarmClass.GetDefaultObject())
+		{
+			if (const UCapsuleComponent* Capsule = CDO->GetCapsuleComponent())
+			{
+				Spacing  = Capsule->GetScaledCapsuleRadius() * 2.f; // 지름 = 서로 안 겹침
+			}
+		}
+		
+		// 무리 전체가 공유할 방향: 중심 → 플레이어
+		const APawn* Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+		FVector GroupDir = FVector(1.f, 0.f, 0.f);
+		if (Player)
+		{
+			GroupDir = Player->GetActorLocation() - Center;
+			GroupDir.Z = 0.f;
+			GroupDir = GroupDir.GetSafeNormal();
+		}
+		
+		// 해바라기(피보나치) 배치
+		const float GoldenAngle = PI * (3.f - FMath::Sqrt(5.f)); // ≈ 2.399 rad
 		for (int32 i = 0; i < FMapEvent.Amount; ++i)
 		{
-			// 중심 주변 랜덤 오프셋 (구름처럼)
-			const FVector2D Rand = FMath::RandPointInCircle(ClusterRadius);
-			const FVector SpawnLoc = Center + FVector(Rand.X, Rand.Y, 0.f);
-
-			APSCharacterEnemySwarm* Swarm = Cast<APSCharacterEnemySwarm>(
-			Pool->SpawnFromPool(SwarmClass, SpawnLoc, FRotator::ZeroRotator));;
-			check(Swarm != nullptr);	// 터지면 풀 크기를 키울것
-
-			Swarm->Initialize(FMapEvent.SwarmType);
-			Swarm->FindComponentByClass<UPSStatComponent>()->Initialize(Data);
-		}
+			const float R = Spacing * 0.5f * FMath::Sqrt(static_cast<float>(i)); // 바깥으로 퍼짐
+			const float Angle = i * GoldenAngle;
+			const FVector Offset(FMath::Cos(Angle) * R, FMath::Sin(Angle) * R, 0.f);
+			SpawnOneSwarm(Center + Offset, FMapEvent.SwarmType, GroupDir, Data);
+		}		
 	}
 	else //if(FMapEvent.SwarmType == ESwarmType::Encircle)
 	{
@@ -248,17 +264,26 @@ bool UPSWaveSubsystem::SpawnSwarm(FPSMapEvent FMapEvent)
 								 FMath::Sin(Angle) * RadiusY, 0.f);
 			const FVector SpawnLoc = PlayerLoc + Offset;
 
-			APSCharacterEnemySwarm* Swarm = Cast<APSCharacterEnemySwarm>(
-				Pool->SpawnFromPool(SwarmClass, SpawnLoc, FRotator::ZeroRotator));
-			check(Swarm != nullptr);
-
-			Swarm->Initialize(FMapEvent.SwarmType);
-			Swarm->FindComponentByClass<UPSStatComponent>()->Initialize(Data);
+			SpawnOneSwarm(SpawnLoc, FMapEvent.SwarmType, FVector::ZeroVector, Data);
 		}
 	}
 		
 	
 	return true;
+}
+
+void UPSWaveSubsystem::SpawnOneSwarm(const FVector& Loc, ESwarmType SwarmType, const FVector& GroupDir,
+	UPSPokemonData* Data)
+{
+	UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
+	if (!Pool) return;
+
+	APSCharacterEnemySwarm* Swarm = Cast<APSCharacterEnemySwarm>(
+		Pool->SpawnFromPool(SwarmClass, Loc, FRotator::ZeroRotator));
+	check(Swarm != nullptr); // 터지면 풀 크기를 키울 것
+
+	Swarm->Initialize(SwarmType, GroupDir);
+	Swarm->FindComponentByClass<UPSStatComponent>()->Initialize(Data);
 }
 
 void UPSWaveSubsystem::SpawnBossesAndTreasure()

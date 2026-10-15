@@ -1,32 +1,28 @@
 
-오브젝트풀링 액터 인터페이스. 이니셜라이즈 / 리턴 풀.
+오브젝트풀링 액터 인터페이스. 이니셜라이즈 / 리턴 풀.   (완)
 
 [스킬 만들기]
 -> BP/Data/Skill에 SkillData 상속해서 DA 만들기
 -> BP/Actor에 투사체 만들기.(필요시) / 액터에 태그 넣기. Player / Enemy
 -> BP/Skill에 **Skill 상속해서 BP 만들기
 
-
-풀에서 들어갔다 나온 얘들이 마늘(화염바퀴) 접촉시 최초 데미지 안 받는 현상? (서몬 스킬 부분 손댈 것. 
+풀에서 들어갔다 나온 얘들이 마늘(화염바퀴) 접촉시 최초 데미지 안 받는 현상 처리.
+-> 데미지 준 액터들 기억해야하는 스킬들. Enemy클래스델리게이트, 죽을때 broadcast. 스킬은 구독
 
 / 웨이브 시스템(오브젝트 풀링) -> UPSWaveSubsystem::SpawnSwarm 쪽에 Swarm->Initialize / APSCharacterEnemySwarm, APSCharacterEnemyBoss 완성
-
 *** UPSWaveSubsystem의 EnemySpawnRadius,SwarmStraightRadius  -> 스폰 범위 조절 ***
 
-상자 만들기. 게임모드 레벨업 관련 로직 참고?
-보스 기믹 
-레벨별 패시브 스킬(HP*레벨, 10레벨당 피해량 보너스 등) -> 적 전용 스킬 구현
+보물상자 만들기. 게임모드 레벨업 관련 로직 참고
 
-# 어떻게 플레이어 스탯 변화를 감지할 것인가?
+# 어떻게 플레이어 스탯 변화를 감지할 것인가? 
 스킬 : UPSSkillBase::CalculateDamage처럼 계산
 스탯 : UPSStatComponent의 OnStatsChanged 델리게이트 쓰고... 플레이어 캐릭터에서 스탯&플레이어스탯 컴포넌트 연결...  (완)
 
-## 스프라이트 우선순위(Priority) (아직 안 함)
+## 스프라이트 우선순위(Priority)
 바닥 0
 픽업 1
 이펙트 2
 캐릭터 3
-
 
 골드로 IV 강화 (플레이어 메타 진행)
 적 IV 난이도 연동 — PSCharacterEnemy::Initialize에서 IV 조정?

@@ -4,13 +4,23 @@
 #include "PokeSurv/Character/PSCharacterEnemy.h"
 
 #include "Components/CapsuleComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PokeSurv/Character/PSStatComponent.h"
 #include "PokeSurv/Game/PSGameModeBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Util/PSLibrary.h"
+
+void APSCharacterEnemy::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
+	const FVector Dir = GetMovementDirection();
+	if (!Dir.IsNearlyZero())
+	{
+		AddMovementInput(Dir);
+	}
+}
 
 void APSCharacterEnemy::PS_TakeDamage_Implementation(const FDamageResult Damage)
 {
@@ -61,6 +71,15 @@ void APSCharacterEnemy::BeginPlay()
 	Super::BeginPlay();
 	TargetCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &APSCharacterEnemy::OnHit);
+}
+
+FVector APSCharacterEnemy::GetMovementDirection() const
+{
+	if (!TargetCharacter) return FVector::ZeroVector;
+
+	FVector Dir = TargetCharacter->GetActorLocation() - GetActorLocation();
+	Dir.Z = 0.f;
+	return Dir.GetSafeNormal();
 }
 
 void APSCharacterEnemy::UpdateMoveVector(float DeltaSeconds)

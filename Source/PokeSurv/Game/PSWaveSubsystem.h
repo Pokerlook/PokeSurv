@@ -44,6 +44,8 @@ protected:
 	FVector GetEnemySpawnLocation(float Radius);
 	bool SpawnEnemy();
 	bool SpawnSwarm(FPSMapEvent FMapEvent);
+	void SpawnOneSwarm(const FVector& Loc, ESwarmType SwarmType,
+					   const FVector& GroupDir, UPSPokemonData* Data);
 	void SpawnBossesAndTreasure();
 	
 private:

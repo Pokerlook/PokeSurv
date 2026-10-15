@@ -26,7 +26,8 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
-	
+
+	// AnimBP의 변수 업데이트
 	virtual void UpdateMoveVector(float DeltaSeconds) PURE_VIRTUAL(APSCharacterBase::UpdateMoveVector,);
 	
 	UFUNCTION(BlueprintNativeEvent, Category = "PS")

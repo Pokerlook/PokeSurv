@@ -16,15 +16,37 @@ class POKESURV_API APSCharacterEnemySwarm : public APSCharacterEnemy
 	GENERATED_BODY()
 
 public:
-	//OnSpawnFromPool_Implementation	n초후 죽어야하면
-	//OnReturnToPool_Implementation
-	// ShouldCull_Implementation	플레이어와 거리가 많이 떨어지면 true
+	virtual void Tick(float DeltaSeconds) override;
 	
-	void Initialize(ESwarmType InSwarmType);
+	virtual void OnSpawnFromPool_Implementation() override;	
+	virtual void OnReturnToPool_Implementation() override;
+	
+	void Initialize(ESwarmType , const FVector& InStraightDir = FVector::ZeroVector);
 
 protected:
-	//UpdateMoveVector		if문으로? 2종류 swarm이 있는데. 벽을 만드는 swarm은 원래대로 플레이어 쫓아가고, 직진 swarm은 spawn시 설정한 방향으로만
+    virtual FVector GetMovementDirection() const override;
 
+	void PushBlockingEnemies();
+	
+	static FVector CalcPushDir(const FVector& MyLoc, const FVector& MoveDir, const FVector& OtherLoc);
+
+	
+	// 밀치기 파라미터
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Swarm|Push")
+	float PushInterval = 0.15f;   // 밀치기 체크 주기 (초)
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Swarm|Push")
+	float PushForce = 300.f;      // 밀어내는 세기
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Swarm|Push")
+	float PushRadiusScale = 1.2f; // 캡슐 반지름 대비 탐색 반경
+	
 private:
+	FTimerHandle LifeTimer;
+	
 	ESwarmType SwarmType;
+	FVector StraightDir;
+	
+	float PushAccum = 0.f; 
+	
 };

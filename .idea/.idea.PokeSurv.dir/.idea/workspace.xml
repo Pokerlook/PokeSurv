@@ -9,30 +9,22 @@
   <component name="ChangeListManager">
     <list default="true" id="726bb5c7-00e3-4b53-86c3-798209be6459" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PokeSurv.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset/Graphic/Character_Insect/0168_Ariados/ARIADOS.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Actor/PickupBase/BP_Pickup_ExpGem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Actor/PickupBase/BP_Pickup_ExpGem.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Character/AnimBP.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/AnimBP.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Actor/PickupBase/BP_Pickup_Treasure.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Actor/PickupBase/BP_Pickup_Treasure.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Character/BP_PlayerBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/BP_PlayerBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/AnimSource_Enemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/Enemy/AnimSource_Enemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_AIController.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP/Data/Pokemon/Spinarak/DA_0167_Spinarak.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBossBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemyBossBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemySwarmBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Character/Enemy/BP_EnemySwarmBase.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP/Game/BP_PSGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP/Game/BP_PSGameMode.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Map/02_GameStage.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Map/02_GameStage.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Actor/PSPoolableActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Actor/PSPoolableActor.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSStatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSStatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Combat/Projectile/PSProjectileBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Data/PSPokemonData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Data/PSPokemonData.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSGameModeBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSPoolSubsystem.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/PSTypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/PSTypes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemySwarm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemySwarm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemySwarm.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Character/PSCharacterEnemySwarm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSWaveSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSWaveSubsystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/PokeSurv/Game/PSWaveSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/PokeSurv/Game/PSWaveSubsystem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/이슈.txt" beforeDir="false" afterPath="$PROJECT_DIR$/이슈.txt" afterDir="false" />
     </list>
@@ -129,20 +121,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Uproject.PokeSurv.executor": "Run",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Uproject.PokeSurv.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="PokeSurv" type="Uproject" factoryName="rider.uproject">
       <configuration_1>
@@ -365,7 +357,75 @@
       <workItem from="1782998140939" duration="2894000" />
       <workItem from="1783044503530" duration="10118000" />
       <workItem from="1783084904309" duration="2144000" />
-      <workItem from="1783119796546" duration="10999000" />
+      <workItem from="1783119796546" duration="12790000" />
+      <workItem from="1783242381360" duration="594000" />
+      <workItem from="1783289712070" duration="597000" />
+      <workItem from="1784686873363" duration="1302000" />
+      <workItem from="1784712290320" duration="594000" />
+      <workItem from="1784766599782" duration="672000" />
+      <workItem from="1785647449769" duration="597000" />
+      <workItem from="1785673082994" duration="1192000" />
+      <workItem from="1785746810546" duration="595000" />
+      <workItem from="1785815747989" duration="4766000" />
+      <workItem from="1785839077388" duration="1053000" />
+      <workItem from="1785883909235" duration="595000" />
+      <workItem from="1785904984340" duration="1195000" />
+      <workItem from="1786496974436" duration="667000" />
+      <workItem from="1786591463567" duration="595000" />
+      <workItem from="1787045344412" duration="598000" />
+      <workItem from="1787056565140" duration="606000" />
+      <workItem from="1787110112281" duration="1190000" />
+      <workItem from="1787178779836" duration="5713000" />
+      <workItem from="1787651366429" duration="2204000" />
+      <workItem from="1787726347513" duration="1313000" />
+      <workItem from="1787803232983" duration="927000" />
+      <workItem from="1787823101725" duration="890000" />
+      <workItem from="1787888838495" duration="594000" />
+      <workItem from="1787895122955" duration="652000" />
+      <workItem from="1788062031740" duration="1280000" />
+      <workItem from="1788145834085" duration="3115000" />
+      <workItem from="1788317717512" duration="613000" />
+      <workItem from="1788336091351" duration="1189000" />
+      <workItem from="1788409007879" duration="4984000" />
+      <workItem from="1788495951205" duration="598000" />
+      <workItem from="1788502808073" duration="1552000" />
+      <workItem from="1788584135963" duration="624000" />
+      <workItem from="1788671871042" duration="597000" />
+      <workItem from="1788742636942" duration="2763000" />
+      <workItem from="1788836066455" duration="722000" />
+      <workItem from="1788871663328" duration="14000" />
+      <workItem from="1788936820075" duration="371000" />
+      <workItem from="1789358696934" duration="1228000" />
+      <workItem from="1789453432349" duration="946000" />
+      <workItem from="1789613605168" duration="594000" />
+      <workItem from="1789633371249" duration="594000" />
+      <workItem from="1789711497383" duration="1188000" />
+      <workItem from="1789891568064" duration="1802000" />
+      <workItem from="1790049945071" duration="787000" />
+      <workItem from="1790058601189" duration="1314000" />
+      <workItem from="1790080226988" duration="1064000" />
+      <workItem from="1790131143090" duration="596000" />
+      <workItem from="1790166834295" duration="2764000" />
+      <workItem from="1790209702651" duration="1827000" />
+      <workItem from="1790568944375" duration="594000" />
+      <workItem from="1790575147575" duration="594000" />
+      <workItem from="1790651237681" duration="2831000" />
+      <workItem from="1790738269501" duration="719000" />
+      <workItem from="1790844012443" duration="1568000" />
+      <workItem from="1790899778677" duration="1187000" />
+      <workItem from="1790912151002" duration="2180000" />
+      <workItem from="1790988702495" duration="2026000" />
+      <workItem from="1791001841084" duration="594000" />
+      <workItem from="1791258520268" duration="597000" />
+      <workItem from="1791356651535" duration="1893000" />
+      <workItem from="1791414678608" duration="2568000" />
+      <workItem from="1791431803356" duration="19000" />
+      <workItem from="1791509146845" duration="5482000" />
+      <workItem from="1791765817162" duration="3694000" />
+      <workItem from="1791850319590" duration="115000" />
+      <workItem from="1791940933614" duration="3310000" />
+      <workItem from="1791969934126" duration="1131000" />
+      <workItem from="1792022667196" duration="748000" />
     </task>
     <servers />
   </component>
@@ -375,16 +435,5 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/PokeSurv/Game/PSWaveSubsystem.cpp</url>
-          <line>281</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
