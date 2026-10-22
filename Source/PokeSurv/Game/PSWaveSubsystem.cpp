@@ -5,10 +5,10 @@
 
 #include "PSPoolSubsystem.h"
 #include "Components/CapsuleComponent.h"
-#include "PokeSurv/Character/PSCharacterEnemy.h"
-#include "PokeSurv/Character/PSCharacterEnemyBoss.h"
-#include "PokeSurv/Character/PSCharacterEnemySwarm.h"
 #include "PokeSurv/Character/PSStatComponent.h"
+#include "PokeSurv/Pawn/PSEnemyBossPawn.h"
+#include "PokeSurv/Pawn/PSEnemyPawn.h"
+#include "PokeSurv/Pawn/PSEnemySwarmPawn.h"
 
 
 void UPSWaveSubsystem::Deinitialize()
@@ -25,12 +25,13 @@ void UPSWaveSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
-void UPSWaveSubsystem::StartWave(const UDataTable* InWaveTable, const TSubclassOf<APSCharacterEnemy>& InEnemyClass, const TSubclassOf<APSCharacterEnemySwarm>& InSwarmClass)
+void UPSWaveSubsystem::StartWave(const UDataTable* InWaveTable, const TSubclassOf<APSEnemyPawn>& InEnemyClass, const TSubclassOf<APSEnemySwarmPawn>& InSwarmClass)
 {
 	if (!GetWorld()) return;
 	
 	checkf(InWaveTable, TEXT("UPSWaveSubsystem::StartWave. WaveTable null"));
 	checkf(InEnemyClass, TEXT("UPSWaveSubsystem::StartWave. EnemyClass null"));
+	checkf(InSwarmClass, TEXT("UPSWaveSubsystem::StartWave. EnemySwarmClass null"));
 	
 	EnemyClass = InEnemyClass;
 	SwarmClass = InSwarmClass;
@@ -191,7 +192,7 @@ bool UPSWaveSubsystem::SpawnEnemy()
 	UPSPoolSubsystem* Pool = World->GetSubsystem<UPSPoolSubsystem>();
 	if (!Pool) return false;
 
-	APSCharacterEnemy* Enemy = Cast<APSCharacterEnemy>(
+	APSEnemyPawn* Enemy = Cast<APSEnemyPawn>(
 		Pool->SpawnFromPool(EnemyClass, GetEnemySpawnLocation(EnemySpawnRadius), FRotator::ZeroRotator));
 	if (!Enemy) return false;  // 풀 고갈 → 스킵
 
@@ -218,7 +219,7 @@ bool UPSWaveSubsystem::SpawnSwarm(FPSMapEvent FMapEvent)
 		
 		// SwarmClass CDO에서 캡슐 반지름 읽어 간격 산출 (고정이지만 BP 값과 자동 동기화)
 		float Spacing  = 68.f; // 폴백
-		if (const APSCharacterEnemySwarm* CDO = SwarmClass.GetDefaultObject())
+		if (APSEnemySwarmPawn* CDO = SwarmClass.GetDefaultObject())
 		{
 			if (const UCapsuleComponent* Capsule = CDO->GetCapsuleComponent())
 			{
@@ -278,7 +279,7 @@ void UPSWaveSubsystem::SpawnOneSwarm(const FVector& Loc, ESwarmType SwarmType, c
 	UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
 	if (!Pool) return;
 
-	APSCharacterEnemySwarm* Swarm = Cast<APSCharacterEnemySwarm>(
+	APSEnemySwarmPawn* Swarm = Cast<APSEnemySwarmPawn>(
 		Pool->SpawnFromPool(SwarmClass, Loc, FRotator::ZeroRotator));
 	check(Swarm != nullptr); // 터지면 풀 크기를 키울 것
 
@@ -296,7 +297,7 @@ void UPSWaveSubsystem::SpawnBossesAndTreasure()
 		Params.SpawnCollisionHandlingOverride =
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-		APSCharacterEnemyBoss* Boss = GetWorld()->SpawnActor<APSCharacterEnemyBoss>(
+		APSEnemyBossPawn* Boss = GetWorld()->SpawnActor<APSEnemyBossPawn>(
 			BossSpawn.BossClass,
 			GetEnemySpawnLocation(EnemySpawnRadius),
 			FRotator::ZeroRotator,

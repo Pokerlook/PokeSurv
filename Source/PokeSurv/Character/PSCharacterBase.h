@@ -9,8 +9,6 @@
 
 class UPSStatComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStatsInitialized);
-
 UCLASS()
 class POKESURV_API APSCharacterBase : public APaperZDCharacter, public IPSDamageable
 {

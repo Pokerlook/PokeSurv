@@ -8,16 +8,21 @@
 UPSLevelUpMenuWidget의 SetupCards쪽 내부에서 BlueprintImplementableEvent 함수를 부르고 BP에서 그 BlueprintImplementableEvent를 작성하자.
 
 
-UPSWaveSubsystem, 특정 타이머에 묶은 이벤트를 n번만 반복하게 하는 것...
+UPSWaveSubsystem, 특정 타이머에 묶은 이벤트를 n번까지만 반복하게 하는 것...
 뱀서에서 n~n+1분 사이에. 맵 이벤트가 보통 1개지만, 2개일 때도 있고. m번 반복하기 때문에. 좀 머리 아팠다.
 타이머 콜백에 인덱스를 넘겨서 해당 구조체의 Repeats를 증가시키고, 목표 횟수에 도달하면 타이머를 클리어하는 방식. (타이머 델리게이트 사용해 셋타이머)
 
 Enemy에 AIController를 None으로 했더니 안 움직임... -> 틱에서 Pawn->AddMovementInput으로 캐릭터방향으로 이동하도록 하기 때문.
 
-뱀서식 밀치기 구현 어려움. 캐릭터의 콜리전이랑 
+몹 스폰 할 때. 원래 나와야하는 것 보다 높은 곳에서 소환되는 경우가 있다. 소환범위 때문? 움직이면서 미끄러져서 떨어진다. 2D라 확인이 늦었다.
 
+뱀서식 밀치기 구현 난항. 단순 트레이스, 콜리전, 런치캐릭터... 안 됨. 폰끼리 충돌 끄고 계산해서 조정해줘야?
+캐릭터무브먼트컴포넌트, 무겁다. log에 경고.. 
+LogCharacterMovement: Warning: GetSimulationTimeStep() - Max iterations 8 hit while remaining time 0.065256 > MaxSimulationTimeStep (0.050) for 'BP_EnemyBase_C_294', movement 'Walking'
 
-
+적들의 베이스클래스를 캐릭터에서 폰으로 바꿈.  
+--> 처음부터 폰으로 만들걸 그랬다는 생각... 더 깊게 생각해보자. 설계 시작할 때좀 더 생각을... 예상 문제, 중요한 거, 등등...
+--> 버그. 데미지가 이상하다? 스피드스타 안 없어짐, 마늘 첫 공격 이상함.
 
 
 

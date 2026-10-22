@@ -7,8 +7,8 @@
 #include "PokeSurv/PSTypes.h"
 #include "PSWaveSubsystem.generated.h"
 
-class APSCharacterEnemy;
-class APSCharacterEnemySwarm;
+class APSEnemyPawn;
+class APSEnemySwarmPawn;
 
 USTRUCT()
 struct FMapEventStruct
@@ -33,7 +33,7 @@ class POKESURV_API UPSWaveSubsystem : public UWorldSubsystem
 public:
 	virtual void Deinitialize() override;
 	
-	void StartWave(const UDataTable* InWaveTable, const TSubclassOf<APSCharacterEnemy>& InEnemyClass, const TSubclassOf<APSCharacterEnemySwarm>& InSwarmClass);
+	void StartWave(const UDataTable* InWaveTable, const TSubclassOf<APSEnemyPawn>& InEnemyClass, const TSubclassOf<APSEnemySwarmPawn>& InSwarmClass);
 
 protected:
 	void RowCheck();  // 행 바뀔 때 1회 처리 (하위 타이머 재설정)
@@ -49,8 +49,8 @@ protected:
 	void SpawnBossesAndTreasure();
 	
 private:
-	TSubclassOf<APSCharacterEnemy> EnemyClass;
-	TSubclassOf<APSCharacterEnemySwarm> SwarmClass;
+	TSubclassOf<APSEnemyPawn> EnemyClass;
+	TSubclassOf<APSEnemySwarmPawn> SwarmClass;
 	
 	TArray<FPSWaveRow> Rows;
     int32 CurrentRowIndex = 0; 

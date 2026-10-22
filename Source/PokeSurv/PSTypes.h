@@ -5,14 +5,15 @@
 #include "CoreMinimal.h"
 #include "PSTypes.generated.h"
 
+class APSEnemyBossPawn;
 class UPSSkillBase;
 class UPSItemBase;
 class APSPickupBase;
 class UPSPokemonData;
-class APSCharacterEnemy;
-class APSCharacterEnemyBoss;
 
-// 여러 곳에서 공통적으로 쓸만한 enum / struct...
+// 여러 곳에서 공통적으로 쓸만한 enum / struct / etc...
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStatsInitialized);
 
 USTRUCT(BlueprintType)
 struct FDamageResult
@@ -78,7 +79,7 @@ struct FPSBossSpawn
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<APSCharacterEnemyBoss> BossClass;
+	TSubclassOf<APSEnemyBossPawn> BossClass;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UPSPokemonData> BossData;
