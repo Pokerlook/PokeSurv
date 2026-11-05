@@ -3,10 +3,9 @@
 
 #include "PokeSurv/Character/PSCharacterBase.h"
 
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PokeSurv/Character/PSStatComponent.h"
+#include "PokeSurv/Component/PSStatComponent.h"
 
 APSCharacterBase::APSCharacterBase()
 {

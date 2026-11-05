@@ -40,6 +40,9 @@ public:
 	void ReturnToPool(AActor* Actor); // 풀에 반환 -  poolable에서 사용
 
 	int32 GetActiveCount(TSubclassOf<AActor> ActorClass) const;
+
+	FBox2D GetScreenWorldBounds() const { return ScreenWorldBounds; }
+	FBox2D GetCullBounds() const        { return ScreenWorldBounds.ExpandBy(CullMargin); }  // 컬링용
 	
 private:
 	void CullingCheck();
@@ -54,6 +57,7 @@ protected:
 	FTimerHandle CullingTimerHandle;
 	static constexpr float CullingInterval = 0.1f;
 
-	FBox2D ScreenWorldBounds;  // 화면 영역 (XY 평면)
+	FBox2D ScreenWorldBounds{ForceInit};  // 화면 영역 (XY 평면)
+    float CullMargin = 100.f;
 
 };

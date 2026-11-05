@@ -5,9 +5,8 @@
 
 #include "Components/SphereComponent.h"
 #include "PokeSurv/Combat/PSSkillComponent.h"
-#include "PokeSurv/Character/PSStatComponent.h"
+#include "PokeSurv/Component/PSStatComponent.h"
 #include "PokeSurv/Combat/Pickup/PSPickupBase.h"
-#include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
 #include "PokeSurv/UI/PSHealthWidgetComponent.h"

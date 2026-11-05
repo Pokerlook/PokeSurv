@@ -44,14 +44,19 @@ protected:
 	
 	//UFUNCTION() void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+
+	/// 아래 2개의 At 함수는, 혹시 몰라서 만든 것... 이펙트 같은거 줄 수도 있으니
 	UFUNCTION(BlueprintImplementableEvent, Category = "PS")
-	void AtPerformAreaDamage(const TArray<AActor*>& InAreaActors);
+	void AtPerformAreaDamage(const TArray<AActor*>& InAreaActors);	
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "PS")
-	void AtOverlapBegin(const AActor* InActor);
+	void AtOverlapBegin(const AActor* InActor);				
 	
 private:
 	void ReturnToPool();
+	
+    bool TryHit(AActor* Target);
+    void PruneHitTimes(float Now);
 
 protected:
 	
@@ -72,7 +77,6 @@ private:
 	
 	UPROPERTY()
 	TArray<AActor*> AreaActors;	
-	TArray<TWeakObjectPtr<AActor>> OverlapActors;	//처음 콜리전에 들어올 시 데미지. 풀에 반환할 때 비운다.
 	
 	FVector OriginalBoxExtent;
 	FVector CurrentBoxExtent;
@@ -85,4 +89,7 @@ private:
 	
 	FTimerHandle DurationTimerHandle;
     FTimerHandle HitboxDelayTimerHandle;
+    
+    TMap<TWeakObjectPtr<AActor>, float> LastHitTimes;
+    float HitInterval = 0.f;   // Periodic : HitboxDelay && OneShot: 무한
 };

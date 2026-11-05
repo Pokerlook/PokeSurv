@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PokeSurv/Character/PSStatComponent.h"
+#include "PokeSurv/Component//PSStatComponent.h"
 
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"

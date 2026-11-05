@@ -11,6 +11,18 @@ class UPSSkillBase;
 class UPSItemBase;
 class UPSSkillComponent;
 
+
+DECLARE_LOG_CATEGORY_EXTERN(LogPSHit, Log, All);
+
+namespace PSHitDebug
+{
+	bool IsOn();
+	FString DescribeCol(const UPrimitiveComponent* C, const UPrimitiveComponent* Other);
+}
+
+#define PS_HITLOG(Fmt, ...) \
+if (PSHitDebug::IsOn()) { UE_LOG(LogPSHit, Warning, Fmt, ##__VA_ARGS__); }
+
 /**
  * 
  */

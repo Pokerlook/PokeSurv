@@ -23,6 +23,14 @@ struct FMapEventStruct
 	FPSMapEvent EventData; 
 };
 
+struct FSpawnArea
+{
+	FVector2D Center = FVector2D::ZeroVector;
+	float W = 0.f, H = 0.f;		// 반너비/반높이 + Margin
+    float Radius = 0.f;       // 반대각선 + Margin (원형 스폰용)
+	float Z = 0.f;
+};
+
 /**
  * 
  */
@@ -35,18 +43,25 @@ public:
 	
 	void StartWave(const UDataTable* InWaveTable, const TSubclassOf<APSEnemyPawn>& InEnemyClass, const TSubclassOf<APSEnemySwarmPawn>& InSwarmClass);
 
-protected:
+private:
 	void RowCheck();  // 행 바뀔 때 1회 처리 (하위 타이머 재설정)
 	void ApplyRow();
 	void SpawnRoutine();
 	void MapEventTick(int32 EventID);
 
-	FVector GetEnemySpawnLocation(float Radius);
-	bool SpawnEnemy();
+	void TryBeginFirstRow();
+
+	bool SpawnEnemy(const FSpawnArea& Area);
 	bool SpawnSwarm(FPSMapEvent FMapEvent);
 	void SpawnOneSwarm(const FVector& Loc, ESwarmType SwarmType,
 					   const FVector& GroupDir, UPSPokemonData* Data);
 	void SpawnBossesAndTreasure();
+	
+	float GetFloorZ() const;	// 플레이어 발밑 바닥 Z (트레이스 실패 시 캡슐 하단으로 폴백)
+	float GetSpawnZ(TSubclassOf<APSEnemyPawn> InClass) const;	// 바닥 Z + 해당 클래스 캡슐 하프하이트
+	
+	FSpawnArea MakeSpawnArea(float Margin, TSubclassOf<APSEnemyPawn> InClass);
+	static FVector RandomOnCircle(const FSpawnArea& A);
 	
 private:
 	TSubclassOf<APSEnemyPawn> EnemyClass;
@@ -61,6 +76,6 @@ private:
 	TMap<int32, FMapEventStruct> MapEventMap;		
 	int32 NextMapEventID = 0;
 
-	float EnemySpawnRadius = 625;	// BP_PlayerBase의 카메라->Ortho Width... 16:9, 가로세로로 대각길이 구하고, 그 이상
-	float SwarmStraightRadius = 900;	
+	float SpawnMargin = 70.f;            // 화면 밖 여유 (스프라이트 크기 정도)
+	float EncircleScale = 0.8f;          // 포위 타원 = 화면 반크기 × 이 값 (1 미만이면 화면 안)
 };

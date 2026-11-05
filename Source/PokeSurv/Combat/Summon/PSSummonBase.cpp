@@ -80,7 +80,10 @@ void APSSummonBase::Initialize(AActor* InOwner, ESummonBehavior InSummonBehavior
 	SummonBehavior = InSummonBehavior;
     SummonDamageMode = InSummonDamageMode;
 	
-	OverlapActors.Empty();
+	LastHitTimes.Reset();
+	HitInterval = (SummonDamageMode == ESummonDamageMode::Periodic && InHitboxDelay > 0.f)
+				? InHitboxDelay
+				: TNumericLimits<float>::Max();   // OneShot: 대상당 1회
 
 	if(SummonBehavior==ESummonBehavior::AttachOwner)
 	{
@@ -157,7 +160,9 @@ void APSSummonBase::UpdateStats(FDamageResult InDamage, float InAreaMultiplier, 
 
 	
 	if (SummonDamageMode != ESummonDamageMode::Periodic) return;
-	
+
+	HitInterval = (InHitboxDelay > 0.f) ? InHitboxDelay : TNumericLimits<float>::Max();
+
 	UWorld* World = GetWorld();
 	World->GetTimerManager().ClearTimer(DurationTimerHandle);
 	World->GetTimerManager().ClearTimer(HitboxDelayTimerHandle);
@@ -183,7 +188,7 @@ void APSSummonBase::OnSpawnFromPool_Implementation()
 void APSSummonBase::OnReturnToPool_Implementation()
 {
 	Super::OnReturnToPool_Implementation();
-	OverlapActors.Empty();
+	LastHitTimes.Reset();
     AreaActors.Empty();
 	
 	if (UWorld* World = GetWorld())
@@ -244,42 +249,81 @@ void APSSummonBase::PerformAreaDamage()
 	{
 		AActor* Actor = Overlap.GetActor();
 		if (!Actor) continue;
-		if (AreaActors.Contains(Actor)) continue;
-        
-		AreaActors.Add(Actor);
-		UPSLibrary::ApplyDamage(Actor, FinalDamage, KnockBackMultiplier, this);
+		if (TryHit(Actor))
+		{
+			AreaActors.Add(Actor);   // 이번에 실제로 맞은 것만 BP에 전달
+		}
 	}
+
+	PruneHitTimes(GetWorld()->GetTimeSeconds());
+	
 	AtPerformAreaDamage(AreaActors);
 }
 
 void APSSummonBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    if (!bInitialized) return;
-	if (!OtherActor || OtherActor == Owner) return;
-	if(!UPSLibrary::IsHostileTo(this, OtherActor)) return;
+	PS_HITLOG(TEXT("[Summon %s] ENTER Other=%s Comp=%s"),
+		*GetName(), *GetNameSafe(OtherActor), *GetNameSafe(OtherComp));
+    if (!bInitialized) { PS_HITLOG(TEXT("  -> return: !bInitialized")); return; }	// return;
+	if (!OtherActor || OtherActor == Owner) { PS_HITLOG(TEXT("  -> return: null or Owner")); return; }	//return;
+	if(!UPSLibrary::IsHostileTo(this, OtherActor)) 
+	{
+		PS_HITLOG(TEXT("  -> return: not hostile  MyTags=%d OtherHasEnemy=%d"),
+			Tags.Num(), OtherActor->ActorHasTag("Enemy"));
+		return;
+	}
 
 	if (APSProjectileBase* OtherProjectile = Cast<APSProjectileBase>(OtherActor); 
 		OtherProjectile && OtherProjectile->ActorHasTag("Enemy") && ActorHasTag("Player") )
 	{
+        PS_HITLOG(TEXT("  -> erase enemy projectile"));
 		UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
 		Pool->ReturnToPool(OtherProjectile);
 		return;
 	}
 	
-	if (!OtherActor->IsA<APSCharacterBase>()) return;
-	if(!UPSLibrary::IsAlive(OtherActor)) return;
+	if (!OtherActor->Implements<UPSDamageable>()) { PS_HITLOG(TEXT("  -> return: not Damageable")); return; }	//return;
+	if(!UPSLibrary::IsAlive(OtherActor)) { PS_HITLOG(TEXT("  -> return: not alive")); return; }		// return;
 	
-	// 중복 히트 방지
-	if (OverlapActors.Contains(OtherActor)) return;
-	OverlapActors.Add(OtherActor);
-	
-	UPSLibrary::ApplyDamage(OtherActor, FinalDamage, KnockBackMultiplier, this);
-	AtOverlapBegin(OtherActor);
+	if (TryHit(OtherActor))
+	{
+		AtOverlapBegin(OtherActor);
+	}
 }
 
 void APSSummonBase::ReturnToPool()
 {
 	UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
 	Pool->ReturnToPool(this);
+}
+
+bool APSSummonBase::TryHit(AActor* Target)
+{
+	if (!Target || Target == Owner) return false;
+	if (!UPSLibrary::IsHostileTo(this, Target)) return false;
+	if (!Target->Implements<UPSDamageable>()) return false;
+	if (!UPSLibrary::IsAlive(Target)) return false;
+
+	const float Now = GetWorld()->GetTimeSeconds();
+	if (const float* Last = LastHitTimes.Find(Target))
+	{
+		// 부동소수점 오차로 틱 한 번을 놓치지 않게 약간 여유
+		if (Now - *Last < HitInterval - 0.05f) return false;
+	}
+	LastHitTimes.Add(Target, Now);
+
+	UPSLibrary::ApplyDamage(Target, FinalDamage, KnockBackMultiplier, this);
+	return true;
+}
+
+void APSSummonBase::PruneHitTimes(float Now)
+{
+	for (auto It = LastHitTimes.CreateIterator(); It; ++It)
+	{
+		if (!It.Key().IsValid() || Now - It.Value() > HitInterval * 2.f)
+		{
+			It.RemoveCurrent();
+		}
+	}
 }

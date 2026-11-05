@@ -1,6 +1,4 @@
 
-오브젝트풀링 액터 인터페이스. 이니셜라이즈 / 리턴 풀.   (완)
-
 [스킬 만들기]
 -> BP/Data/Skill에 SkillData 상속해서 DA 만들기
 -> BP/Actor에 투사체 만들기.(필요시) / 액터에 태그 넣기. Player / Enemy
@@ -13,10 +11,6 @@
 *** UPSWaveSubsystem의 EnemySpawnRadius,SwarmStraightRadius  -> 스폰 범위 조절 ***
 
 보물상자 만들기. 게임모드 레벨업 관련 로직 참고
-
-# 어떻게 플레이어 스탯 변화를 감지할 것인가? 
-스킬 : UPSSkillBase::CalculateDamage처럼 계산
-스탯 : UPSStatComponent의 OnStatsChanged 델리게이트 쓰고... 플레이어 캐릭터에서 스탯&플레이어스탯 컴포넌트 연결...  (완)
 
 ## 스프라이트 우선순위(Priority)
 바닥 0

@@ -7,13 +7,32 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "PokeSurv/Character/PSCharacterBase.h"
-#include "PokeSurv/Character/PSStatComponent.h"
+#include "PokeSurv/Component/PSStatComponent.h"
 #include "PokeSurv/Combat/PSSkillComponent.h"
 #include "PokeSurv/Combat/Item/PSItemBase.h"
 #include "PokeSurv/Combat/Skill/PSSkillBase.h"
 #include "PokeSurv/Interface/PSDamageable.h"
 #include "PokeSurv/Player/PSPlayerStatComponent.h"
+
+DEFINE_LOG_CATEGORY(LogPSHit);
+
+static TAutoConsoleVariable<int32> CVarPSHitLog(TEXT("ps.HitLog"), 0, TEXT("1: 발사체/소환물 오버랩 디버그 로그"));
+
+bool PSHitDebug::IsOn()
+{
+	return CVarPSHitLog.GetValueOnGameThread() != 0;
+}
+
+FString PSHitDebug::DescribeCol(const UPrimitiveComponent* C, const UPrimitiveComponent* Other)
+{
+	if (!C) return TEXT("null");
+	const ECollisionChannel OtherType = Other ? Other->GetCollisionObjectType() : ECC_Pawn;
+	return FString::Printf(TEXT("%s[%s] Obj=%s En=%d GenOv=%d Resp->Other=%d"),
+		*GetNameSafe(C->GetOwner()), *C->GetName(),
+		*UEnum::GetValueAsString(C->GetCollisionObjectType()),
+		(int32)C->GetCollisionEnabled(), C->GetGenerateOverlapEvents(),
+		(int32)C->GetCollisionResponseToChannel(OtherType));   // 0 Ignore / 1 Overlap / 2 Block
+}
 
 void UPSLibrary::ApplyDamage(AActor* Target, FDamageResult Damage, float KnockBackMultiplier, AActor* DamageCauser)
 {
@@ -97,18 +116,11 @@ bool UPSLibrary::IsAlive(AActor* Actor)
 {
 	if (!IsValid(Actor))
 	{
-		UE_LOG(LogTemp, Verbose, TEXT("[IsAlive] Actor is invalid (null or pending kill)"));
+		UE_LOG(LogTemp, Warning, TEXT("[IsAlive] Actor is invalid (null or pending kill)"));
 		return false;
 	}
-    
-	APSCharacterBase* Character = Cast<APSCharacterBase>(Actor);
-	if (!Character)
-	{
-		UE_LOG(LogTemp, Verbose, TEXT("[IsAlive] %s is not APSCharacterBase"), *Actor->GetName());
-		return false;
-	}
-    
-	UPSStatComponent* Stat = Character->FindComponentByClass<UPSStatComponent>();
+
+	const UPSStatComponent* Stat = Actor->FindComponentByClass<UPSStatComponent>();
 	if (!Stat)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[IsAlive] %s has no PSStatComponent"), *Actor->GetName());

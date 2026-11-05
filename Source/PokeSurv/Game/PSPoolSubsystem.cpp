@@ -153,7 +153,8 @@ void UPSPoolSubsystem::CullingCheck()
         
 		if (IPSPoolable::Execute_ShouldCull(Actor))
 		{
-			IPSPoolable::Execute_CheckCulling(Actor, ScreenWorldBounds);
+			const FBox2D CullBounds = GetCullBounds();
+			IPSPoolable::Execute_CheckCulling(Actor, CullBounds);
 		}
 	}
 }
@@ -165,6 +166,7 @@ void UPSPoolSubsystem::UpdateScreenBounds()
 	
 	int32 ViewX, ViewY;
 	PC->GetViewportSize(ViewX, ViewY);
+	if (ViewX <= 0 || ViewY <= 0) return;   // 첫 프레임 뷰포트 크기 0 가드
     
 	// 화면 네 모서리를 월드 좌표로 변환
 	FVector TopLeftWorld, TopLeftDir;
@@ -179,12 +181,12 @@ void UPSPoolSubsystem::UpdateScreenBounds()
 	const float MaxX = FMath::Max(TopLeftWorld.X, BottomRightWorld.X);
 	const float MinY = FMath::Min(TopLeftWorld.Y, BottomRightWorld.Y);
 	const float MaxY = FMath::Max(TopLeftWorld.Y, BottomRightWorld.Y);
-    
-	constexpr float Margin = 100.f;
-    
-	ScreenWorldBounds.Min = FVector2D(MinX - Margin, MinY - Margin);
-	ScreenWorldBounds.Max = FVector2D(MaxX + Margin, MaxY + Margin);
-	ScreenWorldBounds.bIsValid = true;
+	
+	if ((MaxX - MinX) < 10.f || (MaxY - MinY) < 10.f) return;	// 투영이 덜 된 경우 거르기
+	
+	ScreenWorldBounds = FBox2D(FVector2D(MinX, MinY), FVector2D(MaxX, MaxY));	// bIsValid = true
+	
+	//UE_LOG(LogTemp, Warning, TEXT("[Bounds] View:%dx%d  Extent:%s  Frame:%llu"), ViewX, ViewY, *ScreenWorldBounds.GetExtent().ToString(), GFrameCounter);
 	
 	// 디버그 박스 그리기
 	/*

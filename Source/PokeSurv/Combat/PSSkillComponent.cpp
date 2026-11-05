@@ -3,11 +3,11 @@
 
 #include "PokeSurv/Combat/PSSkillComponent.h"
 
-#include "Item/PSItemBase.h"
+#include "PokeSurv/Combat/Item/PSItemBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Util/PSLibrary.h"
-#include "Projectile/PSProjectileBase.h"
-#include "Skill/PSSkillBase.h"
+#include "PokeSurv/Combat/Projectile/PSProjectileBase.h"
+#include "PokeSurv/Combat/Skill/PSSkillBase.h"
 
 UPSSkillComponent::UPSSkillComponent()
 {

@@ -6,15 +6,17 @@
 #include "GameFramework/Pawn.h"
 #include "PokeSurv/Interface/PSDamageable.h"
 #include "PokeSurv/Interface/PSPoolable.h"
+#include "Sequencer/IPaperZDSequencerSource.h"
 #include "PSEnemyPawn.generated.h"
 
 class UPSCrowdMovementComponent;
 class UCapsuleComponent;
 class UPaperFlipbookComponent;
 class UPSStatComponent;
+class UPaperZDAnimationComponent;
 
 UCLASS()
-class POKESURV_API APSEnemyPawn : public APawn, public IPSDamageable, public IPSPoolable
+class POKESURV_API APSEnemyPawn : public APawn, public IPSDamageable, public IPSPoolable, public IPaperZDSequencerSource
 {
 	GENERATED_BODY()
 
@@ -28,7 +30,18 @@ public:
 	virtual void OnReturnToPool_Implementation() override;
 	virtual bool ShouldCull_Implementation() override;
 
-	TObjectPtr<UCapsuleComponent> GetCapsuleComponent(){return Capsule;}
+	UCapsuleComponent* GetCapsuleComponent() const {return Capsule;}
+	
+	//~ Begin IPaperZDSequencerSource Interface
+	virtual TSubclassOf<UPaperZDAnimInstance> GetSequencerAnimInstanceClass() const override;
+	virtual UPaperZDAnimInstance* GetSequencerAnimInstance() override;
+	//~ End IPaperZDSequencerSource Interface
+	
+	UFUNCTION(BlueprintPure)
+	FVector2D GetFacingDirection() const;
+
+	UFUNCTION(BlueprintPure)
+	float GetMoveSpeed() const { return GetVelocity().Size2D(); }
 	
 protected:
 	virtual void BeginPlay() override;
@@ -46,6 +59,9 @@ protected:
 	// 접촉 데미지 (임시 — 나중에 PSCrowdSubsystem으로 이사)
 	void ContactDamageTick();
 	
+	void ActivateEnemy();
+	void DeactivateEnemy();
+	
 private:
 	UFUNCTION()
 	void OnStatsChanged();
@@ -56,6 +72,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy")
 	TObjectPtr<UPaperFlipbookComponent> Sprite;
+	
+	/* PaperZD 애니메이션 컴포넌트 (AnimBP는 여기 Anim Instance Class에 지정) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UPaperZDAnimationComponent> AnimationComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy")
 	TObjectPtr<UPSCrowdMovementComponent> CrowdMovement;

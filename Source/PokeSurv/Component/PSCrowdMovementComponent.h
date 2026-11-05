@@ -26,6 +26,8 @@ public:
 
 	void OnSpawnFromPool();
 	void OnReturnFromPool();
+
+	bool IsTouchingHero(float Tolerance = 5.f) const;
 	
 protected:
 	virtual void BeginPlay() override;

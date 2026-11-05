@@ -6,12 +6,13 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PokeSurv/Character/PSStatComponent.h"
+#include "PokeSurv/Component/PSStatComponent.h"
 #include "PokeSurv/Component/PSCrowdMovementComponent.h"
 #include "PokeSurv/Game/PSGameModeBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Player/PSPlayerController.h"
 #include "PokeSurv/Util/PSLibrary.h"
+#include "PaperZDAnimationComponent.h"
 
 // Sets default values
 APSEnemyPawn::APSEnemyPawn()
@@ -31,6 +32,9 @@ APSEnemyPawn::APSEnemyPawn()
 	Sprite->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Sprite->SetGenerateOverlapEvents(false);
 	Sprite->SetCastShadow(false);
+	
+	AnimationComponent = CreateDefaultSubobject<UPaperZDAnimationComponent>(TEXT("Animation"));
+	AnimationComponent->InitRenderComponent(Sprite);
 
 	CrowdMovement = CreateDefaultSubobject<UPSCrowdMovementComponent>(TEXT("CrowdMovement"));
 
@@ -38,6 +42,8 @@ APSEnemyPawn::APSEnemyPawn()
 
 	AutoPossessAI = EAutoPossessAI::Disabled;
 	AIControllerClass = nullptr;
+	
+    Tags.AddUnique(TEXT("Enemy"));
 }
 
 void APSEnemyPawn::BeginPlay()
@@ -87,30 +93,34 @@ void APSEnemyPawn::TakeKnockback_Implementation(float KnockBackMultiplier, FVect
 
 void APSEnemyPawn::OnSpawnFromPool_Implementation()
 {
-	SetActorHiddenInGame(false);
-	SetActorEnableCollision(true);
-
-	CrowdMovement->ResetMotion(); // 넉백/속도 잔여 제거
-	CrowdMovement->OnSpawnFromPool();
-	
-	// 접촉 데미지 타이머 시작 (임시 — 나중에 PSCrowdSubsystem으로 이사)
-	GetWorldTimerManager().SetTimer(ContactDamageTimer, this,
-		&APSEnemyPawn::ContactDamageTick, ContactDamageInterval, true);
+	ActivateEnemy();
 }
 
 void APSEnemyPawn::OnReturnToPool_Implementation()
 {
-	SetActorHiddenInGame(true);
-	SetActorEnableCollision(false);
-
-	CrowdMovement->OnReturnFromPool();
-	
-	GetWorldTimerManager().ClearTimer(ContactDamageTimer);
+	DeactivateEnemy();
 }
 
 bool APSEnemyPawn::ShouldCull_Implementation()
 {
 	return false;
+}
+
+TSubclassOf<UPaperZDAnimInstance> APSEnemyPawn::GetSequencerAnimInstanceClass() const
+{
+	return AnimationComponent->GetSequencerAnimInstanceClass();
+}
+
+UPaperZDAnimInstance* APSEnemyPawn::GetSequencerAnimInstance()
+{
+	return AnimationComponent->GetSequencerAnimInstance();
+}
+
+FVector2D APSEnemyPawn::GetFacingDirection() const
+{
+	// crowd는 월드 XY 기준 → PaperZD는 화면 기준 (화면 가로 = 월드 Y, 화면 세로 = 월드 X)
+	const FVector2D F = CrowdMovement->FacingDirection;
+	return FVector2D(F.Y, F.X);
 }
 
 void APSEnemyPawn::OnDamage_Implementation()
@@ -150,29 +160,45 @@ void APSEnemyPawn::RequestReturnToPool()
 
 void APSEnemyPawn::ContactDamageTick()
 {
-	if(!IsActorTickEnabled()) return;
-	// 임시: 거리 기반 접촉 데미지. OnHit(물리 Block)이 crowd엔 없어서 타이머로.
-	// TODO: PSCrowdSubsystem이 Hero 거리를 이미 아니까, 나중에 그쪽으로 이사
-	const float TraceRadius = Capsule->GetScaledCapsuleRadius() * 1.1f;
+	// crowd 멈춤 거리와 같은 기준으로 판정 (TODO: 나중에 PSCrowdSubsystem 루프로 이사)
+	if (IsHidden() || StatComponent->CurrentHP <= 0) return;
+	if (!CrowdMovement->IsTouchingHero()) return;
 
-	TArray<FOverlapResult> Overlaps;
-	const FCollisionShape Sphere = FCollisionShape::MakeSphere(TraceRadius);
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-
-	GetWorld()->OverlapMultiByObjectType(Overlaps, GetActorLocation(),
-		FQuat::Identity, FCollisionObjectQueryParams(ECC_Pawn), Sphere, QueryParams);
-
-	for (const FOverlapResult& Overlap : Overlaps)
+	if (APawn* Player = UGameplayStatics::GetPlayerPawn(this, 0))
 	{
-		AActor* Actor = Overlap.GetActor();
-		if (Actor && Actor->ActorHasTag("Player"))
-		{
-			FDamageResult DamageResult{ (float)StatComponent->Attack, false };
-			UPSLibrary::ApplyDamage(Actor, DamageResult, 0.f, this);
-			return;
-		}
+		FDamageResult DamageResult{ (float)StatComponent->Attack, false };
+		UPSLibrary::ApplyDamage(Player, DamageResult, 0.f, this);
 	}
+}
+
+void APSEnemyPawn::ActivateEnemy()
+{
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+
+	CrowdMovement->ResetMotion();
+	CrowdMovement->OnSpawnFromPool();   // crowd 등록
+
+	Sprite->SetComponentTickEnabled(true);
+	AnimationComponent->SetComponentTickEnabled(true);
+	
+	// 접촉 데미지 타이머 시작 (임시 — 나중에 PSCrowdSubsystem으로 이사)
+	GetWorldTimerManager().SetTimer(ContactDamageTimer, this,
+		&APSEnemyPawn::ContactDamageTick, ContactDamageInterval, true);
+}
+
+void APSEnemyPawn::DeactivateEnemy()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+
+	CrowdMovement->OnReturnFromPool();  // crowd 해제
+	
+	Sprite->SetComponentTickEnabled(false);
+	AnimationComponent->SetComponentTickEnabled(false);
+
+	// 접촉 데미지 타이머 종료 (임시 — 나중에 PSCrowdSubsystem으로 이사)
+	GetWorldTimerManager().ClearTimer(ContactDamageTimer);
 }
 
 void APSEnemyPawn::OnStatsChanged()

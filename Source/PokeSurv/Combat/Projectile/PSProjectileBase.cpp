@@ -6,7 +6,6 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "PokeSurv/Character/PSCharacterBase.h"
 #include "PokeSurv/Game/PSPoolSubsystem.h"
 #include "PokeSurv/Util/PSLibrary.h"
 
@@ -87,16 +86,21 @@ void APSProjectileBase::BeginPlay()
 void APSProjectileBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	PS_HITLOG(TEXT("[Proj %s] ENTER Other=%s Comp=%s Sweep=%d"),
+		*GetName(), *GetNameSafe(OtherActor), *GetNameSafe(OtherComp), bFromSweep);
     
-	if (!bInitialized) return;
+	if (!bInitialized) { PS_HITLOG(TEXT("  -> return: !bInitialized")); return; }	//return;
 	if (!OtherActor || OtherActor == Owner)
 	{
+		PS_HITLOG(TEXT("  -> return: null or Owner")); 
 		return;
 	}
 	
 	// 발사체 vs 발사체
 	if (APSProjectileBase* OtherProjectile = Cast<APSProjectileBase>(OtherActor))
 	{
+		PS_HITLOG(TEXT("  [ProjVsProj] Hostile=%d"), UPSLibrary::IsHostileTo(this, OtherProjectile));
+
 		if (!UPSLibrary::IsHostileTo(this, OtherProjectile)) return;
         
 		if (HitActors.Contains(OtherActor)) return;
@@ -116,6 +120,9 @@ void APSProjectileBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	
 	if (!UPSLibrary::IsHostileTo(this, OtherActor))
 	{
+		PS_HITLOG(TEXT("  -> return: not hostile  MyTags=[%s] OtherTags=[%s]"),
+	*FString::JoinBy(Tags, TEXT(","), [](const FName& N){ return N.ToString(); }),
+	*FString::JoinBy(OtherActor->Tags, TEXT(","), [](const FName& N){ return N.ToString(); }));
 		return;
 	}
 	if (!UPSLibrary::IsAlive(OtherActor))
@@ -127,6 +134,7 @@ void APSProjectileBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	// 중복 히트 방지
 	if (HitActors.Contains(OtherActor))
 	{
+		PS_HITLOG(TEXT("  -> return: already hit"));
 		return;
 	}
 	HitActors.Add(OtherActor);
@@ -134,6 +142,8 @@ void APSProjectileBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	// 데미지 처리
     UPSLibrary::ApplyDamage(OtherActor, FinalDamage, KnockBackMultiplier, this);
 
+	PS_HITLOG(TEXT("  -> APPLY Damage=%.1f Pierce(before)=%d"), FinalDamage.FinalDamage, PierceCount);
+	UPSLibrary::ApplyDamage(OtherActor, FinalDamage, KnockBackMultiplier, this);
 	// 관통 처리
 	if (PierceCount != TNumericLimits<int32>::Max())
 	{

@@ -5,7 +5,8 @@
 
 #include "PSPoolSubsystem.h"
 #include "Components/CapsuleComponent.h"
-#include "PokeSurv/Character/PSStatComponent.h"
+#include "GameFramework/Character.h"
+#include "PokeSurv/Component/PSStatComponent.h"
 #include "PokeSurv/Pawn/PSEnemyBossPawn.h"
 #include "PokeSurv/Pawn/PSEnemyPawn.h"
 #include "PokeSurv/Pawn/PSEnemySwarmPawn.h"
@@ -62,7 +63,7 @@ void UPSWaveSubsystem::StartWave(const UDataTable* InWaveTable, const TSubclassO
 	GetWorld()->GetTimerManager().SetTimer(
 		RowCheckTimer, this, &UPSWaveSubsystem::RowCheck, 60.0f, true);
 
-	ApplyRow();  // 시작 즉시 1회 (0분 행 바로 적용)
+	TryBeginFirstRow();  // 시작 즉시 1회 ApplyRow. 처음 시작 시 초기화 순서 때문.
 }
 
 void UPSWaveSubsystem::RowCheck()
@@ -131,15 +132,16 @@ void UPSWaveSubsystem::SpawnRoutine()
 	UPSPoolSubsystem* Pool = World->GetSubsystem<UPSPoolSubsystem>();
 	if (!Pool) return;
 	
-	SpawnEnemy();
+	const FSpawnArea Area = MakeSpawnArea(SpawnMargin, EnemyClass);
+	SpawnEnemy(Area);
 
 	// 최소 수 까지 스폰
 	int32 Alive = Pool->GetActiveCount(EnemyClass);
-	UE_LOG(LogTemp, Warning, TEXT("[Wave] Alive:%d / Min:%d"), Alive, Rows[CurrentRowIndex].EnemyMinimum);
+	//UE_LOG(LogTemp, Warning, TEXT("[Wave] Alive:%d / Min:%d"), Alive, Rows[CurrentRowIndex].EnemyMinimum);
 	
 	while( Alive < Rows[CurrentRowIndex].EnemyMinimum)
 	{
-		if (!SpawnEnemy()) break;
+		if (!SpawnEnemy(Area)) break;		// pool 고갈
 		++Alive; 
 	}
 }
@@ -165,19 +167,22 @@ void UPSWaveSubsystem::MapEventTick(int32 EventID)
 	}
 }
 
-FVector UPSWaveSubsystem::GetEnemySpawnLocation(float Radius)
+void UPSWaveSubsystem::TryBeginFirstRow()
 {
-	APawn* Player = GetWorld()->GetFirstPlayerController()->GetPawn();	// 폰&컨트롤러 없으면 터질 수도 있지만 안 터질듯
-	const FVector PlayerLoc = Player->GetActorLocation();
+	UPSPoolSubsystem* Pool = GetWorld()->GetSubsystem<UPSPoolSubsystem>();
 
-	const float Angle = FMath::FRandRange(0.f, 2.f * PI);
-	
-	const FVector2D Offset(FMath::Cos(Angle) * Radius, FMath::Sin(Angle) * Radius);
+	if (!Pool->GetScreenWorldBounds().bIsValid)
+	{
+		// 아직 준비 안 됨 → 다음 틱에 재시도
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &UPSWaveSubsystem::TryBeginFirstRow);
+		return;
+	}
 
-	return PlayerLoc + FVector(Offset.X, Offset.Y, 0.f);
+	GetWorld()->GetTimerManager().SetTimer(RowCheckTimer, this, &UPSWaveSubsystem::RowCheck, 60.f, true);
+	ApplyRow();
 }
 
-bool UPSWaveSubsystem::SpawnEnemy()
+bool UPSWaveSubsystem::SpawnEnemy(const FSpawnArea& Area)
 {
 	UWorld* World = GetWorld();
 	if (!World) return false;
@@ -186,14 +191,14 @@ bool UPSWaveSubsystem::SpawnEnemy()
 	if (Row.Enemies.Num() == 0) return false;  // % 0, empty.
 	
 	UPSPokemonData* Data = Row.Enemies[NextEnemyIndex];
-	//if (!Data) return false;		Data null 이면 터지도록
+	//if (!Data) return false;		Data null 이면 터지도록 주석처리
 	NextEnemyIndex = (NextEnemyIndex + 1) % Row.Enemies.Num();
 	
 	UPSPoolSubsystem* Pool = World->GetSubsystem<UPSPoolSubsystem>();
 	if (!Pool) return false;
 
 	APSEnemyPawn* Enemy = Cast<APSEnemyPawn>(
-		Pool->SpawnFromPool(EnemyClass, GetEnemySpawnLocation(EnemySpawnRadius), FRotator::ZeroRotator));
+		Pool->SpawnFromPool(EnemyClass, RandomOnCircle(Area), FRotator::ZeroRotator));
 	if (!Enemy) return false;  // 풀 고갈 → 스킵
 
 	UPSStatComponent* Stat = Enemy->FindComponentByClass<UPSStatComponent>();
@@ -214,28 +219,28 @@ bool UPSWaveSubsystem::SpawnSwarm(FPSMapEvent FMapEvent)
 	
 	if(FMapEvent.SwarmType == ESwarmType::Straight)
 	{
-		// 이 무리의 중심점 하나 잡고, 그 주변에 Amount마리를 흩뿌림
-		const FVector Center = GetEnemySpawnLocation(SwarmStraightRadius);
-		
-		// SwarmClass CDO에서 캡슐 반지름 읽어 간격 산출 (고정이지만 BP 값과 자동 동기화)
-		float Spacing  = 68.f; // 폴백
+		// 간격 (캡슐 지름)
+		float Spacing = 68.f; // 폴백
 		if (APSEnemySwarmPawn* CDO = SwarmClass.GetDefaultObject())
 		{
 			if (const UCapsuleComponent* Capsule = CDO->GetCapsuleComponent())
 			{
-				Spacing  = Capsule->GetScaledCapsuleRadius() * 2.f; // 지름 = 서로 안 겹침
+				Spacing = Capsule->GetScaledCapsuleRadius() * 2.f;
 			}
 		}
 		
-		// 무리 전체가 공유할 방향: 중심 → 플레이어
-		const APawn* Player = GetWorld()->GetFirstPlayerController()->GetPawn();
-		FVector GroupDir = FVector(1.f, 0.f, 0.f);
-		if (Player)
-		{
-			GroupDir = Player->GetActorLocation() - Center;
-			GroupDir.Z = 0.f;
-			GroupDir = GroupDir.GetSafeNormal();
-		}
+		// 해바라기 최외곽 반경 → 대형 전체가 화면 밖에서 시작하도록 Margin에 더함
+		const float FormationRadius =
+			Spacing * 0.5f * FMath::Sqrt(static_cast<float>(FMath::Max(FMapEvent.Amount - 1, 0)));
+
+		const FSpawnArea Area = MakeSpawnArea(SpawnMargin + FormationRadius, SwarmClass);
+		const FVector Center = RandomOnCircle(Area);
+		
+		// 무리 전체가 공유할 방향: 화면 중심(플레이어)
+		FVector GroupDir(Area.Center.X - Center.X, Area.Center.Y - Center.Y, 0.f);
+		GroupDir = GroupDir.GetSafeNormal();
+		
+		if (GroupDir.IsNearlyZero()) GroupDir = FVector(1.f, 0.f, 0.f);
 		
 		// 해바라기(피보나치) 배치
 		const float GoldenAngle = PI * (3.f - FMath::Sqrt(5.f)); // ≈ 2.399 rad
@@ -249,21 +254,18 @@ bool UPSWaveSubsystem::SpawnSwarm(FPSMapEvent FMapEvent)
 	}
 	else //if(FMapEvent.SwarmType == ESwarmType::Encircle)
 	{
-		APawn* Player = GetWorld()->GetFirstPlayerController()->GetPawn();
-		if (!Player) return false;
-		const FVector PlayerLoc = Player->GetActorLocation();
-
-		const float RadiusX = EnemySpawnRadius / 3 * 2;  
-		const float RadiusY = EnemySpawnRadius / 2;
+		const FSpawnArea Area = MakeSpawnArea(0.f, SwarmClass);  // 화면 반크기 그대로
+		const float RadiusX = Area.W * EncircleScale;
+		const float RadiusY = Area.H * EncircleScale;
 
 		for (int32 i = 0; i < FMapEvent.Amount; ++i)
 		{
 			// Amount마리를 원 둘레에 균등 분할 + 약간의 랜덤
 			const float Angle = (2.f * PI / FMapEvent.Amount) * i
-							  + FMath::FRandRange(-0.1f, 0.1f);  // 살짝 흔들어 자연스럽게
-			const FVector Offset(FMath::Cos(Angle) * RadiusX,
-								 FMath::Sin(Angle) * RadiusY, 0.f);
-			const FVector SpawnLoc = PlayerLoc + Offset;
+			+ FMath::FRandRange(-0.1f, 0.1f);  // 살짝 흔들어 자연스럽게
+			
+			const FVector SpawnLoc(Area.Center.X + FMath::Cos(Angle) * RadiusX,
+				Area.Center.Y + FMath::Sin(Angle) * RadiusY, Area.Z);
 
 			SpawnOneSwarm(SpawnLoc, FMapEvent.SwarmType, FVector::ZeroVector, Data);
 		}
@@ -289,17 +291,21 @@ void UPSWaveSubsystem::SpawnOneSwarm(const FVector& Loc, ESwarmType SwarmType, c
 
 void UPSWaveSubsystem::SpawnBossesAndTreasure()
 {
+	const TArray<FPSBossSpawn>& Bosses = Rows[CurrentRowIndex].BossesAndTreasure;
+	if (Bosses.Num() == 0) return;
+	
+	const FSpawnArea Area = MakeSpawnArea(SpawnMargin, EnemyClass);  // 일반 적과 같은 높이
+
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
 	for(const FPSBossSpawn& BossSpawn : Rows[CurrentRowIndex].BossesAndTreasure)
 	{
         checkf(BossSpawn.BossClass, TEXT("SpawnBoss: BossClass null"));
 		
-		FActorSpawnParameters Params;
-		Params.SpawnCollisionHandlingOverride =
-			ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
 		APSEnemyBossPawn* Boss = GetWorld()->SpawnActor<APSEnemyBossPawn>(
 			BossSpawn.BossClass,
-			GetEnemySpawnLocation(EnemySpawnRadius),
+			RandomOnCircle(Area),
 			FRotator::ZeroRotator,
 			Params);
 		check(Boss != nullptr);
@@ -309,4 +315,72 @@ void UPSWaveSubsystem::SpawnBossesAndTreasure()
 
 		Boss->SetTreasure(BossSpawn.TreasureDrop);		
 	}
+}
+
+float UPSWaveSubsystem::GetFloorZ() const
+{
+	const APawn* Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!Player) return 0.f;
+
+	const FVector PlayerLoc = Player->GetActorLocation();
+
+	// 폴백: 플레이어 캡슐 하단
+	float FloorZ = PlayerLoc.Z;
+	if (const ACharacter* Char = Cast<ACharacter>(Player))
+	{
+		FloorZ -= Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	}
+
+	// 아래로 트레이스해서 실제 바닥 찾기 (공중에 떠 있어도 OK)
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(Player);
+
+	const FVector Start = PlayerLoc;
+	const FVector End   = PlayerLoc - FVector(0.f, 0.f, 2000.f);
+	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_WorldStatic, Params))
+	{
+		FloorZ = Hit.ImpactPoint.Z;
+	}
+	return FloorZ;
+}
+
+float UPSWaveSubsystem::GetSpawnZ(TSubclassOf<APSEnemyPawn> InClass) const
+{
+	float HalfHeight = 34.f; 
+	if (InClass)
+	{
+		if (const APSEnemyPawn* CDO = InClass.GetDefaultObject())
+		{
+			if (const UCapsuleComponent* Capsule = CDO->GetCapsuleComponent())
+			{
+				HalfHeight = Capsule->GetScaledCapsuleHalfHeight();
+			}
+		}
+	}
+	return GetFloorZ() + HalfHeight;
+}
+
+FSpawnArea UPSWaveSubsystem::MakeSpawnArea(float Margin, TSubclassOf<APSEnemyPawn> InClass)
+{
+	const FBox2D Bounds = GetWorld()->GetSubsystem<UPSPoolSubsystem>()->GetScreenWorldBounds();
+	ensureMsgf(Bounds.bIsValid, TEXT("MakeSpawnArea: ScreenWorldBounds 무효 — TryBeginFirstRow 이전 호출?"));
+	
+	const FVector2D Extent = Bounds.GetExtent();
+	
+	FSpawnArea A;
+	A.Center = Bounds.GetCenter();
+	A.W = Extent.X + Margin;
+	A.H = Extent.Y + Margin;
+	A.Radius = Extent.Size() + Margin; 
+	A.Z = GetSpawnZ(InClass);
+	return A;
+}
+
+FVector UPSWaveSubsystem::RandomOnCircle(const FSpawnArea& A)
+{
+	const float Angle = FMath::FRandRange(0.f, 2.f * PI);
+	return FVector(A.Center.X + FMath::Cos(Angle) * A.Radius,
+				   A.Center.Y + FMath::Sin(Angle) * A.Radius,
+				   A.Z);
 }

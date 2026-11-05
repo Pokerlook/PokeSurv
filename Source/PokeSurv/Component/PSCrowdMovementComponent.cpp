@@ -44,6 +44,19 @@ void UPSCrowdMovementComponent::OnReturnFromPool()
 	}
 }
 
+bool UPSCrowdMovementComponent::IsTouchingHero(float Tolerance) const
+{
+	if (!UpdatedComponent) return false;
+
+	UPSCrowdSubsystem* Registry = GetWorld()->GetSubsystem<UPSCrowdSubsystem>();
+	FCrowdHeroInfo Hero;
+	if (!Registry || !Registry->GetHeroInfo(Hero)) return false;
+
+	const float Reach = Radius + Hero.Radius + Tuning.HeroContactPadding + Tolerance;
+	const FVector2f D = To2D(UpdatedComponent->GetComponentLocation()) - Hero.Pos;
+	return D.SizeSquared() <= Reach * Reach;
+}
+
 void UPSCrowdMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
